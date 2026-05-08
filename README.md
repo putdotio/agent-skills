@@ -37,7 +37,7 @@ Per-skill checks:
 ./scripts/tessl.sh tile publish --dry-run skills/frontend/docs
 ```
 
-Publishing from GitHub Actions expects a repository secret named `TESSL_TOKEN`. See [Distribution](docs/distribution.md) for the publish flow and tile naming.
+Publishing from GitHub Actions expects `TESSL_TOKEN` in the protected `release` Environment. See [Distribution](docs/distribution.md) for the publish flow and tile naming.
 
 ## Publishable skill shape
 
