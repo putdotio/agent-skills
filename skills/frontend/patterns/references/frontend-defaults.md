@@ -161,7 +161,8 @@ Imitate: `putio-cli/src/internal/auth-flow.ts` for Effect-native; `putio-ios` vi
 - Distinguish *expected error the user can act on* (typed, rendered inline) from *unexpected crash* (caught by the boundary, logged, generic fallback).
 - Lazy-loaded route failures are recoverable states. Match chunk-load failures and load timeouts, then offer a reload action instead of surfacing an opaque module-loading error.
 - Support fallbacks are part of the error model. Route contact-support actions through the repo's support adapter so Intercom, email, or another configured channel can be swapped without changing feature error localizers.
-- Never log or surface secrets. `putio-cli/src/internal/output-service.ts` redacts `auth_token`, `Bearer`, and query params before terminal output — model that level of paranoia.
+- Never log or surface secrets. `putio-cli/src/internal/output-service.ts` redacts `auth_token`, `Bearer`, and query params before terminal output, and terminal adapters also neutralize control bytes from untrusted text. Redaction is not terminal escaping; do both when rendering API/user text in a CLI or log-like surface.
+- Error messages for rejected input describe the invalid shape without reflecting raw control-bearing values back to terminal output.
 
 Preferred React shape:
 

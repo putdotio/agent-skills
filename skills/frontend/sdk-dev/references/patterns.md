@@ -111,6 +111,8 @@ data class ListFilesQuery(
 )
 ```
 
+When an SDK or CLI offers "collect all pages", bound it with max pages/items and reject repeated cursors. Streaming pagination still needs cursor-cycle detection even when it does not accumulate every item in memory.
+
 ## Swift
 
 Keep public contracts explicit and preserve a stable package surface:
