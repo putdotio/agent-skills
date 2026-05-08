@@ -43,7 +43,7 @@ Use this when touching GitHub Actions workflows that publish packages, upload ap
 ## Actions And Toolchains
 
 - Pin release, publish, upload, signing, and deploy actions to full commit SHAs with a trailing comment for the human version tag
-- In release paths, preserve the repo's normal toolchain contract when it can be pinned. For VitePlus repos, use a full-SHA-pinned `voidzero-dev/setup-vp` plus `vp install` / `vp run ...`. Fall back to pinned `actions/setup-node`, `corepack enable`, and `pnpm install --frozen-lockfile` only when the repo is not VitePlus-shaped or the VitePlus setup cannot be trusted for that release path
+- In release paths, preserve the repo's normal toolchain contract when it can be pinned. For repos that use Vite+ (`vp`), use a full-SHA-pinned `voidzero-dev/setup-vp` plus `vp install` / `vp run ...`. Fall back to pinned `actions/setup-node`, `corepack enable`, and `pnpm install --frozen-lockfile` when the repo does not use Vite+ or when Vite+ setup cannot be trusted for that release path
 - Verify downloaded runtime or toolchain archives before extraction or embedding. Functional smoke tests prove behavior; they do not prove provenance
 - For Node SEA or binary builds, download the official checksum file, match the exact platform archive name, hash the archive, and fail before extraction on mismatch
 - Keep security-sensitive build logic typed when the repo supports it without extra dependencies. In TypeScript repos, prefer `.ts` or `.mts` scripts over loosely typed `.mjs` for release-critical logic
