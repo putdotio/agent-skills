@@ -37,8 +37,17 @@ jobs:
     permissions:
       contents: write
     steps:
+      - name: Create release bot token
+        id: release-bot
+        uses: actions/create-github-app-token@1b10c78c7865c340bc4f6099eb2f838309f1e8c3 # v3
+        with:
+          app-id: ${{ vars.PUTIO_RELEASE_BOT_APP_ID }}
+          private-key: ${{ secrets.PUTIO_RELEASE_BOT_PRIVATE_KEY }}
+          permission-contents: write
       - name: Checkout
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
+        with:
+          token: ${{ steps.release-bot.outputs.token }}
 
       - name: Set up Tessl
         uses: tesslio/setup-tessl@25ec223fc0da33b41b8044ff5ab2b85235f4f91e # v2
@@ -49,3 +58,5 @@ jobs:
         uses: uinaf/tessl-publish-action@4e224c708ac4253ed901ef9125bccfa73a9cd5ba # v2.0.0
         with:
           review-threshold: "90"
+        env:
+          GITHUB_TOKEN: ${{ steps.release-bot.outputs.token }}

@@ -23,7 +23,7 @@ jq -r '.name' skills/*/*/tile.json
 - The publish job uses [`uinaf/tessl-publish-action`](https://github.com/uinaf/tessl-publish-action) to detect changed tiles, run review and lint, and publish them
 - The action derives semantic version bumps from Conventional Commit messages: breaking changes -> `major`, `feat` -> `minor`, everything else -> `patch`
 - Before publish, the action probes `tessl tile publish --dry-run` and keeps bumping patch versions in the job workspace until Tessl accepts a free version
-- After a successful publish, the workflow commits the resulting `tile.json` version bumps back to `main` as `github-actions[bot]` with a skip-CI commit message
+- After a successful publish, the workflow commits the resulting `tile.json` version bumps back to `main` as `putio-release-bot[bot]` with a skip-CI commit message
 - Publish-path actions are pinned to full commit SHAs with trailing comments for their human version tags
 
 ## Required GitHub Environment
@@ -34,8 +34,9 @@ Create a GitHub Environment named `release` for the publish job:
 - Enable prevent self-review
 - Limit Environment deployment branches to `main`
 - Store the Tessl publish token as the Environment secret `TESSL_TOKEN`; do not store it as a plain repository Actions secret
+- Store `PUTIO_RELEASE_BOT_APP_ID` as an Environment variable and `PUTIO_RELEASE_BOT_PRIVATE_KEY` as an Environment secret
 - Protect `main` so only the put.io team can update it, with force-push and branch deletion blocked where GitHub supports those controls
-- If publish or release tags are added later, restrict tag creation and mutation to trusted release automation or release admins
+- `main` and `v*` release tags are restricted to trusted team/admin access plus `putio-release-bot` for release automation
 
 Create a Tessl API key for the `putio` workspace, then add it to the `release` Environment as `TESSL_TOKEN`.
 
