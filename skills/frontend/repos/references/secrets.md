@@ -123,7 +123,7 @@ Mandatory shape against PR-driven exfiltration and supply-chain attacks.
 ### Trigger discipline
 
 - **PR verify on `pull_request`** MUST NOT map `OP_SERVICE_ACCOUNT_TOKEN` (or any sensitive secret) into any job. `pull_request` from internal branches DOES receive `secrets.*` when referenced; the gate is "workflow author never wires it in"
-- **Deploy / release / live-test on `push: main` or `workflow_dispatch`** reference Environment-scoped secrets gated by required reviewers. `workflow_dispatch` is only allowed when the Environment's deployment-branch policy restricts the runnable ref to `main` or protected release branches, and the job does not separately check out an arbitrary input ref
+- **Continuous release on `push: main`** references Environment-scoped secrets without reviewer gates. `workflow_dispatch` is only allowed when the Environment's deployment-branch policy restricts the runnable ref to `main` or protected release branches, and the job does not separately check out an arbitrary input ref
 - **Secret-bearing manual flows** validate any requested tag/ref in a secretless job first, then check it out with `actions/checkout` `with.ref` only after validation. Environment branch/tag policy protects the workflow run ref, not a later `inputs.ref` checkout
 - **Never `pull_request_target` for code-running steps** (checkout PR head, label automation with checkout, composite actions running PR-supplied scripts)
 - **Never `workflow_run` triggered by a `pull_request` workflow that reads PR data** — classic exfiltration vector
@@ -132,7 +132,7 @@ Mandatory shape against PR-driven exfiltration and supply-chain attacks.
 ### Where secrets live
 
 - The 1Password service-account token lives ONLY in a GitHub Deployment Environment — never as a repo Actions secret
-- Environment has **required reviewers** with **"Prevent self-review"** enabled
+- Continuous release Environment approval is none; approval-gated production deploy, signing, promotion, or store-submission environments document reviewers explicitly
 
 ### Workflow defaults
 
@@ -145,7 +145,7 @@ Mandatory shape against PR-driven exfiltration and supply-chain attacks.
 
 Load-bearing:
 
-- **Deployment Environment with required reviewers + Prevent self-review** on every workflow mapping a sensitive secret — the mechanical gate between a compromised committer and a deploy
+- **Deployment Environment for every workflow mapping a sensitive secret** — continuous release environments scope secrets without approval gates; production deploy, signing, promotion, or store-submission environments may add reviewers when a human gate is intended
 - **Dependabot** for the `github-actions` ecosystem so pinned SHAs get reviewable bumps
 - Branch/tag trust and trusted-team direct push mechanics live in [release-security.md](release-security.md)
 
@@ -165,7 +165,7 @@ gh api -X PUT repos/<owner>/<repo>/environments/release
 # Add the SA token as an Environment secret
 gh secret set OP_SERVICE_ACCOUNT_TOKEN --env release --repo <owner>/<repo>
 
-# Configure required reviewers, Prevent self-review, and deployment-branch policy
+# Configure deployment-branch policy; add reviewers only for intentionally approval-gated environments
 # in Settings → Environments → release (UI; gh api supports it but the body shape is awkward)
 ```
 

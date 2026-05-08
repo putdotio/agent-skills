@@ -37,16 +37,16 @@ Per-skill checks:
 ./scripts/tessl.sh tile publish --dry-run skills/frontend/docs
 ```
 
-Publishing from GitHub Actions expects `TESSL_TOKEN` in the protected `release` Environment. See [Distribution](docs/distribution.md) for the publish flow and tile naming.
+Publishing from GitHub Actions expects `TESSL_TOKEN` in the protected `release` Environment. See [Distribution](docs/DISTRIBUTION.md) for the publish flow and tile naming.
 
 ## Publishable skill shape
 
-Published skills keep their package metadata next to the skill. Use [Distribution](docs/distribution.md) as the source of truth for `tile.json`, optional `agents/openai.yaml`, and Tessl publishing behavior.
+Published skills keep their package metadata next to the skill. Use [Distribution](docs/DISTRIBUTION.md) as the source of truth for `tile.json`, optional `agents/openai.yaml`, and Tessl publishing behavior.
 
 ## Docs
 
 - [Contributing](./CONTRIBUTING.md) for contributor workflow and validation
-- [Distribution](./docs/distribution.md) for publish flow and repository release details
+- [Distribution](./docs/DISTRIBUTION.md) for publish flow and repository release details
 - [Security](./SECURITY.md) for private vulnerability reporting
 
 ## Repo Internals
