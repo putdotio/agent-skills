@@ -22,7 +22,8 @@ This skill owns repo shape and canonical commands, not host-specific deployment 
 8. Run the repo-local `verify` command locally before changing delivery automation. If it fails, fix that command first and rerun it until it passes.
 9. Configure semantic-release plugins and commit identity per the delivery-model reference when release commits are in scope.
 10. Verify the publish or deploy path only after the repo-local `verify` command is stable and reproducible.
-11. After publish or deploy changes, run the repo-documented artifact or app smoke check. If none exists, record that as a repo gap.
+11. Keep release and publishing docs in `docs/DISTRIBUTION.md`; `CONTRIBUTING.md` links there as contributor navigation.
+12. After publish or deploy changes, run the repo-documented artifact or app smoke check. If none exists, record that as a repo gap.
 
 Summary shape:
 
@@ -82,4 +83,5 @@ App-shaped example:
 - Prefer GitHub Actions for orchestration and repo-local commands as the canonical home for build, test, and deliver logic.
 - Do not invent release tooling without a real repo or team standard behind it.
 - Do not add manual release paths that check out arbitrary refs into secret-bearing jobs.
+- Put release credential policy, protected Environment setup, and tag rules in `docs/DISTRIBUTION.md`; leave contributor docs as workflow/setup guidance.
 - GitHub-facing repos should carry a useful pull request template and issue templates when the review or triage flow benefits from them.

@@ -72,3 +72,4 @@ Keep review and triage prompts close to the repo instead of relying on maintaine
   - environment details when platform differences matter
 - Keep templates short enough that people fill them out honestly. Prefer `N/A` prompts over giant mandatory essays.
 - Treat templates as the detailed source of truth for review and triage prompts. `CONTRIBUTING.md` should summarize the expectation without copying the full checklist.
+- Release and publishing behavior belongs in `docs/DISTRIBUTION.md`: delivery model, publish target, protected Environment requirements, release bot identity, tag policy, and release-specific smoke checks. `CONTRIBUTING.md` links there as contributor navigation.

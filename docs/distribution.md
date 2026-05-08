@@ -17,7 +17,7 @@ jq -r '.name' skills/*/*/tile.json
 - Each skill directory under `skills/*/*` has its own `tile.json`
 - `tile.json` is the source of truth for Tessl package identity and publishing
 - `agents/openai.yaml` is optional, but when present it is the source of truth for OpenAI or Codex picker-facing display names, descriptions, and default prompts
-- `.github/workflows/publish-skills.yml` runs a secretless review job first, then publishes only after the `release` Environment approves the publish job
+- `.github/workflows/publish-skills.yml` runs a secretless review job first, then publishes from the `release` Environment without an approval gate
 - Pushes to `main` publish only the tiles that changed
 - Manual workflow runs publish all tiles only when the run ref is `main`; non-`main` manual runs can review, but the publish job is skipped
 - The publish job uses [`uinaf/tessl-publish-action`](https://github.com/uinaf/tessl-publish-action) to detect changed tiles, run review and lint, and publish them
@@ -30,8 +30,7 @@ jq -r '.name' skills/*/*/tile.json
 
 Create a GitHub Environment named `release` for the publish job:
 
-- Add required reviewers from the put.io team
-- Enable prevent self-review
+- Approval: none; publishing is continuous after the `main` gate passes
 - Limit Environment deployment branches to `main`
 - Store the Tessl publish token as the Environment secret `TESSL_TOKEN`; do not store it as a plain repository Actions secret
 - Store `PUTIO_RELEASE_BOT_APP_ID` as an Environment variable and `PUTIO_RELEASE_BOT_PRIVATE_KEY` as an Environment secret
@@ -46,7 +45,7 @@ You can create the key either from the Tessl web UI or with the CLI:
 tessl api-key create --workspace putio --name github-actions-publish --role publisher
 ```
 
-The workflow still references the token as `${{ secrets.TESSL_TOKEN }}`; GitHub resolves that value from the `release` Environment after reviewer approval.
+The workflow still references the token as `${{ secrets.TESSL_TOKEN }}`; GitHub resolves that value from the `release` Environment when the `main` release job starts.
 
 ## Local checks
 

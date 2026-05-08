@@ -35,7 +35,7 @@ jobs:
     runs-on: ubuntu-latest
     environment: release
     permissions:
-      contents: write
+      contents: read
     steps:
       - name: Create release bot token
         id: release-bot
