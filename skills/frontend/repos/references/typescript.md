@@ -15,7 +15,7 @@ Use the new `putio-sdk-typescript` layout as the default TypeScript package refe
 ## Expected Shape
 
 - local commands for `check`, `build`, `test`, and `verify`
-- CI setup with `voidzero-dev/setup-vp`
+- CI setup with `voidzero-dev/setup-vp` for non-release verify paths, or pinned `actions/setup-node` plus `corepack enable` and `pnpm install --frozen-lockfile` for release paths where mutable setup actions can influence artifacts
 - `vp install` before verification or release
 - `verify` on pull requests and `main` pushes
 - a GitHub Actions delivery job on `main` after `verify` passes
@@ -25,3 +25,4 @@ Use the new `putio-sdk-typescript` layout as the default TypeScript package refe
 - Use the current team default toolchain for package builds, including Vite+ and `tsdown` where appropriate.
 - Keep build-tool choice behind repo scripts so the workflow model does not change when packaging details do.
 - If a repo needs a different build tool, preserve the same verify/release shape unless there is a strong reason not to.
+- For release-critical TypeScript build scripts, prefer typed `.ts` or `.mts` files when the repo's Node runtime can execute them without adding release-only dependencies.

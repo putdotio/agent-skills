@@ -10,11 +10,13 @@ interface:
     - Repo kind, verify entrypoint, delivery target, versioning tool, and template gaps are identified from current files.
     - CI calls the repo-local verify command directly before publish or deploy.
     - Package repos remain continuously publishable and app repos remain continuously deployable from the `main` branch.
+    - Secret-bearing release, deploy, signing, publish, beta, backfill, and binary-build workflows use trusted refs, pinned release actions, validated dispatch inputs, and repo settings that match the workflow trust model.
     - Existing working release or deploy plumbing is preserved unless repo evidence shows it conflicts with the target model.
 
     Constraints:
     - Do not invent ecosystem-specific release tooling without a real repo or team standard.
     - Do not weaken verify, bypass it, or add manual release paths that skip it.
+    - Do not allow arbitrary manual refs in jobs that load secrets, sign, publish, upload, deploy, or promote artifacts.
     - Do not paste secrets into workflow YAML.
 
     Output: summarize workflow/config files changed, verify shape, publish or deploy target, validation path, risks, gaps, and next step.

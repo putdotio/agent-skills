@@ -7,7 +7,7 @@ description: Structure put.io frontend-owned repositories around repo-local veri
 
 Use one delivery rule: every merge to `main` should already be publishable or deployable.
 
-Bundled references: `delivery-model.md`, `typescript.md`, `applications.md`, and `secrets.md`.
+Bundled references: `delivery-model.md`, `typescript.md`, `applications.md`, `secrets.md`, and `release-security.md`.
 This skill owns repo shape and canonical commands, not host-specific deployment architecture.
 
 ## Workflow
@@ -17,11 +17,12 @@ This skill owns repo shape and canonical commands, not host-specific deployment 
 3. If the repo is TypeScript, read [references/typescript.md](references/typescript.md).
 4. If the repo is an application, read [references/applications.md](references/applications.md).
 5. If the repo uses 1Password-backed local, live-test, build, signing, or deploy workflows, read [references/secrets.md](references/secrets.md) and standardize the local env shape.
-6. Prefer one repo-local `verify` entrypoint that CI calls directly.
-7. Run the repo-local `verify` command locally before changing delivery automation. If it fails, fix that command first and rerun it until it passes.
-8. Configure semantic-release plugins and commit identity per the delivery-model reference when release commits are in scope.
-9. Verify the publish or deploy path only after the repo-local `verify` command is stable and reproducible.
-10. After publish or deploy changes, run the repo-documented artifact or app smoke check. If none exists, record that as a repo gap.
+6. If the repo has secret-bearing release, deploy, signing, publish, beta, backfill, or binary-build workflows, read [references/release-security.md](references/release-security.md).
+7. Prefer one repo-local `verify` entrypoint that CI calls directly.
+8. Run the repo-local `verify` command locally before changing delivery automation. If it fails, fix that command first and rerun it until it passes.
+9. Configure semantic-release plugins and commit identity per the delivery-model reference when release commits are in scope.
+10. Verify the publish or deploy path only after the repo-local `verify` command is stable and reproducible.
+11. After publish or deploy changes, run the repo-documented artifact or app smoke check. If none exists, record that as a repo gap.
 
 Summary shape:
 
@@ -80,4 +81,5 @@ App-shaped example:
 - Keep the repo-local `verify` command as the source of truth for guardrails.
 - Prefer GitHub Actions for orchestration and repo-local commands as the canonical home for build, test, and deliver logic.
 - Do not invent release tooling without a real repo or team standard behind it.
+- Do not add manual release paths that check out arbitrary refs into secret-bearing jobs.
 - GitHub-facing repos should carry a useful pull request template and issue templates when the review or triage flow benefits from them.

@@ -123,7 +123,8 @@ Mandatory shape against PR-driven exfiltration and supply-chain attacks.
 ### Trigger discipline
 
 - **PR verify on `pull_request`** MUST NOT map `OP_SERVICE_ACCOUNT_TOKEN` (or any sensitive secret) into any job. `pull_request` from internal branches DOES receive `secrets.*` when referenced; the gate is "workflow author never wires it in"
-- **Deploy / release / live-test on `push: main` or `workflow_dispatch`** reference Environment-scoped secrets gated by required reviewers. `workflow_dispatch` is only allowed when the Environment's deployment-branch policy restricts the runnable ref to `main` or protected release branches
+- **Deploy / release / live-test on `push: main` or `workflow_dispatch`** reference Environment-scoped secrets gated by required reviewers. `workflow_dispatch` is only allowed when the Environment's deployment-branch policy restricts the runnable ref to `main` or protected release branches, and the job does not separately check out an arbitrary input ref
+- **Secret-bearing manual flows** validate any requested tag/ref in a secretless job first, then check it out with `actions/checkout` `with.ref` only after validation. Environment branch/tag policy protects the workflow run ref, not a later `inputs.ref` checkout
 - **Never `pull_request_target` for code-running steps** (checkout PR head, label automation with checkout, composite actions running PR-supplied scripts)
 - **Never `workflow_run` triggered by a `pull_request` workflow that reads PR data** — classic exfiltration vector
 - Pin reusable workflows to SHA and CODEOWNER-gate
@@ -138,6 +139,7 @@ Mandatory shape against PR-driven exfiltration and supply-chain attacks.
 - Top-level `permissions: {}` (deny by default); each job opts into the minimum it needs
 - Third-party actions pinned to SHA
 - 1Password-backed loading uses `1Password/load-secrets-action@<sha>` reading `OP_ENV_FILE=.env.example`
+- `workflow_dispatch` inputs pass through `env`, are validated and bounded before shell use, and are never interpolated directly inside `run:` scripts
 
 ### Repo configuration
 
@@ -145,14 +147,12 @@ Load-bearing:
 
 - **Deployment Environment with required reviewers + Prevent self-review** on every workflow mapping a sensitive secret — the mechanical gate between a compromised committer and a deploy
 - **Dependabot** for the `github-actions` ecosystem so pinned SHAs get reviewable bumps
+- Branch/tag trust and trusted-team direct push mechanics live in [release-security.md](release-security.md)
 
-Additional hygiene (adopt where team size supports a real PR review process):
+Additional hygiene:
 
-- Branch protection on `main`: required PR review, no force-push, no admin bypass
 - CODEOWNERS on `.github/workflows/**`, `.github/actions/**`, `.env.example`, the `secrets-setup`/`secrets-clean` target body, and lockfiles
-- Signed commits
-
-Residual risk for a yolopush-to-main team: a compromised committer credential = direct push = workflow runs in main context. The Environment human gate is the floor.
+- Signed commits where repo contributors can tolerate the friction
 
 ### Setup recipe
 
@@ -194,6 +194,8 @@ Migrating an existing repo Actions secret to the Environment: add the secret to 
 ### Cache scoping
 
 Cache keys include `${{ github.event_name }}` so PR (no-secrets) jobs cannot poison caches consumed by `push: main` (with-secrets) jobs.
+
+Generated dependency trees such as full CocoaPods `Pods` directories are not restored into signed or release jobs across trust boundaries. Cache download artifacts instead, or namespace generated-tree caches by workflow/trust level and regenerate or verify before signing.
 
 ## Agent Contexts
 

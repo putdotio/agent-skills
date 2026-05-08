@@ -35,6 +35,7 @@ Read only what you need:
 - [references/language-notes.md](references/language-notes.md) for TypeScript, Swift, or Kotlin-specific guidance
 
 If the repo has a canonical verify command, use that as the source of truth before editing delivery automation.
+If SDK release, publish, signing, or binary-build automation is in scope, also use `putio-frontend-repos` and its release-supply-chain guidance.
 
 ## Main Workflow
 
@@ -101,4 +102,5 @@ For runtime verification, prefer the repo's documented live-test entrypoints and
 - Do not claim an SDK change is fully verified if only unit tests or only live probes were exercised when both layers matter.
 - Do not add live destructive coverage against shared accounts.
 - Do not weaken naming, parity, or type-safety without a documented reason.
+- Do not change SDK release, publish, signing, or binary-build workflows without applying the shared frontend repo release-supply-chain checklist.
 - Do not copy repo-specific implementation guidance into this shared skill when it belongs in that repo's `AGENTS.md` or `docs/*`.

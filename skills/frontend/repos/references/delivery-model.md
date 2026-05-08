@@ -38,6 +38,7 @@ template gaps: missing .github/pull_request_template.md
 - Repos hosted on GitHub include collaboration templates when they improve review or triage, especially `.github/pull_request_template.md` and `.github/ISSUE_TEMPLATE/*`.
 - Package release jobs are safe to no-op when there are no releasable commits.
 - Delivery jobs use only the permissions and secrets they actually need.
+- Secret-bearing release, deploy, signing, publish, beta, backfill, and binary-build jobs follow [release-security.md](release-security.md).
 - Release jobs that create follow-up commits set their commit author explicitly. The current shared put.io default is `devsputio <devs@put.io>`.
 - Release automation fetches full git history when versioning depends on commits or tags.
 - For Swift, Kotlin, and other ecosystems, keep this model and choose the smallest repo-native toolchain that CI can call unchanged.

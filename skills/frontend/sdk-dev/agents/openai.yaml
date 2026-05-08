@@ -10,10 +10,12 @@ interface:
     - The repo-local `AGENTS.md`, package overview, relevant docs, and target namespace or transport code are inspected before changes.
     - Backend behavior, backend tests, current first-party app usage, and sibling SDKs are checked in source-of-truth order when contracts change.
     - Request, response, error models, tests, docs, and live verification are updated together when the public surface changes.
+    - SDK release, publish, signing, or binary-build workflow changes apply the shared frontend repo release-supply-chain checklist.
 
     Constraints:
     - Do not widen SDK scope from old SDK parity alone.
     - Do not add destructive live tests against shared accounts.
+    - Do not add manual release paths that publish or sign artifacts from arbitrary refs.
     - Do not weaken TypeScript type-safety or copy repo-specific implementation guidance into this shared skill.
 
     Output: summarize SDK surface changed or reviewed, evidence sources, verification run, parity or non-parity decisions, gaps, and next step.
