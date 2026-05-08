@@ -54,6 +54,7 @@ Use this order unless the repo gives a strong reason not to:
 - Avoid repeating the same doc-link lists in multiple top-level files. Keep one canonical navigation area and let other docs link to it sparingly.
 - Keep it skimmable: a short list is usually enough.
 - Prefer one canonical location per workflow detail instead of mirroring the same checklist across `README.md`, `CONTRIBUTING.md`, and GitHub templates.
+- Agent-facing verification commands should avoid dumping authenticated PII or account metadata. Use non-PII checks or field-filtered structured output such as an auth-source proof.
 
 ## CONTRIBUTING.md
 

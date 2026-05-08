@@ -43,6 +43,7 @@ Use this when touching GitHub Actions workflows that publish packages, upload ap
 - Verify downloaded runtime or toolchain archives before extraction or embedding. Functional smoke tests prove behavior; they do not prove provenance
 - For Node SEA or binary builds, download the official checksum file, match the exact platform archive name, hash the archive, and fail before extraction on mismatch
 - Keep security-sensitive build logic typed when the repo supports it without extra dependencies. In TypeScript repos, prefer `.ts` or `.mts` scripts over loosely typed `.mjs` for release-critical logic
+- Shell installers for downloaded binaries normalize the final executable mode, for example `0755`, and reject group/world-writable install directories unless the repo exposes an explicit opt-in for shared installs
 
 ## Caches and Generated Trees
 
