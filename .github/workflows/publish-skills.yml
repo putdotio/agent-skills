@@ -55,8 +55,12 @@ jobs:
           token: ${{ secrets.TESSL_TOKEN }}
 
       - name: Publish changed tiles
-        uses: uinaf/tessl-publish-action@4e224c708ac4253ed901ef9125bccfa73a9cd5ba # v2.0.0
+        uses: uinaf/tessl-publish-action@7cf4e23051fa5465a86e484e38feef4e750e1748 # v2.1.0
         with:
           review-threshold: "90"
+          git-author-name: putio-release-bot[bot]
+          git-author-email: 283001373+putio-release-bot[bot]@users.noreply.github.com
+          git-committer-name: putio-release-bot[bot]
+          git-committer-email: 283001373+putio-release-bot[bot]@users.noreply.github.com
         env:
           GITHUB_TOKEN: ${{ steps.release-bot.outputs.token }}
