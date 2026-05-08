@@ -19,9 +19,10 @@ Treat structure, labels, and ordering as part of the interface, not just as neut
 7. Ensure the repo has `CONTRIBUTING.md`, `LICENSE`, and `SECURITY.md`; keep `SECURITY.md` private-first and use `devs@put.io` for security contact.
 8. Push deep implementation detail into linked docs when it starts to bloat the top-level docs.
 9. When a repo uses `AGENTS.md`, keep `CLAUDE.md` beside it as a symlink to `AGENTS.md` instead of maintaining a second authored guidance file.
-10. In checked-in docs, use repo-relative Markdown links for local files. Reserve absolute filesystem paths for chat/UI file references, not versioned docs.
-11. Verify that every claimed command, path, email address, doc link, badge target, and GitHub template path exists.
-12. If any command, path, link, badge target, or template reference is broken, fix the doc and re-verify before stopping.
+10. In README `Docs`, `Key Docs`, `Start Here`, and similar routing lists, use document titles or reader-facing purposes as link labels, not raw filenames or paths. Prefer `Contributing`, `Distribution`, `Architecture`, or `Agent guide` over `CONTRIBUTING.md`, `docs/DISTRIBUTION.md`, or `AGENTS.md`.
+11. In checked-in docs, use repo-relative Markdown links for local files. Reserve absolute filesystem paths for chat/UI file references, not versioned docs.
+12. Verify that every claimed command, path, email address, doc link, badge target, and GitHub template path exists.
+13. If any command, path, link, badge target, or template reference is broken, fix the doc and re-verify before stopping.
 
 Concrete checks:
 
@@ -38,6 +39,7 @@ test ! -e AGENTS.md || { test -L CLAUDE.md && test "$(readlink CLAUDE.md)" = "AG
 - Do not hardcode volatile metrics such as test counts or coverage numbers.
 - Do not add generic filler sections that say nothing specific about the repo.
 - Do not cite or link unrelated external repos in generated docs unless the user explicitly asks for that.
+- Do not let routing docs read like a file tree. Link targets may be paths, but visible labels should usually be document titles or reader-facing purposes.
 - Do not leak chat-only absolute filesystem links such as `/Users/...`, `file://...`, or `vscode://...` into checked-in docs.
 - Do not assume the repo provides a link-checking script or any repo-specific docs helper unless it actually exists.
 - Never include user PII (names, emails, usernames, IPs, etc.) in docs, references, or examples. Mask or normalize any PII to generic placeholders (e.g., `user@example.com`, `your-username`).
