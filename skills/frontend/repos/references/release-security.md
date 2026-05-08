@@ -8,21 +8,27 @@ Use this when touching GitHub Actions workflows that publish packages, upload ap
 - Treat the workflow run ref and the checkout ref as separate trust boundaries. A GitHub Environment branch or tag policy constrains the run ref; it does not prove that `inputs.ref` is safe to check out later
 - Do not let arbitrary `workflow_dispatch` inputs choose code for a job that loads secrets, signs artifacts, publishes packages, or uploads release assets
 - For manual backfill flows, validate the tag/ref in a separate secretless job, make build jobs depend on it, and use `actions/checkout` `with.ref`
-- Prefer repo settings that make the intended refs real: restrict `main` to the put.io team, protect release tags, require reviewers on release environments, and consider action SHA pinning on release workflows
+- Prefer repo settings that make the intended refs real: restrict `main` to `put-io`, require reviewers on release environments, and consider action SHA pinning on release workflows. Protect release tags only when the release automation can use a bypassable dedicated release app or equivalent trusted identity
 
 ## Repo Settings Model
 
 - The default put.io posture is trusted-team direct pushes to `main`, strict release/deploy boundaries
-- Public repos: protect `main` so only the put.io team can push, while force-pushes and branch deletes stay blocked. Do not require PRs on `main` unless the repo owner wants that workflow
+- Public frontend-owned repos: protect `main` so only the `put-io` team can push, while force-pushes and branch deletes stay blocked. Do not require PRs on `main` unless the repo owner wants that workflow
 - Private repos without paid GitHub protection: document that branch protection is unavailable, then compensate with Environment gates, fixed checkout refs, action pinning, validated manual inputs, and least-privilege deploy credentials
-- Release tags such as `v*` should be created by trusted release automation or release admins only. If semantic-release or a similar workflow creates tags, allow that workflow identity and block arbitrary manual tag creation or mutation
+- Release tags such as `v*` should be created by trusted release automation or release admins only. If semantic-release or a similar workflow creates tags with `GITHUB_TOKEN`, do not add repo-level tag rules that would break releases. Keep tag rules off until the repo has a bypassable dedicated release app or equivalent trusted identity, then restrict `v*` creation, update, and deletion to that identity plus org admins
 - Secret-bearing jobs still target protected Environments with required reviewers and self-review prevention, even when trusted team members can push directly to `main`
 
 ### Allowing The put.io Team To Push
 
-- In GitHub branch protection, create a rule for `main`, leave "Require a pull request before merging" off, enable "Restrict who can push to matching branches", and add the put.io team or release app as allowed push actors
+- In GitHub branch protection, create a rule for `main`, leave "Require a pull request before merging" off, enable "Restrict who can push to matching branches", and add the `put-io` team or release app as allowed push actors
 - Keep force-push and delete protection enabled for `main`
-- If using rulesets instead, avoid a broad bypass that also permits force-push or delete. Prefer a no-bypass baseline rule for deletion/force-push protection plus a narrow update rule that only the put.io team can bypass
+- If using rulesets instead, avoid a broad bypass that also permits force-push or delete. Prefer a no-bypass baseline rule for deletion/force-push protection plus a narrow update rule that only `put-io` can bypass
+
+### Release Tags
+
+- The current lightweight setup leaves `v*` tag rules off when workflows create tags with `GITHUB_TOKEN`; treat that as intentional interim state, not as a completed tag protection control
+- Compensate with workflow hardening: protected release Environments, fixed trusted refs, validated manual inputs, action SHA pinning, least-privilege `permissions`, and provenance or artifact digest checks before publishing or promoting
+- For hard tag protection, create a dedicated release GitHub App, mint an installation token inside the approved release workflow, and allow that app plus org admins to bypass a `v*` tag ruleset
 
 ## Inputs
 
@@ -58,7 +64,7 @@ Use this when touching GitHub Actions workflows that publish packages, upload ap
 Before final severity or remediation calls, inspect live GitHub state:
 
 - `main` branch push restrictions or documented private-repo fallback
-- release tag protection or rulesets for `v*`
+- release tag policy for `v*`: protected by a dedicated release identity, or intentionally unprotected with workflow provenance controls
 - Environment reviewers, self-review prevention, and branch/tag policy
 - Actions cache contents and cache write/read boundaries
 - Actions permission policy and job-level `permissions`
