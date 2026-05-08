@@ -6,41 +6,37 @@ Use this when touching GitHub Actions workflows that publish packages, upload ap
 
 - Secret-bearing jobs check out fixed trusted refs: beta from `main`, release from a published `v*` tag, or an explicitly validated protected ref
 - Treat the workflow run ref and the checkout ref as separate trust boundaries. A GitHub Environment branch or tag policy constrains the run ref; it does not prove that `inputs.ref` is safe to check out later
-- `workflow_dispatch` inputs are validated and bounded before they influence jobs that load secrets, sign artifacts, publish packages, or upload release assets
-- For manual backfill flows, validate the tag/ref in a separate secretless job, make build jobs depend on it, and use `actions/checkout` `with.ref`
-- Repo settings make intended refs real: `main` restricted to `put-io` plus the release app, continuous release environments approval-free, release tags protected, and release workflow actions pinned to full SHAs
+- `workflow_dispatch` inputs are validated and bounded in a secretless step before they influence jobs that load secrets, sign artifacts, publish packages, or upload release assets
+- For manual backfills, validate the tag/ref in a separate secretless job, make build jobs depend on it, and use a sanitized output in `actions/checkout` `with.ref`
 
 ## Repo Settings Model
 
-- The default put.io posture is trusted-team direct pushes to `main`, strict release/deploy boundaries, and a dedicated release bot for automated GitHub writes
-- Public frontend-owned repos: protect `main` so only the `put-io` team and `putio-release-bot` can push, while force-pushes and branch deletes stay blocked. Do not require PRs on `main` unless the repo owner wants that workflow
-- Private repos without paid GitHub protection: document that branch protection is unavailable, then compensate with Environment gates, fixed checkout refs, action pinning, validated manual inputs, and least-privilege deploy credentials
-- Release tags such as `v*` are protected in public frontend-owned repos. Only `putio-release-bot` and org admins should create, update, or delete them
-- Continuous release jobs target protected Environments for secret scoping with approval set to none. Reviewer-gated environments are separate production deploy, signing, promotion, or store-submission gates when a repo explicitly needs them
+- Public frontend-owned repos use four defaults: `main` push allowlist, protected `v*` tags, approval-free continuous release Environments, and `putio-release-bot` for automated GitHub writes
+- Private repos without paid GitHub protection document the limitation and compensate with Environment gates, fixed checkout refs, action pinning, validated manual inputs, and least-privilege credentials
+- Reviewer-gated Environments are separate production deploy, signing, promotion, or store-submission gates when a repo explicitly needs them
 - Release workflows store `PUTIO_RELEASE_BOT_APP_ID` as a protected Environment variable and `PUTIO_RELEASE_BOT_PRIVATE_KEY` as a protected Environment secret
-- Commit metadata is not authorization. When a release job pushes version bumps, tags, releases, or generated metadata, mint a `putio-release-bot` installation token and set `GIT_AUTHOR_*` and `GIT_COMMITTER_*` to the app bot identity. `GITHUB_TOKEN` means `github-actions[bot]`, not `devsputio` or `devs@put.io`
+- Push-back jobs mint a `putio-release-bot` installation token and set matching `GIT_AUTHOR_*` / `GIT_COMMITTER_*`. Commit metadata is not authorization: `GITHUB_TOKEN` writes as `github-actions[bot]`
+- If a third-party publish action creates commits internally, verify it accepts release-bot identity inputs or honors `GIT_AUTHOR_*` / `GIT_COMMITTER_*`
 
-### Allowing The put.io Team To Push
+### Allowing the put.io Team to Push
 
-- In GitHub branch protection, create a rule for `main`, leave "Require a pull request before merging" off, enable "Restrict who can push to matching branches", and add the `put-io` team plus `putio-release-bot` as allowed push actors
-- Keep force-push and delete protection enabled for `main`
-- Release jobs that push back to `main` use `putio-release-bot`, not `GITHUB_TOKEN`, a human PAT, or spoofed human commit metadata
-- If using rulesets instead, avoid a broad bypass that also permits force-push or delete. Prefer a no-bypass baseline rule for deletion/force-push protection plus a narrow update rule that only `put-io` can bypass
+- Branch protection: rule for `main`, "Require a pull request before merging" off, "Restrict who can push" on, allowed actors `put-io` and `putio-release-bot`
+- Rulesets: avoid a broad bypass that also permits force-push or delete. Prefer a no-bypass baseline rule for deletion/force-push protection plus a narrow update rule for allowed push actors
 
 ### Release Tags
 
-- Public frontend-owned repos protect `v*` tags with an active tag ruleset. Only `putio-release-bot` and org admins bypass creation, update, and deletion restrictions
-- Release workflows that create GitHub Releases, upload release assets, or create/move `v*` tags mint a `putio-release-bot` installation token inside the approved release workflow
-- Keep workflow hardening in place: protected release Environments, fixed trusted refs, validated manual inputs, action SHA pinning, least-privilege `permissions`, and provenance or artifact digest checks before publishing or promoting
+- Tag ruleset: protect `v*`; allow only `putio-release-bot` and org-admin bypass for creation, update, and deletion
+- Workflows that create GitHub Releases, upload release assets, or move `v*` tags use a `putio-release-bot` installation token
+- Keep the release path pinned, least-privilege, ref-validated, and provenance-checked before publishing or promoting
 
 ## Inputs
 
 - Never interpolate `workflow_dispatch` inputs directly inside shell `run:` scripts
-- Pass inputs through `env`, validate format and length, then use shell variables such as `$TAG_NAME` or `$env:TAG_NAME`
+- Pass inputs through `env`, validate format and length, then use shell variables such as `$TAG_NAME` or `$env:TAG_NAME`. For later action inputs, emit sanitized step outputs rather than reusing raw `${{ inputs.* }}`
 - Keep multiline untrusted input out of `$GITHUB_ENV`; sanitize it first or use heredoc-safe patterns that cannot be broken by attacker-controlled delimiters
 - Move non-secret metadata prep before any secret-loading step whenever possible
 
-## Actions And Toolchains
+## Actions and Toolchains
 
 - Pin release, publish, upload, signing, and deploy actions to full commit SHAs with a trailing comment for the human version tag
 - In release paths, preserve the repo's normal toolchain contract when it can be pinned. For repos that use Vite+ (`vp`), use a full-SHA-pinned `voidzero-dev/setup-vp` plus `vp install` / `vp run ...`. Fall back to pinned `actions/setup-node`, `corepack enable`, and `pnpm install --frozen-lockfile` when the repo does not use Vite+ or when Vite+ setup cannot be trusted for that release path
@@ -48,7 +44,7 @@ Use this when touching GitHub Actions workflows that publish packages, upload ap
 - For Node SEA or binary builds, download the official checksum file, match the exact platform archive name, hash the archive, and fail before extraction on mismatch
 - Keep security-sensitive build logic typed when the repo supports it without extra dependencies. In TypeScript repos, prefer `.ts` or `.mts` scripts over loosely typed `.mjs` for release-critical logic
 
-## Caches And Generated Trees
+## Caches and Generated Trees
 
 - Do not restore generated dependency trees across trust boundaries into signed or release jobs. Examples include full CocoaPods `Pods` trees and other generated vendor directories
 - Cache download artifacts where possible, then regenerate and verify generated trees before signing or publishing
@@ -62,7 +58,7 @@ Use this when touching GitHub Actions workflows that publish packages, upload ap
 - Required promotion provenance: commit SHA, tag, build number or package version, artifact digest, workflow run id, and the originating artifact identity
 - When reviewing findings, separate stale evidence from current truth. If a direct cache or checkout path was removed, keep only the surviving path that still reaches signing, publishing, or promotion
 
-## Live Settings To Check
+## Live Settings to Check
 
 Before final severity or remediation calls, inspect live GitHub state:
 
@@ -73,6 +69,6 @@ Before final severity or remediation calls, inspect live GitHub state:
 - Actions permission policy and job-level `permissions`
 - where secrets live: repo, org, Environment, or external manager
 
-## Docs To Update
+## Docs to Update
 
 When release, cache, provenance, or signing behavior changes, update repo-local docs in the same change. Put release and publishing behavior in `docs/DISTRIBUTION.md`; keep `CONTRIBUTING.md` focused on contributor setup and validation, and let `README.md` / `AGENTS.md` link to the distribution doc when useful.
