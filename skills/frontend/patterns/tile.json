@@ -1,6 +1,6 @@
 {
   "name": "putio/frontend-patterns",
-  "version": "0.1.6",
+  "version": "0.1.7",
   "private": false,
   "summary": "Apply put.io frontend code patterns and seed repo-local `.patterns/` conventions. Use when writing or reviewing UI/frontend code in a put.io frontend repo, picking the default approach for types, data parsing, state machines, error handling, components, or testing, or seeding/extending the repo's `.patterns/` folder.",
   "skills": {
