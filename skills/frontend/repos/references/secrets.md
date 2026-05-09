@@ -133,6 +133,7 @@ Mandatory shape against PR-driven exfiltration and supply-chain attacks.
 
 - The 1Password service-account token lives in a GitHub Deployment Environment
 - Continuous release Environment approval is none; approval-gated production deploy, signing, promotion, or store-submission environments document reviewers explicitly
+- Package/library/CLI/skill publish jobs use the Environment as a secret boundary with `deployment: false`; app deploy, signing, promotion, and store-submission jobs keep deployment records when those records are useful
 
 ### Workflow defaults
 
@@ -174,7 +175,9 @@ Workflow YAML for a deploy / release / live-test job:
 ```yaml
 jobs:
   deploy:
-    environment: release
+    environment:
+      name: release
+      deployment: false
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -188,6 +191,8 @@ jobs:
           OP_ENV_FILE: .env.example
       - run: pnpm deploy
 ```
+
+Use `deployment: false` for package/library/CLI/skill release jobs whose Environment exists only to scope secrets. Keep deployment records for app deploys, signing, promotion, store submission, and any Environment with custom deployment protection rules.
 
 Migrating an existing repo Actions secret to the Environment: add the secret to the Environment first, switch the workflow's job to declare `environment:`, then delete the repo-level secret.
 
