@@ -39,6 +39,7 @@ Use this when touching GitHub Actions workflows that publish packages, upload ap
 
 ## Actions and Toolchains
 
+- Use GitHub-hosted floating runner labels for routine CI and release jobs: `ubuntu-latest`, `windows-latest`, and `macos-latest`. Pin a runner image only when the OS image is part of the tested toolchain contract, and document that reason next to the workflow or in the repo release docs
 - Pin release, publish, upload, signing, and deploy actions to full commit SHAs with a trailing comment for the human version tag
 - In release paths, preserve the repo's normal toolchain contract when it can be pinned. For repos that use Vite+ (`vp`), use a full-SHA-pinned `voidzero-dev/setup-vp` plus `vp install` / `vp run ...`. Fall back to pinned `actions/setup-node`, `corepack enable`, and `pnpm install --frozen-lockfile` when the repo does not use Vite+ or when Vite+ setup cannot be trusted for that release path
 - For semantic-release action workflows, keep CI/CD-only release plugins in `extra_plugins` rather than repo `devDependencies`, and pin every plugin entry to an exact version
