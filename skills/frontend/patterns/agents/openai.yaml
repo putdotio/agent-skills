@@ -8,14 +8,14 @@ interface:
 
     Success criteria:
     - The repo's framework, build tool, styling, state/data libraries, test runner, agent guide, README, and relevant `.patterns/` entries are inspected before changes.
-    - Type/schema boundaries, parse-don't-validate, impossible-states-impossible, state machines, and localized error handling are applied where the repo supports them.
+    - Type/schema boundaries, boundary parsing, impossible-states-impossible, state machines, and localized error handling are applied where the repo supports them.
     - New or changed `.patterns/` entries capture non-obvious repo choices without duplicating user/contributor docs.
 
     Constraints:
     - Use $putio-frontend-repos for delivery and CI shape.
     - Use $putio-frontend-docs for top-level docs.
     - Use $putio-sdk-dev for SDK package patterns.
-    - Do not force defaults over explicit repo-local patterns.
+    - Prefer explicit repo-local patterns over shared defaults.
 
     Output: summarize code or pattern files changed, repo conventions found, verification run, exceptions, gaps, and next step.
 

@@ -31,9 +31,9 @@ type SubtitleResult =
   | { readonly kind: "missing" };
 ```
 
-Avoid unsafe casts, ignored type failures, and ad hoc JSON parsing when `Schema` already covers the boundary.
+Use `Schema` at boundaries so casts, ignored type failures, and ad hoc JSON parsing stay out of the public path.
 
-Expose ergonomic helpers on top of typed errors instead of forcing every consumer to rebuild the same checks:
+Expose ergonomic helpers on top of typed errors so consumers can reuse the same checks:
 
 ```ts
 export const isAuthError = (error: PutioSdkError): boolean =>

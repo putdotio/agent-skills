@@ -21,7 +21,7 @@ Use this when touching GitHub Actions workflows that publish packages, upload ap
 ### Allowing the put.io Team to Push
 
 - Branch protection: rule for `main`, "Require a pull request before merging" off, "Restrict who can push" on, allowed actors `put-io` and `putio-release-bot`
-- Rulesets: avoid a broad bypass that also permits force-push or delete. Prefer a no-bypass baseline rule for deletion/force-push protection plus a narrow update rule for allowed push actors
+- Rulesets: prefer a no-bypass baseline rule for deletion/force-push protection plus a narrow update rule for allowed push actors
 
 ### Release Tags
 
@@ -31,7 +31,7 @@ Use this when touching GitHub Actions workflows that publish packages, upload ap
 
 ## Inputs
 
-- Never interpolate `workflow_dispatch` inputs directly inside shell `run:` scripts
+- Pass `workflow_dispatch` inputs through `env` and sanitized step outputs before shell use
 - Pass inputs through `env`, validate format and length, then use shell variables such as `$TAG_NAME` or `$env:TAG_NAME`. For later action inputs, emit sanitized step outputs rather than reusing raw `${{ inputs.* }}`
 - Keep multiline untrusted input out of `$GITHUB_ENV`; sanitize it first or use heredoc-safe patterns that cannot be broken by attacker-controlled delimiters
 - Move non-secret metadata prep before any secret-loading step whenever possible
@@ -40,22 +40,23 @@ Use this when touching GitHub Actions workflows that publish packages, upload ap
 
 - Pin release, publish, upload, signing, and deploy actions to full commit SHAs with a trailing comment for the human version tag
 - In release paths, preserve the repo's normal toolchain contract when it can be pinned. For repos that use Vite+ (`vp`), use a full-SHA-pinned `voidzero-dev/setup-vp` plus `vp install` / `vp run ...`. Fall back to pinned `actions/setup-node`, `corepack enable`, and `pnpm install --frozen-lockfile` when the repo does not use Vite+ or when Vite+ setup cannot be trusted for that release path
-- Verify downloaded runtime or toolchain archives before extraction or embedding. Functional smoke tests prove behavior; they do not prove provenance
+- For semantic-release action workflows, keep CI/CD-only release plugins in `extra_plugins` rather than repo `devDependencies`, and pin every plugin entry to an exact version
+- Verify downloaded runtime or toolchain archives before extraction or embedding. Pair functional smoke tests with provenance checks
 - For Node SEA or binary builds, download the official checksum file, match the exact platform archive name, hash the archive, and fail before extraction on mismatch
 - Keep security-sensitive build logic typed when the repo supports it without extra dependencies. In TypeScript repos, prefer `.ts` or `.mts` scripts over loosely typed `.mjs` for release-critical logic
 - Shell installers for downloaded binaries normalize the final executable mode, for example `0755`, and reject group/world-writable install directories unless the repo exposes an explicit opt-in for shared installs
 
 ## Caches and Generated Trees
 
-- Do not restore generated dependency trees across trust boundaries into signed or release jobs. Examples include full CocoaPods `Pods` trees and other generated vendor directories
+- Regenerate or verify generated dependency trees inside signed or release jobs. Examples include full CocoaPods `Pods` trees and other generated vendor directories
 - Cache download artifacts where possible, then regenerate and verify generated trees before signing or publishing
-- If a generated-tree cache is unavoidable, namespace by workflow, event, trust level, platform, and lockfile; release jobs must not consume caches written by PR or beta jobs
+- If a generated-tree cache is unavoidable, namespace by workflow, event, trust level, platform, and lockfile; release jobs consume only caches from the same trust level
 - `bootstrap-ci.sh`-style shortcuts that skip regeneration only from lockfile equality are acceptable for local speed, but risky when a generated tree came from a shared CI cache
 
 ## Provenance
 
 - Release workflows should build and upload the release artifact from the release tag
-- Do not promote an existing beta, TestFlight, App Store Connect, npm, or GitHub artifact into release unless provenance is recorded and verified
+- Promote an existing beta, TestFlight, App Store Connect, npm, or GitHub artifact into release only when provenance is recorded and verified
 - Required promotion provenance: commit SHA, tag, build number or package version, artifact digest, workflow run id, and the originating artifact identity
 - When reviewing findings, separate stale evidence from current truth. If a direct cache or checkout path was removed, keep only the surviving path that still reaches signing, publishing, or promotion
 

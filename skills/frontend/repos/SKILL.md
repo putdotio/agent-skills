@@ -81,7 +81,7 @@ App-shaped example:
 
 - Keep the repo-local `verify` command as the source of truth for guardrails.
 - Prefer GitHub Actions for orchestration and repo-local commands as the canonical home for build, test, and deliver logic.
-- Do not invent release tooling without a real repo or team standard behind it.
-- Do not add manual release paths that check out arbitrary refs into secret-bearing jobs.
+- Use release tooling backed by a real repo precedent or team standard.
+- Keep manual release paths on trusted refs before they reach secret-bearing jobs.
 - Put release credential policy, protected Environment setup, and tag rules in `docs/DISTRIBUTION.md`; leave contributor docs as workflow/setup guidance.
 - GitHub-facing repos should carry a useful pull request template and issue templates when the review or triage flow benefits from them.

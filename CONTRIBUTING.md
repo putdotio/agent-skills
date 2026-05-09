@@ -11,7 +11,7 @@ There is no repo-local bootstrap step beyond access to Tessl for review and publ
 - shared skills live under `skills/*`
 - keep top-level `SKILL.md` files concise and self-activating
 - move detailed examples, doctrine, and checklists into adjacent `references/*` files
-- avoid duplicating the same guidance across multiple skills when one shared source can own it
+- put shared guidance in one owning skill or reference
 
 ## Validation
 

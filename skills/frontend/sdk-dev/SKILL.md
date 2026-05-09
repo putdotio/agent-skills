@@ -22,7 +22,7 @@ Bundled references: `sdk-vision.md`, `patterns.md`, and `language-notes.md`.
 
 When docs, runtime behavior, and consumers disagree, trust sources in this order: local backend and tests, current first-party app usage, actively maintained SDKs, archived clients, then published Swagger or public API docs.
 
-Do not widen an SDK surface just because another SDK already has it. Match real app use and verified backend behavior.
+Widen SDK surfaces only when real app use and verified backend behavior justify it.
 
 ## Start Here
 
@@ -70,7 +70,7 @@ Then update the SDK in this order:
 
 ## Verification
 
-Run the checks that match the repo instead of inventing ad hoc commands.
+Run the checks that match the repo.
 Healthy SDK repos in this workspace should expose both:
 
 - a default deterministic unit-test path that is safe for CI and local iteration
@@ -98,9 +98,9 @@ For runtime verification, prefer the repo's documented live-test entrypoints and
 
 ## Guardrails
 
-- Do not guess backend contracts from old SDKs alone.
-- Do not claim an SDK change is fully verified if only unit tests or only live probes were exercised when both layers matter.
-- Do not add live destructive coverage against shared accounts.
-- Do not weaken naming, parity, or type-safety without a documented reason.
-- Do not change SDK release, publish, signing, or binary-build workflows without applying the shared frontend repo release-supply-chain checklist.
-- Do not copy repo-specific implementation guidance into this shared skill when it belongs in that repo's `AGENTS.md` or `docs/*`.
+- Verify backend contracts with current docs, source, fixtures, or live probes rather than old SDKs alone.
+- Claim full verification only when the unit, fixture, and live layers that matter for the change were exercised.
+- Keep live coverage against shared accounts non-destructive.
+- Preserve naming, parity, and type-safety unless a documented reason justifies a change.
+- Apply the shared frontend repo release-supply-chain checklist before changing SDK release, publish, signing, or binary-build workflows.
+- Keep repo-specific implementation guidance in that repo's `AGENTS.md` or `docs/*`.

@@ -14,7 +14,7 @@ Use this skill for put.io-wide code defaults and `.patterns/` for repo-specific 
 ## Quick Rules
 
 - **Type/schema-driven**: schemas at the boundary are the source of truth. Types follow from schemas, not the other way around.
-- **Parse, don't validate**: turn unknown input into typed values at the boundary. Pass typed values inward; never let raw `unknown`, untyped JSON, or "validated but still loosely typed" data leak into the render tree.
+- **Parse at the boundary**: turn unknown input into typed values at the boundary. Pass typed values inward so raw `unknown`, untyped JSON, and "validated but still loosely typed" data stay out of the render tree.
 - **Make impossible states impossible**: discriminated unions, sealed shapes, exhaustive matches. No sentinel `null`s or `isLoading + data + error` boolean salads.
 - **State machines for bug-sensitive flows**: auth, payment, video conversion, video playback, upload, transfer lifecycle — model them as explicit state machines, not ad-hoc `useState` cascades.
 - **Localize expected errors, bound unexpected errors**: feature code maps known failures to actionable localized messages; route or feature boundaries catch unknown crashes without blanking the whole app.
@@ -40,7 +40,7 @@ Use `.patterns/` at the repo root.
 - Keep each file under ~300 lines so it loads on demand without dominating context.
 - Link `.patterns/` from the repo's `AGENTS.md` so future contributors and agents discover it automatically.
 
-Do not put `.patterns/` under `docs/`; keep user/contributor docs and code-convention docs separated.
+Keep `.patterns/` at the repo root so user/contributor docs and code-convention docs stay separated.
 
 ## When to add a pattern entry
 

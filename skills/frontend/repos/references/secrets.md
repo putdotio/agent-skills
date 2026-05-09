@@ -122,16 +122,16 @@ Mandatory shape against PR-driven exfiltration and supply-chain attacks.
 
 ### Trigger discipline
 
-- **PR verify on `pull_request`** MUST NOT map `OP_SERVICE_ACCOUNT_TOKEN` (or any sensitive secret) into any job. `pull_request` from internal branches DOES receive `secrets.*` when referenced; the gate is "workflow author never wires it in"
+- **PR verify on `pull_request`** runs without `OP_SERVICE_ACCOUNT_TOKEN` or other sensitive secrets. `pull_request` from internal branches DOES receive `secrets.*` when referenced; the gate is "workflow author leaves it unwired"
 - **Continuous release on `push: main`** references Environment-scoped secrets without reviewer gates. `workflow_dispatch` is only allowed when the Environment's deployment-branch policy restricts the runnable ref to `main` or protected release branches, and the job does not separately check out an arbitrary input ref
 - **Secret-bearing manual flows** validate any requested tag/ref in a secretless job first, then check it out with `actions/checkout` `with.ref` only after validation. Environment branch/tag policy protects the workflow run ref, not a later `inputs.ref` checkout
-- **Never `pull_request_target` for code-running steps** (checkout PR head, label automation with checkout, composite actions running PR-supplied scripts)
-- **Never `workflow_run` triggered by a `pull_request` workflow that reads PR data** — classic exfiltration vector
+- **Use `pull_request` for code-running steps** such as checkout PR head, label automation with checkout, or composite actions running PR-supplied scripts
+- **Use direct trusted triggers for secret-bearing follow-ups** rather than `workflow_run` triggered by a `pull_request` workflow that reads PR data
 - Pin reusable workflows to SHA and CODEOWNER-gate
 
 ### Where secrets live
 
-- The 1Password service-account token lives ONLY in a GitHub Deployment Environment — never as a repo Actions secret
+- The 1Password service-account token lives in a GitHub Deployment Environment
 - Continuous release Environment approval is none; approval-gated production deploy, signing, promotion, or store-submission environments document reviewers explicitly
 
 ### Workflow defaults
@@ -139,7 +139,7 @@ Mandatory shape against PR-driven exfiltration and supply-chain attacks.
 - Top-level `permissions: {}` (deny by default); each job opts into the minimum it needs
 - Third-party actions pinned to SHA
 - 1Password-backed loading uses `1Password/load-secrets-action@<sha>` reading `OP_ENV_FILE=.env.example`
-- `workflow_dispatch` inputs pass through `env`, are validated and bounded before shell use, and are never interpolated directly inside `run:` scripts
+- `workflow_dispatch` inputs pass through `env`, are validated and bounded before shell use, then flow through sanitized step outputs
 
 ### Repo configuration
 

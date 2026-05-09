@@ -6,10 +6,10 @@ The principles below are universal across put.io frontend repos. The *implementa
 
 ## Type and Schema Driven Development
 
-The contract lives in a schema. Types are derived from the schema. Code never re-declares the same shape in two places.
+The contract lives in a schema. Types are derived from the schema. Code keeps each shape in one canonical place.
 
 - For TypeScript, the put.io default is Effect's `Schema`. See `putio-sdk-typescript` `src/domains/files.ts` — base schemas, broad schemas with optionals, query schemas, response envelopes — all named on a strict hierarchy: `FileBaseSchema` → `FileBroadSchema` → `FilesListEnvelopeSchema`.
-- Type extraction follows the schema, never the other way around: `export type FileType = Schema.Schema.Type<typeof FileTypeSchema>`. Do not hand-write a parallel `type X = { ... }` next to the schema.
+- Type extraction follows the schema: `export type FileType = Schema.Schema.Type<typeof FileTypeSchema>`. Keep parallel hand-written `type X = { ... }` declarations out of schema-owned contracts.
 - Brand entity IDs so unrelated numeric or string IDs cannot cross. A small helper goes a long way:
 
   ```ts
@@ -75,7 +75,7 @@ Imitate: `putio-sdk-typescript/src/domains/transfers.ts` for HTTP response union
 
 Auth, payment, video conversion, video playback, upload, transfer lifecycle — model them explicitly when transitions actually matter. Bugs in these flows cost trust.
 
-Skip a state machine for trivial toggles, single-screen forms, or anywhere "did we forget a state" is not a real failure mode. `useState` is fine for local UI state. Do not state-machine for the sake of it.
+Use `useState` for trivial toggles, single-screen forms, or anywhere "did we forget a state" is not a real failure mode. Add a state machine when forgotten states are a real failure mode.
 
 - The shape varies by repo. The principle does not: enumerate states, name transitions, attach effects to states (not to event handlers).
 - **In Effect TypeScript**, model the loop as `Effect.gen` with explicit state and exit conditions. See `putio-cli/src/internal/auth-flow.ts` `waitForDeviceToken`: a polling loop with `Clock`, deadline check, `Duration.millis` sleep, terminal conditions explicit. No implicit retries, no callback chains.
@@ -156,12 +156,12 @@ Imitate: `putio-cli/src/internal/auth-flow.ts` for Effect-native; `putio-ios` vi
   - **Known known**: a feature localizer recognizes a product or API condition and returns a targeted message plus an instruction or action.
   - **Known unknown**: the value is a recognized API error shape, but no feature-specific localizer exists. Capture a telemetry event such as `UnlocalizedAPIError`, show a generic API error, and keep a support-ready trace id in metadata.
   - **Unknown unknown**: the value is not recognized. Capture the exception, show a generic fallback, and keep the captured error id in metadata.
-- The localizer is also the redaction chokepoint: raw `PutioApiError.body`, request URLs with query strings, and stack traces never reach UI text, telemetry, or third-party SDKs (Sentry, analytics) without going through it.
+- The localizer is also the redaction chokepoint: raw `PutioApiError.body`, request URLs with query strings, and stack traces go through it before reaching UI text, telemetry, or third-party SDKs (Sentry, analytics).
 - Error boundaries exist at the app, route, lazy-load, or feature-island level, not wrapped around every component. The goal is to keep the shell alive and isolate the broken surface, not to hide programmer errors everywhere.
 - Distinguish *expected error the user can act on* (typed, rendered inline) from *unexpected crash* (caught by the boundary, logged, generic fallback).
 - Lazy-loaded route failures are recoverable states. Match chunk-load failures and load timeouts, then offer a reload action instead of surfacing an opaque module-loading error.
 - Support fallbacks are part of the error model. Route contact-support actions through the repo's support adapter so Intercom, email, or another configured channel can be swapped without changing feature error localizers.
-- Never log or surface secrets. `putio-cli/src/internal/output-service.ts` redacts `auth_token`, `Bearer`, and query params before terminal output, and terminal adapters also neutralize control bytes from untrusted text. Redaction is not terminal escaping; do both when rendering API/user text in a CLI or log-like surface.
+- Redact secrets before logs or UI. `putio-cli/src/internal/output-service.ts` redacts `auth_token`, `Bearer`, and query params before terminal output, and terminal adapters also neutralize control bytes from untrusted text. Redaction is not terminal escaping; do both when rendering API/user text in a CLI or log-like surface.
 - Error messages for rejected input describe the invalid shape without reflecting raw control-bearing values back to terminal output.
 
 Preferred React shape:
@@ -236,7 +236,7 @@ export const useCancelTransfer = () => {
 
 Rules:
 
-- **Do not hand-roll `useEffect` + `useState` + `fetch`** for server reads. You will reinvent loading, error, dedup, abort, retry, and stale-while-revalidate — and one of them will leak. Use `useQuery`.
+- **Use `useQuery` for server reads.** It provides loading, error, dedup, abort, retry, and stale-while-revalidate behavior in one place.
 - **Query keys are arrays, namespaced per feature**, with the input as a structured payload, not a stringified blob. `["transfers", filter]` not `` `transfers-${JSON.stringify(filter)}` ``. Cache invalidation works on prefix.
 - **Mutations invalidate the cache, not local state**. `onSuccess: invalidateQueries({ queryKey: ["transfers"] })`. Optimistic flows use `onMutate` to set + return a snapshot, `onError` to roll it back.
 - **TanStack Query for server reads, `useActionEffect` (or `useMutation`) for writes** — pick `useMutation` when there is a cache to invalidate; `useActionEffect` when the action is a one-off RPC with no cached read.
@@ -244,7 +244,7 @@ Rules:
 
 
 
-For form mutations in Effect-React code, the put.io default is a small `useActionEffect` bridge over React 19's `useActionState`. Keep the FormData → Schema → Effect flow as one typed pipeline; do not assemble an intermediate plain object first.
+For form mutations in Effect-React code, the put.io default is a small `useActionEffect` bridge over React 19's `useActionState`. Keep the FormData → Schema → Effect flow as one typed pipeline.
 
 When the form mutates a server read that lives in a TanStack Query cache (rename in a file list, cancel in a transfer list, edit in a settings query), prefer `useMutation` from the *Server State* section above and call its `mutate` from the form's action handler — that way the cache invalidation lives next to the mutation. Reserve `useActionEffect` for one-off RPC actions with no cached read on the other side (login, OTP verification, fire-and-forget settings save).
 
@@ -283,16 +283,16 @@ const [error, action, pending] = useActionEffect(RuntimeClient, (formData: FormD
 </form>;
 ```
 
-Read keys explicitly via `formData.get(name)` (or `formData.getAll(name)` for multi-value fields like checkbox groups). Avoid `Object.fromEntries(formData)` — it silently coalesces repeated names (last-wins, a real correctness bug for permission/tag forms) and feeds attacker-controlled keys into the schema decoder.
+Read keys explicitly via `formData.get(name)` (or `formData.getAll(name)` for multi-value fields like checkbox groups). This preserves repeated names and keeps attacker-controlled keys out of the schema decoder.
 
 A TanStack Query mutation that invalidates the relevant query keys does not need to update local state — the next read picks up the change. Skip optimistic updates unless the user-perceived latency actually warrants them.
 
 ## Component and State Placement
 
 - Components are deep modules: small surface (props), meaningful interior. A wrapper that forwards every prop unchanged is not pulling its weight.
-- Keep state local until a second consumer needs it. Do not lift to context or a global store preemptively.
+- Keep state local until a second consumer needs it.
 - Effects (data fetching, subscriptions, storage, telemetry) live at leaves and adapters. Pages compose; leaves do.
-- Server-state and UI-state are different concerns; do not put server state into Redux/Zustand/Context "for consistency". See *Server State* above.
+- Keep server-state in server-state tools and UI-state in UI-state tools. See *Server State* above.
 - Pure render trees: a component that takes typed props and returns JSX with no side effects is the easiest thing to test, animate, and refactor.
 
 Imitate: small composable primitives in your app's UI layer rather than monolithic screen templates.
@@ -303,7 +303,7 @@ put.io has multiple valid styling stacks depending on constraints:
 
 - Tailwind v4 + design tokens for new general-purpose web work.
 - Plain CSS modules + TS theme tokens where bundle size or old-browser support matters.
-- Emotion + Theme-UI in legacy bundles — keep working, do not extend.
+- Emotion + Theme-UI in legacy bundles — maintain existing code while moving new work to current patterns.
 
 Pick the repo's existing stack. If the repo is silent, default to Tailwind v4 for new web work. Encode the choice in `.patterns/styling.md`.
 
@@ -311,9 +311,9 @@ Pick the repo's existing stack. If the repo is silent, default to Tailwind v4 fo
 
 - Write tests at the level the bug would surface: a parse bug needs a parse test, a state-machine bug needs a machine test, a render bug needs a render test, an interaction bug needs an interaction test.
 - Prefer real implementations over mocks at the contract boundary. Mock the network if you must, but parse the same way production does. See `putio-sdk-typescript/test/support/sdk-test.ts` for layered mock injection.
-- Live tests against shared accounts are gated by env/secret hydration and `describe.sequential`. See `putio-sdk-typescript/test/live/auth.test.ts` and `test/live/support/helpers.ts`. Do not add destructive coverage against shared accounts.
+- Live tests against shared accounts are gated by env/secret hydration and `describe.sequential`. See `putio-sdk-typescript/test/live/auth.test.ts` and `test/live/support/helpers.ts`. Keep shared-account coverage non-destructive.
 - TypeScript repos use `vite-plus/test` (Vitest). E2E uses Playwright.
-- Do not assert on logger output, real timers, or implementation internals. Those tests pass by construction and rot fastest.
+- Assert on behavior with controlled clocks and public effects instead of logger output, real timers, or implementation internals.
 
 Imitate: `putio-cli/src/internal/state.test.ts` for Effect tests with `Effect.runPromiseExit` + `Cause.failureOption`.
 
@@ -321,5 +321,5 @@ Imitate: `putio-cli/src/internal/state.test.ts` for Effect tests with `Effect.ru
 
 - Type-check, lint, unit tests pass — necessary, not sufficient for UI work.
 - Exercise the feature in a browser or device. Click the golden path. Try one edge case. Watch the network tab and console.
-- If the UI cannot be exercised (no dev server, no preview), say so explicitly in the PR — do not claim success on type checks alone.
+- If the UI cannot be exercised (no dev server, no preview), say so explicitly in the PR and list type checks as partial evidence.
 - Run the repo's `verify` (or equivalent) — `putio-sdk-typescript/scripts/`, `putio-cli/scripts/`, and the modern frontend repos all expose one canonical command.

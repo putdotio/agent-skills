@@ -13,10 +13,10 @@ interface:
     - SDK release, publish, signing, or binary-build workflow changes apply the shared frontend repo release-supply-chain checklist.
 
     Constraints:
-    - Do not widen SDK scope from old SDK parity alone.
-    - Do not add destructive live tests against shared accounts.
-    - Do not add manual release paths that publish or sign artifacts from arbitrary refs.
-    - Do not weaken TypeScript type-safety or copy repo-specific implementation guidance into this shared skill.
+    - Widen SDK scope from verified backend behavior and real consumer need.
+    - Keep live tests against shared accounts non-destructive.
+    - Keep publish and signing paths tied to trusted refs.
+    - Preserve TypeScript type-safety and keep repo-specific implementation guidance in the owning repo.
 
     Output: summarize SDK surface changed or reviewed, evidence sources, verification run, parity or non-parity decisions, gaps, and next step.
 

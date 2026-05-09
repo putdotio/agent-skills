@@ -31,7 +31,7 @@ Use this order unless the repo gives a strong reason not to:
 - Use human-facing labels in the README, not raw filenames or paths. Prefer labels such as `Contributing`, `Distribution`, `Architecture`, or `Agent guide` over `CONTRIBUTING.md` or `docs/DISTRIBUTION.md`.
 - Add a short `Contributing` section that points to `CONTRIBUTING.md`.
 - Add a short `License` section that points to `LICENSE`.
-- Link to `SECURITY.md` from the README when it materially helps navigation, but do not let it crowd the main user flow.
+- Link to `SECURITY.md` from the README when it materially helps navigation, while keeping the main user flow clear.
 - Link to deeper docs before the README turns into a handbook.
 
 ## Hero And Badges
@@ -39,9 +39,9 @@ Use this order unless the repo gives a strong reason not to:
 - Use a brand block only when the repo has a real recognizable asset.
 - Keep the hero compact: name, one-sentence purpose, optional positioning sentence.
 - Good badges: CI status, version, downloads when relevant, license.
-- Skip decorative badges that do not help trust, adoption, or navigation.
+- Use badges only when they help trust, adoption, or navigation.
 - For put.io repos that use shields badges, follow the `putio-sdk-typescript` pattern: `style=flat`, `colorA=000000`, `colorB=000000`, and `style="text-decoration:none;"` on each badge link.
-- Keep badge styling consistent within the hero block. Do not mix black shields with default-colored or glossy variants.
+- Keep badge styling consistent within the hero block.
 
 ## Docs Section
 
@@ -49,12 +49,12 @@ Use this order unless the repo gives a strong reason not to:
 - Keep the section even when the repo only has a small set of links.
 - Common links include About, Guides, Architecture, Deployment, and Security when those docs exist.
 - Order the links by reader importance, not by filesystem path or filename.
-- Do not use the `Docs` section as a dump of every top-level file. Keep `Contributing` and `License` in their own sections unless the repo has a strong reason not to.
+- Use the `Docs` section for reader-facing documentation links. Keep `Contributing` and `License` in their own sections unless the repo has a strong reason to group them.
 - If a repo needs to expose agent-only, generated, or otherwise internal navigation such as `AGENTS.md` or `fastlane/README.md`, put those links last or move them into a separate section such as `Repo Internals`.
-- Avoid repeating the same doc-link lists in multiple top-level files. Keep one canonical navigation area and let other docs link to it sparingly.
+- Keep one canonical navigation area and let other docs link to it sparingly.
 - Keep it skimmable: a short list is usually enough.
 - Prefer one canonical location per workflow detail instead of mirroring the same checklist across `README.md`, `CONTRIBUTING.md`, and GitHub templates.
-- Agent-facing verification commands should avoid dumping authenticated PII or account metadata. Use non-PII checks or field-filtered structured output such as an auth-source proof.
+- Agent-facing verification commands use non-PII checks or field-filtered structured output such as an auth-source proof.
 
 ## CONTRIBUTING.md
 
@@ -97,7 +97,7 @@ Use this order unless the repo gives a strong reason not to:
 - Pull request and issue templates exist when they materially improve review or triage quality.
 - `SECURITY.md` uses private-first disclosure and points to `devs@put.io`.
 - `LICENSE` exists and is linked where appropriate.
-- User-facing docs do not drift into contributor setup.
-- Contributor docs do not re-explain end-user usage unless it helps local development.
+- User-facing docs stay focused on users.
+- Contributor docs explain end-user usage only when it helps local development.
 - Repeated doc references live in one canonical place instead of being copied across multiple files.
 - Every command, doc path, badge target, and contact address is verified against the repo.

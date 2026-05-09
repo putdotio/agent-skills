@@ -55,7 +55,7 @@ This means TypeScript should remain the canonical full-surface contract referenc
 
 - Parse external data once at the transport or domain boundary
 - Operate on typed models internally
-- Do not pass raw JSON or untyped maps through public APIs
+- Expose typed values through public APIs
 - Preserve unknown backend enum or string values when forward compatibility matters
 
 ### Typed query and pagination contracts
@@ -79,7 +79,7 @@ This means TypeScript should remain the canonical full-surface contract referenc
 
 - Keep deterministic tests for request shaping, parsing, error mapping, and public contract behavior
 - Keep safe live tests for real API behavior that unit tests cannot prove
-- Do not count mock-heavy self-verification as enough
+- Treat mock-heavy self-verification as a starting point; add the real contract checks the change needs
 - If a repo cannot prove its real behavior safely, document that as a gap
 
 ## Language Doctrine
@@ -92,9 +92,9 @@ This means TypeScript should remain the canonical full-surface contract referenc
 - Keep `Schema` at boundaries for request, response, config, and error shapes
 - Keep Promise and Effect client surfaces aligned when both are public
 - Prefer discriminated unions, explicit exports, and parameter-aware return types over loose optional bags
-- Do not weaken the contract with unsafe casts, ad hoc parsing, or hidden runtime assumptions
+- Preserve the contract with typed boundaries, structured parsing, and explicit runtime assumptions
 - Mirror backend capability one to one unless an endpoint is intentionally excluded for a documented reason such as safety, transport mismatch, or an unfinished backend contract
-- If a backend surface is still unstable, under-specified, or not safely verifiable, document the temporary gap instead of pretending it is complete
+- If a backend surface is still unstable, under-specified, or not safely verifiable, document the temporary gap plainly
 - Use conditional and parameter-aware return types where query parameters, pagination options, or field selections materially change the response shape
 - Expose helper utilities around typed errors when they improve client ergonomics without hiding the underlying error taxonomy
 
@@ -155,7 +155,7 @@ Use this bias:
 - TypeScript should be the fully fledged one-to-one backend client because the web app, CLI, and external users need it
 - Swift and Kotlin should prioritize the surfaces first-party native apps actually need
 - Expand Swift or Kotlin coverage when backend behavior is verified and first-party usage or clear product intent justifies it
-- Do not add namespaces just because another SDK already has them
+- Add namespaces when backend behavior and real consumer use justify them
 
 When deciding whether a namespace belongs in Swift or Kotlin, check:
 
@@ -188,7 +188,7 @@ Use this as the default scope bias for native SDKs and as a completeness reminde
 
 - `required` means a healthy SDK in that lane should actively support the family
 - `required in the full client` means the TypeScript SDK should cover it as part of the one-to-one backend client mission
-- `optional` means do not add it just for parity
+- `optional` means add it when real consumer need appears
 - `defer` means wait for first-party usage or an explicit product decision
 - `justify explicitly` means add only with clear evidence and a maintenance plan
 - `include when the backend still meaningfully exposes them` means the TypeScript SDK should not erase backend capability just because the surface is niche or old

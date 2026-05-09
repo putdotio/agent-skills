@@ -8,7 +8,8 @@ Use the new `putio-sdk-typescript` layout as the default TypeScript package refe
 - Expose one repo-local `verify` script and let CI call it directly.
 - Prefer the same repo shape across TypeScript libraries and apps so setup and maintenance stay boring.
 - Prefer GitHub Actions for release orchestration.
-- If the repo uses semantic-release for npm publishing and release notes, run it from the release workflow instead of installing release-only tooling into the package by default.
+- If the repo uses semantic-release for npm publishing and release notes, run it from the release workflow by default.
+- Keep CI/CD-only semantic-release plugins in the workflow `extra_plugins` list with exact versions. Add them to repo `devDependencies` only when the repo intentionally supports local release execution.
 - When using semantic-release, configure both the commit analyzer and release notes generator with the `conventionalcommits` preset and include `conventional-changelog-conventionalcommits` in the workflow plugin list.
 - When `@semantic-release/git` writes a release commit, mint a `putio-release-bot` installation token and set `GIT_AUTHOR_*` and `GIT_COMMITTER_*` so commit metadata matches the app bot identity.
 - If `main` or `v*` is protected, verify `putio-release-bot` is allowed before relying on version-bump commits, tag creation, GitHub Releases, or asset uploads.

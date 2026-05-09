@@ -12,9 +12,9 @@ interface:
     - Stale, duplicated, broken, or bloated guidance is removed, linked, or moved to the correct doc.
 
     Constraints:
-    - Do not guess commands, env vars, deployment behavior, or repo-specific helper scripts.
-    - Do not leak chat-only absolute paths, editor URIs, user PII, or third-party app names into checked-in docs.
-    - Do not turn top-level docs into deep implementation manuals.
+    - Verify commands, env vars, deployment behavior, and repo-specific helper scripts against the repo.
+    - Keep chat-only absolute paths, editor URIs, user PII, and third-party app names out of checked-in docs.
+    - Keep top-level docs navigational and move deep implementation detail into focused docs.
 
     Output: list docs changed, stale material removed or rewritten, verification performed, gaps, and next step.
 

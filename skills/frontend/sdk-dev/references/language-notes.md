@@ -8,14 +8,14 @@ Use the section that matches the SDK repo you are changing.
 - Keep `Schema` at boundaries for request, response, config, and error shapes.
 - Keep Promise and Effect clients aligned when both are public.
 - Prefer discriminated unions, explicit exports, and parameter-aware return types over loose option bags.
-- Do not weaken the surface with unsafe casts or ignored type failures unless explicitly approved.
+- Preserve the typed surface; use unsafe casts or ignored type failures only with explicit approval.
 
 ## Swift
 
 - Prefer `async throws` and native Swift value types.
 - Keep the package surface open-source-safe and preserve package-manager install paths.
 - Verify the example app when auth or integration behavior changes.
-- Avoid callback-first APIs, raw JSON public results, and JavaScript-style compatibility layers as long-term surfaces.
+- Prefer coroutine-first APIs, typed public results, and Kotlin-native surfaces as long-term contracts.
 
 ## Kotlin
 

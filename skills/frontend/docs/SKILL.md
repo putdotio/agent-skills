@@ -34,13 +34,13 @@ test ! -e AGENTS.md || { test -L CLAUDE.md && test "$(readlink CLAUDE.md)" = "AG
 
 ## Guardrails
 
-- Do not guess commands, environment variables, or deployment behavior.
+- Verify commands, environment variables, and deployment behavior against the repo.
 - Prefer one canonical location per fact. Point to docs or templates instead of copying long checklists between them.
-- Do not hardcode volatile metrics such as test counts or coverage numbers.
-- Do not add generic filler sections that say nothing specific about the repo.
-- Do not cite or link unrelated external repos in generated docs unless the user explicitly asks for that.
-- Do not let routing docs read like a file tree. Link targets may be paths, but visible labels should usually be document titles or reader-facing purposes.
-- Do not leak chat-only absolute filesystem links such as `/Users/...`, `file://...`, or `vscode://...` into checked-in docs.
-- Do not assume the repo provides a link-checking script or any repo-specific docs helper unless it actually exists.
-- Never include user PII (names, emails, usernames, IPs, etc.) in docs, references, or examples. Mask or normalize any PII to generic placeholders (e.g., `user@example.com`, `your-username`).
-- Never mention third-party applications by name in docs or references. Refer to them collectively as "ecosystem apps".
+- Keep volatile metrics such as test counts or coverage numbers out of durable docs.
+- Add sections only when they say something specific about the repo.
+- Cite or link external repos only when they are relevant to the generated docs or explicitly requested.
+- Make routing docs read like reader navigation. Link targets may be paths, but visible labels should usually be document titles or reader-facing purposes.
+- Keep chat-only absolute filesystem links such as `/Users/...`, `file://...`, or `vscode://...` out of checked-in docs.
+- Use only repo-specific docs helpers that actually exist.
+- Mask or normalize user PII (names, emails, usernames, IPs, etc.) to generic placeholders such as `user@example.com` or `your-username`.
+- Refer to third-party applications collectively as "ecosystem apps".

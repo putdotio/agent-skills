@@ -28,12 +28,12 @@ Useful reports usually include issues involving:
 ## Guidelines
 
 - test only against accounts, environments, and data you control
-- avoid destructive behavior, service disruption, or automated high-volume testing
-- do not attempt social engineering, physical attacks, or denial-of-service testing
+- keep testing non-destructive, low-volume, and service-safe
+- limit reports to technical vulnerabilities in this project
 
 ## Supported Versions
 
-Describe the repo's actual support policy here. If the repo does not have a formal version-support policy, say so plainly instead of guessing.
+Describe the repo's actual support policy here. If the repo has no formal version-support policy, say so plainly.
 
 ## Disclosure
 

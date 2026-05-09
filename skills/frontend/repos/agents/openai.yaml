@@ -14,10 +14,10 @@ interface:
     - Existing working release or deploy plumbing is preserved unless repo evidence shows it conflicts with the target model.
 
     Constraints:
-    - Do not invent ecosystem-specific release tooling without a real repo or team standard.
-    - Do not weaken verify, bypass it, or add manual release paths that skip it.
-    - Do not allow arbitrary manual refs in jobs that load secrets, sign, publish, upload, deploy, or promote artifacts.
-    - Do not paste secrets into workflow YAML.
+    - Use ecosystem-specific release tooling backed by a real repo or team standard.
+    - Preserve verify as the gate for automatic and manual release paths.
+    - Validate manual refs before jobs load secrets, sign, publish, upload, deploy, or promote artifacts.
+    - Keep secrets in secret stores and reference them from workflow YAML.
 
     Output: summarize workflow/config files changed, verify shape, publish or deploy target, validation path, risks, gaps, and next step.
 
