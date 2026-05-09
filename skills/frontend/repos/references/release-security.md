@@ -48,6 +48,15 @@ Use this when touching GitHub Actions workflows that publish packages, upload ap
 - Keep security-sensitive build logic typed when the repo supports it without extra dependencies. In TypeScript repos, prefer `.ts` or `.mts` scripts over loosely typed `.mjs` for release-critical logic
 - Shell installers for downloaded binaries normalize the final executable mode, for example `0755`, and reject group/world-writable install directories unless the repo exposes an explicit opt-in for shared installs
 
+## SST Deploy Roles
+
+- Bind GitHub OIDC deploy roles to the repo and protected Environment that owns the deploy, and keep AWS account IDs, Route 53 zone IDs, certificate ARNs, and role ARNs in repo variables
+- For first SST deploys, start with enough AWS access for SST bootstrap plus the app's components, then trim after a successful deploy with CloudTrail or IAM Access Analyzer evidence
+- Record the steady-state policy in the repo's release or infra docs, including the component-specific actions observed during deploy
+- For `sst.aws.StaticSite`, include the SST state and asset buckets, the app bucket prefix, CloudFront, the hosted zone, read access to the existing ACM certificate, and the SSM `/sst/*` parameter path
+- For `StaticSite` assets and invalidations, include S3 bucket refresh reads used by the Pulumi AWS provider: ACL, CORS, policy, public-access-block, request-payment, tagging, website, versioning, logging, lifecycle, replication, encryption, and object-lock configuration
+- When SST creates CloudFront key-value store metadata for a static site, include `cloudfront-keyvaluestore:DescribeKeyValueStore` and `cloudfront-keyvaluestore:UpdateKeys` for the deploy role
+
 ## Caches and Generated Trees
 
 - Regenerate or verify generated dependency trees inside signed or release jobs. Examples include full CocoaPods `Pods` trees and other generated vendor directories
