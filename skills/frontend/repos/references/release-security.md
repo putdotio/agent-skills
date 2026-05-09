@@ -41,7 +41,7 @@ Use this when touching GitHub Actions workflows that publish packages, upload ap
 
 - Use GitHub-hosted floating runner labels for routine CI and release jobs: `ubuntu-latest`, `windows-latest`, and `macos-latest`. Pin a runner image only when the OS image is part of the tested toolchain contract, and document that reason next to the workflow or in the repo release docs
 - Pin release, publish, upload, signing, and deploy actions to full commit SHAs with a trailing comment for the human version tag
-- In release paths, preserve the repo's normal toolchain contract when it can be pinned. For repos that use Vite+ (`vp`), use a full-SHA-pinned `voidzero-dev/setup-vp` plus `vp install` / `vp run ...`. For pnpm repos that do not use Vite+, use full-SHA-pinned `pnpm/action-setup`, then `actions/setup-node` with `cache: pnpm`, then `pnpm install --frozen-lockfile`
+- In release paths, preserve the repo's normal toolchain contract when it can be pinned. For repos that use Vite+ (`vp`), use a full-SHA-pinned `voidzero-dev/setup-vp` plus `vp install` / `vp run ...`. For pnpm repos that do not use Vite+, use full-SHA-pinned `actions/setup-node` for the Node version, then full-SHA-pinned `pnpm/action-setup@v6` with `cache: true`, then `pnpm install --frozen-lockfile`
 - For semantic-release action workflows, keep CI/CD-only release plugins in `extra_plugins` rather than repo `devDependencies`, and pin every plugin entry to an exact version
 - Verify downloaded runtime or toolchain archives before extraction or embedding. Pair functional smoke tests with provenance checks
 - For Node SEA or binary builds, download the official checksum file, match the exact platform archive name, hash the archive, and fail before extraction on mismatch
