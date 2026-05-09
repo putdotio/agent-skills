@@ -19,7 +19,7 @@ Use the new `putio-sdk-typescript` layout as the default TypeScript package refe
 - local commands for `check`, `build`, `test`, and `verify`
 - CI setup with full-SHA-pinned `voidzero-dev/setup-vp` for repos that use Vite+ (`vp`), including release jobs
 - `vp install` before verification or release
-- Use pinned `actions/setup-node`, `corepack enable`, and `pnpm install --frozen-lockfile` for TypeScript repos that do not use Vite+ (`vp`), or as a documented fallback when Vite+ setup cannot be trusted for the release path
+- Use full-SHA-pinned `pnpm/action-setup`, then pinned `actions/setup-node` with `cache: pnpm`, then `pnpm install --frozen-lockfile` for TypeScript repos that do not use Vite+ (`vp`)
 - `verify` on pull requests and `main` pushes
 - a GitHub Actions delivery job on `main` after `verify` passes
 
