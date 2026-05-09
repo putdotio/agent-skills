@@ -33,7 +33,7 @@ Create a GitHub Environment named `release` for the publish job:
 - Approval: none; publishing is continuous after the `main` gate passes
 - Limit Environment deployment branches to `main`
 - Store the Tessl publish token as the Environment secret `TESSL_TOKEN`; do not store it as a plain repository Actions secret
-- Store `PUTIO_RELEASE_BOT_APP_ID` as an Environment variable and `PUTIO_RELEASE_BOT_PRIVATE_KEY` as an Environment secret
+- Store `PUTIO_RELEASE_BOT_CLIENT_ID` as an Environment variable and `PUTIO_RELEASE_BOT_PRIVATE_KEY` as an Environment secret
 - Protect `main` so only the put.io team can update it, with force-push and branch deletion blocked where GitHub supports those controls
 - `main` and `v*` release tags are restricted to trusted team/admin access plus `putio-release-bot` for release automation
 

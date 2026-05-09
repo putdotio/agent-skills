@@ -15,7 +15,7 @@ Use this when touching GitHub Actions workflows that publish packages, upload ap
 - Private repos without paid GitHub protection document the limitation and compensate with Environment gates, fixed checkout refs, action pinning, validated manual inputs, and least-privilege credentials
 - Reviewer-gated Environments are separate production deploy, signing, promotion, or store-submission gates when a repo explicitly needs them
 - Package/library/CLI/skill release jobs use the approval-free `release` Environment as a secret boundary with `deployment: false`; app deploy, beta, signing, promotion, and store-submission jobs keep deployment records when they represent real deployments
-- Release workflows store `PUTIO_RELEASE_BOT_APP_ID` as a protected Environment variable and `PUTIO_RELEASE_BOT_PRIVATE_KEY` as a protected Environment secret
+- Release workflows store `PUTIO_RELEASE_BOT_CLIENT_ID` as a protected Environment variable and `PUTIO_RELEASE_BOT_PRIVATE_KEY` as a protected Environment secret
 - Push-back jobs mint a `putio-release-bot` installation token and set matching `GIT_AUTHOR_*` / `GIT_COMMITTER_*`. Commit metadata is not authorization: `GITHUB_TOKEN` writes as `github-actions[bot]`
 - If a third-party publish action creates commits internally, verify it accepts release-bot identity inputs or honors `GIT_AUTHOR_*` / `GIT_COMMITTER_*`
 
