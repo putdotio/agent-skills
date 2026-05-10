@@ -1,6 +1,6 @@
 {
   "name": "putio/frontend-docs",
-  "version": "0.1.11",
+  "version": "0.1.12",
   "private": false,
   "summary": "Structure and rewrite docs for frontend repositories, especially README.md, CONTRIBUTING.md, SECURITY.md, and other top-level docs. Use when creating or reorganizing frontend repo docs, clarifying user vs contributor guidance, reducing doc sprawl, or fixing stale commands, paths, and links in top-level docs.",
   "skills": {
