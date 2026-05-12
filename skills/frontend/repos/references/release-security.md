@@ -6,6 +6,7 @@ Use this when touching GitHub Actions workflows that publish packages, upload ap
 
 - Secret-bearing jobs check out fixed trusted refs: beta from `main`, release from a published `v*` tag, or an explicitly validated protected ref
 - Treat the workflow run ref and the checkout ref as separate trust boundaries. A GitHub Environment branch or tag policy constrains the run ref; it does not prove that `inputs.ref` is safe to check out later
+- Do not use `pull_request_target` for workflows that check out, install, build, test, package, publish, sign, deploy, or otherwise execute project code. Keep fork and outsider code on `pull_request` with read-only credentials and no release secrets
 - `workflow_dispatch` inputs are validated and bounded in a secretless step before they influence jobs that load secrets, sign artifacts, publish packages, or upload release assets
 - For manual backfills, validate the tag/ref in a separate secretless job, make build jobs depend on it, and use a sanitized output in `actions/checkout` `with.ref`
 
@@ -41,7 +42,7 @@ Use this when touching GitHub Actions workflows that publish packages, upload ap
 
 - Use GitHub-hosted floating runner labels for routine CI and release jobs: `ubuntu-latest`, `windows-latest`, and `macos-latest`. Pin a runner image only when the OS image is part of the tested toolchain contract, and document that reason next to the workflow or in the repo release docs
 - Pin release, publish, upload, signing, and deploy actions to full commit SHAs with a trailing comment for the human version tag
-- In release paths, preserve the repo's normal toolchain contract when it can be pinned. For repos that use Vite+ (`vp`), use a full-SHA-pinned `voidzero-dev/setup-vp` plus `vp install` / `vp run ...`. For pnpm repos that do not use Vite+, use full-SHA-pinned `actions/setup-node` for the Node version, then full-SHA-pinned `pnpm/action-setup@v6` with `cache: true`, then `pnpm install --frozen-lockfile`
+- In secret-bearing release, publish, signing, and deploy paths, preserve the repo's normal toolchain contract when it can be pinned, but disable dependency caches by default. For repos that use Vite+ (`vp`), use a full-SHA-pinned `voidzero-dev/setup-vp` with `cache: false` or no cache input, then `vp install` / `vp run ...`. For pnpm repos that do not use Vite+, use full-SHA-pinned `actions/setup-node` for the Node version, full-SHA-pinned `pnpm/action-setup@v6` without package-manager cache, then `pnpm install --frozen-lockfile`
 - For semantic-release action workflows, keep CI/CD-only release plugins in `extra_plugins` rather than repo `devDependencies`, and pin every plugin entry to an exact version
 - Verify downloaded runtime or toolchain archives before extraction or embedding. Pair functional smoke tests with provenance checks
 - For Node SEA or binary builds, download the official checksum file, match the exact platform archive name, hash the archive, and fail before extraction on mismatch
@@ -59,10 +60,19 @@ Use this when touching GitHub Actions workflows that publish packages, upload ap
 
 ## Caches and Generated Trees
 
+- Verify jobs may use dependency caches, but secret-bearing release, publish, signing, and deploy jobs do fresh dependency installs by default. Do not share package-manager caches between `pull_request` and privileged `push: main`, `workflow_dispatch`, or tag-driven jobs
 - Regenerate or verify generated dependency trees inside signed or release jobs. Examples include full CocoaPods `Pods` trees and other generated vendor directories
 - Cache download artifacts where possible, then regenerate and verify generated trees before signing or publishing
-- If a generated-tree cache is unavoidable, namespace by workflow, event, trust level, platform, and lockfile; release jobs consume only caches from the same trust level
+- If a generated-tree or tool cache is unavoidable in a privileged job, namespace it by workflow, event, trust level, platform, and lockfile. Privileged jobs consume only caches written by the same trusted event class, and they still regenerate or verify generated trees before signing, publishing, or promotion
 - `bootstrap-ci.sh`-style shortcuts that skip regeneration only from lockfile equality are acceptable for local speed, but risky when a generated tree came from a shared CI cache
+
+## npm Supply-Chain Incident Checks
+
+Reference: [TanStack npm supply-chain compromise postmortem](https://tanstack.com/blog/npm-supply-chain-compromise-postmortem) and [GitHub advisory GHSA-g7cv-rxg3-hmpx](https://github.com/advisories/GHSA-g7cv-rxg3-hmpx)
+
+- For TanStack-style incidents, scan manifests and lockfiles for the published IOC before running installs: malicious `optionalDependencies` entries pointing `@tanstack/setup` at `github:tanstack/router#79ac49eedf774dd4b0cfa308722bc463cfe5885c`, unexpected `router_init.js`, and affected package versions from the active advisory
+- If any affected version was installed on a developer machine or CI runner, treat that host as compromised. Rotate registry, GitHub, cloud, SSH, Vault, and package-manager credentials reachable from the host before publishing again
+- SLSA or npm provenance proves where a package was built, not that the runner was clean. Keep provenance checks, but do not use them as a substitute for trusted workflow boundaries, fresh release installs, and no shared release caches
 
 ## Provenance
 
