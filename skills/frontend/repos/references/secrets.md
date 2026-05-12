@@ -147,7 +147,7 @@ Mandatory shape against PR-driven exfiltration and supply-chain attacks.
 Load-bearing:
 
 - **Deployment Environment for every workflow mapping a sensitive secret** — continuous release environments scope secrets without approval gates; production deploy, signing, promotion, or store-submission environments may add reviewers when a human gate is intended
-- **Dependabot** for the `github-actions` ecosystem so pinned SHAs get reviewable bumps
+- **Dependabot** for the `github-actions` ecosystem so pinned action SHAs with same-line version comments get reviewable bumps. Verify each pinned SHA resolves to the comment's tag before committing it; stale upstream SHAs break Dependabot's updater
 - Branch/tag trust and trusted-team direct push mechanics live in [release-security.md](release-security.md)
 
 Additional hygiene:
