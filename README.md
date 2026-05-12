@@ -10,14 +10,10 @@
 
 ## Installation
 
-```bash
-npx skills add putdotio/skills
-```
-
-Install one skill directly:
+Install all shared put.io skills globally:
 
 ```bash
-npx skills add https://github.com/putdotio/skills --skill putio-frontend-docs
+npx --yes skills add putdotio/skills -g --all -y
 ```
 
 ## Tessl
