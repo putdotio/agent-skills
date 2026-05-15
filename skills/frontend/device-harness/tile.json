@@ -1,0 +1,11 @@
+{
+  "name": "putio/device-harness",
+  "version": "0.1.0",
+  "private": false,
+  "summary": "Design small, typed, agent-friendly harnesses for hard-to-automate device and TV platforms. Use when shaping tools for Tizen, Roku, Android TV, Apple TV/tvOS, emulator wrappers, screenshot collectors, remote-control drivers, runtime assertion tools, or similar proof loops.",
+  "skills": {
+    "putio-device-harness": {
+      "path": "SKILL.md"
+    }
+  }
+}

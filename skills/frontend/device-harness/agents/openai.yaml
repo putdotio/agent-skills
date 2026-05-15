@@ -1,0 +1,5 @@
+interface:
+  display_name: "put.io Device Harness"
+  short_description: "Design typed device proof loops"
+  default_prompt: |
+    Use $putio-device-harness to design a typed, agent-friendly harness for a hard-to-automate device platform, with clear adapter, CLI, driver, assertion, artifact, repo-integration, and boundary choices.
