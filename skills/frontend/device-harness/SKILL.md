@@ -5,9 +5,7 @@ description: Design small, typed, agent-friendly harnesses for hard-to-automate 
 
 # put.io Device Harness
 
-Use this skill when designing or reviewing a device/platform harness for put.io work.
-
-A good harness turns platform ceremony into repeatable commands and proof artifacts. It wraps vendor/community tools, exposes a small typed surface, drives runtime behavior, and leaves enough evidence for another agent or reviewer to trust the result.
+Use this skill when designing or reviewing a device/platform harness for put.io work. The harness should wrap platform tools, expose a typed command surface, drive runtime behavior, assert meaningful state, and leave proof artifacts.
 
 ## Workflow
 
@@ -18,6 +16,7 @@ A good harness turns platform ceremony into repeatable commands and proof artifa
 5. Prefer deterministic commands and typed outputs over prose-only manual steps.
 6. Design verification around hardware-backed or emulator-backed proof when static checks cannot prove behavior.
 7. Before implementation, check the design covers all seven layers from `harness-pattern.md`: adapter, CLI/API, runtime driver, assertions, proof artifacts, repo integration, and boundaries.
+8. If any layer is missing, revise the design before writing code; if platform state cannot be queried, require stronger screenshot, log, or transcript proof.
 
 Mini-example command surface:
 
@@ -30,6 +29,30 @@ harness assert-screen --name player --artifact artifacts/live/player.png
 ```
 
 The exact command names should follow the target repo, but the shape should stay narrow, typed, and proof-producing.
+
+Minimal TypeScript shape:
+
+```ts
+type HarnessArtifact = {
+  kind: "screenshot" | "log" | "state" | "review-html";
+  path: string;
+};
+
+type HarnessResult = {
+  status: "ok" | "failed";
+  device: string;
+  artifacts: HarnessArtifact[];
+  message?: string;
+};
+
+interface PlatformAdapter {
+  package(profile: string): Promise<HarnessResult>;
+  install(device: string): Promise<HarnessResult>;
+  launch(appId: string): Promise<HarnessResult>;
+  press(key: string): Promise<HarnessResult>;
+  screenshot(path: string): Promise<HarnessResult>;
+}
+```
 
 ## Output Shape
 
