@@ -18,7 +18,7 @@ jq -r '.name' skills/*/*/tile.json
 - `tile.json` is the source of truth for Tessl package identity and publishing
 - `agents/openai.yaml` is optional, but when present it is the source of truth for OpenAI or Codex picker-facing display names, descriptions, and default prompts
 - `.github/workflows/publish-skills.yml` runs a secretless review job first, then publishes from the `release` Environment without an approval gate
-- Pushes to `main` publish only the tiles that changed
+- Pushes to `main` that touch `skills/**` publish only the tiles that changed
 - Manual workflow runs publish all tiles only when the run ref is `main`; non-`main` manual runs can review, but the publish job is skipped
 - The publish job uses [`uinaf/tessl-publish-action`](https://github.com/uinaf/tessl-publish-action) to detect changed tiles, run review and lint, and publish them
 - The action derives semantic version bumps from Conventional Commit messages: breaking changes -> `major`, `feat` -> `minor`, everything else -> `patch`
