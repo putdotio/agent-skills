@@ -1,6 +1,6 @@
 {
   "name": "putio/frontend-repos",
-  "version": "0.1.34",
+  "version": "0.1.35",
   "private": false,
   "summary": "Structure frontend repositories around a shared verify and delivery model. Use when standardizing package repos, app repos, or SDK repos across TypeScript, Swift, Kotlin, or similar ecosystems; setting up CI guardrails; defining a repo-local verify command; or enabling continuous publish or deploy flows on main after verify passes.",
   "skills": {
