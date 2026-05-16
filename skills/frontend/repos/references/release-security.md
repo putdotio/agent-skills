@@ -19,6 +19,7 @@ Use this when touching GitHub Actions workflows that publish packages, upload ap
 - Release workflows store `PUTIO_RELEASE_BOT_CLIENT_ID` as a protected Environment variable and `PUTIO_RELEASE_BOT_PRIVATE_KEY` as a protected Environment secret
 - Push-back jobs mint a `putio-release-bot` installation token and set matching `GIT_AUTHOR_*` / `GIT_COMMITTER_*`. Commit metadata is not authorization: `GITHUB_TOKEN` writes as `github-actions[bot]`
 - If a third-party publish action creates commits internally, verify it accepts release-bot identity inputs or honors `GIT_AUTHOR_*` / `GIT_COMMITTER_*`
+- Do not add CODEOWNERS as a blanket default for small frontend repos. Use owner-gated workflow or release-file review only when maintainers explicitly want that extra process.
 
 ### Allowing the put.io Team to Push
 
@@ -46,6 +47,8 @@ Use this when touching GitHub Actions workflows that publish packages, upload ap
 - Before committing a pinned action ref, verify that the SHA still exists upstream and resolves to the advertised tag. Stale or garbage-collected SHAs can make Dependabot update jobs fail even when the workflow still looks pinned
 - In secret-bearing release, publish, signing, and deploy paths, preserve the repo's normal toolchain contract when it can be pinned, but disable dependency caches by default. For repos that use Vite+ (`vp`), use a full-SHA-pinned `voidzero-dev/setup-vp` with `cache: false` or no cache input, then `vp install` / `vp run ...`. For pnpm repos that do not use Vite+, use full-SHA-pinned `actions/setup-node` for the Node version, full-SHA-pinned `pnpm/action-setup@v6` without package-manager cache, then `pnpm install --frozen-lockfile`
 - For semantic-release action workflows, keep CI/CD-only release plugins in `extra_plugins` rather than repo `devDependencies`, and pin every plugin entry to an exact version
+- For npm publishing from GitHub-hosted Actions, prefer npm Trusted Publishing over `NPM_TOKEN`: configure the package on npm with the GitHub owner/repo, workflow filename, and optional Environment; grant the release job `id-token: write`; remove the long-lived token; and rely on npm's automatic provenance for public packages from public repos. Keep `package.json` repository metadata aligned with that GitHub repo.
+- Keep checkout credentials unpersisted through install, build, and pack steps when possible. If semantic-release must push a version bump, introduce the release-bot or GitHub App write credential only at the release boundary, after dependency lifecycle scripts have finished.
 - Verify downloaded runtime or toolchain archives before extraction or embedding. Pair functional smoke tests with provenance checks
 - For Node SEA or binary builds, download the official checksum file, match the exact platform archive name, hash the archive, and fail before extraction on mismatch
 - Keep security-sensitive build logic typed when the repo supports it without extra dependencies. In TypeScript repos, prefer `.ts` or `.mts` scripts over loosely typed `.mjs` for release-critical logic
@@ -74,6 +77,7 @@ Reference: [TanStack npm supply-chain compromise postmortem](https://tanstack.co
 
 - For TanStack-style incidents, scan manifests and lockfiles for the published IOC before running installs: malicious `optionalDependencies` entries pointing `@tanstack/setup` at `github:tanstack/router#79ac49eedf774dd4b0cfa308722bc463cfe5885c`, unexpected `router_init.js`, and affected package versions from the active advisory
 - If any affected version was installed on a developer machine or CI runner, treat that host as compromised. Rotate registry, GitHub, cloud, SSH, Vault, and package-manager credentials reachable from the host before publishing again
+- OIDC removes the long-lived npm token theft path, but the workflow identity can still be abused if the release job runs compromised code. Keep trusted refs, fresh release installs, no shared release caches, and a narrow release credential boundary.
 - SLSA or npm provenance proves where a package was built, not that the runner was clean. Keep provenance checks, but do not use them as a substitute for trusted workflow boundaries, fresh release installs, and no shared release caches
 
 ## Provenance

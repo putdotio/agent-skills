@@ -127,7 +127,7 @@ Mandatory shape against PR-driven exfiltration and supply-chain attacks.
 - **Secret-bearing manual flows** validate any requested tag/ref in a secretless job first, then check it out with `actions/checkout` `with.ref` only after validation. Environment branch/tag policy protects the workflow run ref, not a later `inputs.ref` checkout
 - **Use `pull_request` for code-running steps** such as checkout PR head, label automation with checkout, or composite actions running PR-supplied scripts
 - **Use direct trusted triggers for secret-bearing follow-ups** rather than `workflow_run` triggered by a `pull_request` workflow that reads PR data
-- Pin reusable workflows to SHA and CODEOWNER-gate
+- Pin reusable workflows to SHA and use owner-gated review only when the repo intentionally carries that process
 
 ### Where secrets live
 
@@ -152,7 +152,7 @@ Load-bearing:
 
 Additional hygiene:
 
-- CODEOWNERS on `.github/workflows/**`, `.github/actions/**`, `.env.example`, the `secrets-setup`/`secrets-clean` target body, and lockfiles
+- Optional owner-gated review on `.github/workflows/**`, `.github/actions/**`, `.env.example`, the `secrets-setup`/`secrets-clean` target body, and lockfiles when maintainers want that process
 - Signed commits where repo contributors can tolerate the friction
 
 ### Setup recipe
