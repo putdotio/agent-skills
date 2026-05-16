@@ -40,4 +40,5 @@ This mutates files. Review the diff before committing.
 - `review-skills.sh` is the batch entrypoint for local skill review
 - `tessl.sh` uses an installed `tessl` CLI first and falls back to `npx tessl` only when needed
 - `optimize-skills.sh` applies mutations, so run it intentionally and inspect the resulting diff
-- CI runs `./scripts/review-skills.sh` on pull requests and pushes to `main`
+- CI runs `./scripts/review-skills.sh` on pull requests. The publish workflow
+  runs the same review before publishing `main` changes under `skills/**`
