@@ -8,7 +8,7 @@ description: Structure put.io frontend-owned repositories around repo-local veri
 Use one delivery rule: every merge to `main` should already be publishable or deployable.
 
 Bundled references: `delivery-model.md`, `typescript.md`, `applications.md`, `secrets.md`, and `release-security.md`.
-This skill owns repo shape and canonical commands, not host-specific deployment architecture.
+This skill owns repo shape and canonical commands, not host-specific deployment architecture or detailed frontend test harness design.
 
 ## Workflow
 
@@ -18,12 +18,13 @@ This skill owns repo shape and canonical commands, not host-specific deployment 
 4. If the repo is an application, read [references/applications.md](references/applications.md).
 5. If the repo uses 1Password-backed local, live-test, build, signing, or deploy workflows, read [references/secrets.md](references/secrets.md) and standardize the local env shape.
 6. If the repo has secret-bearing release, deploy, signing, publish, beta, backfill, or binary-build workflows, read [references/release-security.md](references/release-security.md).
-7. Prefer one repo-local `verify` entrypoint that CI calls directly.
-8. Run the repo-local `verify` command locally before changing delivery automation. If it fails, fix that command first and rerun it until it passes.
-9. Configure semantic-release plugins and commit identity per the delivery-model reference when release commits are in scope.
-10. Verify the publish or deploy path only after the repo-local `verify` command is stable and reproducible.
-11. Keep release and publishing docs in `docs/DISTRIBUTION.md`; `CONTRIBUTING.md` links there as contributor navigation.
-12. After publish or deploy changes, run the repo-documented artifact or app smoke check. If none exists, record that as a repo gap.
+7. If the repo owns live, e2e, QA, emulator, simulator, browser, extension, TV, native, or device test harness commands, keep this skill focused on repo-local entrypoints and sanitized env/profile names; detailed auth/session, flow, assertion, and artifact design belongs with the harness implementation and its local docs.
+8. Prefer one repo-local `verify` entrypoint that CI calls directly.
+9. Run the repo-local `verify` command locally before changing delivery automation. If it fails, fix that command first and rerun it until it passes.
+10. Configure semantic-release plugins and commit identity per the delivery-model reference when release commits are in scope.
+11. Verify the publish or deploy path only after the repo-local `verify` command is stable and reproducible.
+12. Keep release and publishing docs in `docs/DISTRIBUTION.md`; `CONTRIBUTING.md` links there as contributor navigation.
+13. After publish or deploy changes, run the repo-documented artifact or app smoke check. If none exists, record that as a repo gap.
 
 Summary shape:
 
@@ -81,6 +82,7 @@ App-shaped example:
 
 - Keep the repo-local `verify` command as the source of truth for guardrails.
 - Prefer GitHub Actions for orchestration and repo-local commands as the canonical home for build, test, and deliver logic.
+- For frontend test harnesses, expose stable repo-local targets and sanitized `.env.example` profile names here; keep auth/session, deep-link, fixture, platform-input, assertion, and proof-artifact doctrine in the harness implementation and local docs.
 - Use release tooling backed by a real repo precedent or team standard.
 - Keep manual release paths on trusted refs before they reach secret-bearing jobs.
 - Put release credential policy, protected Environment setup, and tag rules in `docs/DISTRIBUTION.md`; leave contributor docs as workflow/setup guidance.

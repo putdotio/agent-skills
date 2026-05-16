@@ -1,0 +1,5 @@
+interface:
+  display_name: "put.io Frontend Test Harness"
+  short_description: "Design typed frontend proof loops"
+  default_prompt: |
+    Use $putio-frontend-test-harness to design a typed, agent-friendly test harness for a put.io frontend-owned surface, with clear adapter, auth/session, flow driver, assertion, artifact, observability, isolation, repo-integration, and boundary choices.

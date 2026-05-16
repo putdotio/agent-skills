@@ -4,7 +4,7 @@ These examples are training references for the harness pattern. They are not the
 
 ## `taizn`
 
-`taizn` demonstrates the packaging, install, and signing side of a device harness.
+`taizn` demonstrates the packaging, install, and signing side of a frontend surface harness.
 
 Pattern signals:
 
@@ -16,7 +16,7 @@ Pattern signals:
 - reads sensitive values from env or local config instead of git
 - turns multi-step Tizen ceremony into repeatable commands
 
-Use this pattern when a platform needs reliable build/package/install setup before runtime testing can start.
+Use this pattern when a platform needs reliable build/package/install setup before flow testing can start.
 
 Good boundaries:
 
@@ -26,7 +26,7 @@ Good boundaries:
 
 ## `putio-roku`
 
-`putio-roku` demonstrates a hardware-backed runtime proof loop.
+`putio-roku` demonstrates a hardware-backed product-flow proof loop.
 
 Pattern signals:
 
@@ -35,7 +35,7 @@ Pattern signals:
 - Roku ECP handles launch, deeplinks, keypresses, and screenshots
 - SceneGraph/runtime queries support assertions when available
 - screenshots, logs, review HTML, and compact summaries make behavior reviewable
-- live checks cover navigation, playback, focus, media-key behavior, and visual artifacts
+- live checks cover auth state, deeplink navigation, playback, focus, media-key behavior, and visual artifacts
 
 Use this pattern when platform behavior can only be trusted after running on a real device or emulator.
 
@@ -45,6 +45,25 @@ Good boundaries:
 - keep generic remote-control and screenshot primitives separate from app journeys
 - keep scenario expectations in named scripts or scenario files so the platform driver remains reusable
 
+## Frontend-owned Web And Native Apps
+
+Use the same shape for web, browser extension, iOS, Android, and tvOS surfaces.
+The wrapped tools change, but the harness contract stays stable.
+
+Pattern signals:
+
+- one command boots or selects the target surface
+- one command checks auth/profile readiness through global `putio`
+- scenario commands open common product flows through deeplinks, routes, launch arguments, or debug hooks
+- assertions read UI state, accessibility state, app logs, network-visible state, or screenshots
+- artifacts explain failures without relying on a human watching the run
+
+Good boundaries:
+
+- keep fixture IDs and account-specific state behind local config, scenario files, or approved dev-account helpers
+- keep platform control separate from product scenarios
+- make missing simulator, emulator, browser, device, or auth profile errors fail early with exact setup needs
+
 ## What To Copy
 
 Copy the shape, not the exact implementation:
@@ -52,7 +71,8 @@ Copy the shape, not the exact implementation:
 - a small typed CLI or script API
 - repo-local commands for common flows
 - clean local config and env boundaries
-- device communication wrapped behind narrow functions
+- platform communication wrapped behind narrow functions
+- auth/session setup through global `putio` profile checks
 - meaningful waits and assertions
 - proof artifacts written to predictable paths
 - concise failure messages that point to the failing platform step

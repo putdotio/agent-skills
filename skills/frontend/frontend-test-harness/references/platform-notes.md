@@ -2,6 +2,54 @@
 
 Use these notes as starting points. Verify current platform tooling in the target repo before implementing.
 
+## Web And Browser Extensions
+
+Likely tools:
+
+- Playwright or repo-local browser automation
+- extension pack/load tooling
+- dev server or preview server commands
+- browser logs, screenshots, traces, and network captures
+
+Common harness concerns:
+
+- dev server boot readiness
+- authenticated session setup without using the human's browser profile
+- route, deeplink, and extension entrypoint coverage
+- extension permissions, service worker lifecycle, and content-script injection state
+- reliable screenshots and traces for visual or startup failures
+
+Good proof:
+
+- surface boots through a single command
+- smoke check proves the app or extension is alive
+- route or extension entrypoint opens the expected product flow
+- screenshot, trace, console log, or runtime state dump is saved with the summary
+
+## iOS / Android Native
+
+Likely tools:
+
+- Xcode command-line tooling, `simctl`, XCTest, or UI test runners
+- Gradle, Android `adb`, UI Automator, accessibility dumps, logcat, and screencap
+- emulator, simulator, hardware, or cloud-device provider CLIs
+
+Common harness concerns:
+
+- simulator or emulator boot readiness
+- install, launch, deeplink, intent, and launch-argument support
+- app reinstall wiping local session state
+- auth/session seeding through approved development hooks
+- logs, screenshots, and accessibility state that explain failures
+
+Good proof:
+
+- app installs or launches on the selected target
+- auth/session readiness is checked before the product flow starts
+- deeplink or launch argument opens the expected route
+- UI/accessibility state supports assertions
+- screenshot and log excerpt are saved with the summary
+
 ## Tizen
 
 Likely tools:
