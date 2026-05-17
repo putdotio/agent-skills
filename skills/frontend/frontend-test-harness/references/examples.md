@@ -54,7 +54,12 @@ Pattern signals:
 
 - one command boots or selects the target surface
 - one command checks auth/profile readiness through global `putio`
+- one bounded setup step renders or injects 1Password-backed testing-account
+  variables, then the rest of the flow uses `putio` profiles and ignored local
+  config paths
 - scenario commands open common product flows through deeplinks, routes, launch arguments, or debug hooks
+- device-code and link approval flows are completed by typed CLI/API helpers
+  with the testing account instead of by opening the human's browser
 - assertions read UI state, accessibility state, app logs, network-visible state, or screenshots
 - artifacts explain failures without relying on a human watching the run
 
@@ -73,6 +78,8 @@ Copy the shape, not the exact implementation:
 - clean local config and env boundaries
 - platform communication wrapped behind narrow functions
 - auth/session setup through global `putio` profile checks
+- one-shot 1Password materialization plus autonomous `putio` profile/device-link
+  flows for auth-bearing scenarios
 - meaningful waits and assertions
 - proof artifacts written to predictable paths
 - concise failure messages that point to the failing platform step

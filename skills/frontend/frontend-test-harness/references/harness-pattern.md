@@ -73,6 +73,19 @@ missing. Do not add repo-local CLI installs just to make auth work unless the
 repo already owns that toolchain contract and explicitly chooses to pin the CLI
 as part of it.
 
+Before designing or running `putio`-backed harness commands, load the `putio-cli`
+skill and inspect the current contract with `putio describe --output json`.
+Treat that skill as the source of truth for CLI discovery, structured output,
+auth profiles, paging, dry-runs, and write safety.
+
+Design for one bounded secret-materialization step followed by autonomous CLI
+flows. A good harness can render or inject approved 1Password-backed values once
+at startup, then run the rest of auth, device approval, authorization, and
+seeding through the testing account and `putio` profile state. Use the repo's
+standard secret path, such as a `secrets-setup` target, `op run
+--env-file=<template> -- <command>`, or a typed wrapper around those mechanics.
+Do not make agents approve 1Password prompts repeatedly inside a scenario.
+
 Keep auth state durable across native app reinstalls, simulator wipes, and
 sideload cycles by defaulting to global `putio` profile state. Use repo-local
 config paths only for tests that intentionally need isolated auth state.
@@ -80,8 +93,10 @@ config paths only for tests that intentionally need isolated auth state.
 Good auth commands are explicit and non-leaky:
 
 ```txt
+harness auth-render-vars --profile <profile-name> --env-file <ignored-env-file>
 harness auth-status --profile <profile-name>
 harness auth-prepare --profile <profile-name>
+harness auth-approve-device --profile <profile-name> --code <device-code>
 harness auth-reset --surface <target-name>
 ```
 
@@ -91,6 +106,29 @@ session unless the user explicitly asks for that flow. Prefer `putio` profile
 checks, token injection into child harness commands, or device-code approval
 helpers. If the approved profile is missing, stop with the exact setup need
 instead of opening a browser or signing into a personal account.
+
+Use these `putio` boundaries when the CLI is available:
+
+- `putio auth status --profile <profile-name> --output json` proves readiness
+  without exposing token material
+- `putio auth profiles list --output json` lets the harness explain profile
+  state without reading secret values
+- `PUTIO_CLI_PROFILE=<profile-name>` selects the testing profile for child
+  commands
+- `PUTIO_CLI_CONFIG_PATH=<ignored-path>` isolates disposable harness auth state
+  when global profile state is not appropriate
+- `PUTIO_CLI_TOKEN` may be injected for headless setup, but it overrides
+  persisted profile selection and must not leak into checked-in examples or
+  proof artifacts
+
+For TV, native, browser-extension, and other device-code/link surfaces, prefer a
+typed command that completes the approval with the testing account through
+`putio` or approved put.io API helpers. The target behavior is: the app displays
+or emits a code, the harness captures it, the CLI/API approves it with the
+`devs-fe-auto` profile, and the app reaches an authenticated state without the
+human opening `put.io/link`. If no autonomous approval path exists for the
+surface yet, call that out as a harness-readiness gap and keep the manual
+fallback explicit.
 
 ## 4. Flow Driver
 
@@ -167,6 +205,8 @@ Expected repo shape:
 - Make/npm/pnpm targets for common flows
 - deterministic `verify`, `smoke`, or `live-test` entrypoints
 - sanitized `.env.example`
+- one-shot secret materialization or `op run` wrappers for auth-bearing live
+  checks
 - ignored local working directory
 - docs that distinguish hardware-backed checks from static checks
 - CI or manual workflow notes that explain which checks require a real device
