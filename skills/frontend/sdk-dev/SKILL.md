@@ -7,7 +7,7 @@ description: Develop or review put.io SDK repositories, API clients, and client 
 
 Use this skill when working in a put.io SDK repository rather than an end-user app.
 
-Bundled references: `sdk-vision.md`, `patterns.md`, and `language-notes.md`.
+Bundled references: [SDK vision](./references/sdk-vision.md), [patterns](./references/patterns.md), and [language notes](./references/language-notes.md).
 
 ## Quick Rules
 
@@ -30,9 +30,9 @@ Read only what you need:
 
 - the repo-local `AGENTS.md`
 - the canonical verify and live-test commands from `README.md`, `AGENTS.md`, or `docs/*`
-- [references/sdk-vision.md](references/sdk-vision.md) for scope, parity, and endpoint-family decisions
-- [references/patterns.md](references/patterns.md) for typed boundaries, error mapping, pagination, and live-test layering
-- [references/language-notes.md](references/language-notes.md) for TypeScript, Swift, or Kotlin-specific guidance
+- [SDK vision](./references/sdk-vision.md) for scope, parity, and endpoint-family decisions
+- [patterns](./references/patterns.md) for typed boundaries, error mapping, pagination, and live-test layering
+- [language notes](./references/language-notes.md) for TypeScript, Swift, or Kotlin-specific guidance
 
 If the repo has a canonical verify command, use that as the source of truth before editing delivery automation.
 If SDK release, publish, signing, or binary-build automation is in scope, also use `putio-frontend-repos` and its release-supply-chain guidance.

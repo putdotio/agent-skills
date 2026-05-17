@@ -12,10 +12,10 @@ Treat structure, labels, and ordering as part of the interface, not just as neut
 
 1. Inspect the repository before drafting.
 2. Identify the project type, user install and usage flow, contributor setup flow, any GitHub collaboration templates already in use, and the best existing docs to link.
-3. Read [references/readme-guideline.md](references/readme-guideline.md) before picking a final shape.
+3. Read [README guideline](./references/readme-guideline.md) before picking a final shape.
 4. For README hero, logo, or badge work, inspect 2-3 sibling put.io repo READMEs first and reuse the concrete house style instead of inventing a new shape.
-5. Start from [references/contributing-template.md](references/contributing-template.md) when creating or reshaping `CONTRIBUTING.md`.
-6. Start from [references/security-template.md](references/security-template.md) when creating or reshaping `SECURITY.md`.
+5. Start from [contributing template](./references/contributing-template.md) when creating or reshaping `CONTRIBUTING.md`.
+6. Start from [security template](./references/security-template.md) when creating or reshaping `SECURITY.md`.
 7. Put each concern in its canonical home: user flow in `README.md`, contributor workflow in `CONTRIBUTING.md`, security reporting in `SECURITY.md`, and detailed review prompts in GitHub templates.
 8. Ensure the repo has `CONTRIBUTING.md`, `LICENSE`, and `SECURITY.md`; keep `SECURITY.md` private-first and use `devs@put.io` for security contact.
 9. Push deep implementation detail into linked docs when it starts to bloat the top-level docs.

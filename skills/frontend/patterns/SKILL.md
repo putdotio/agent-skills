@@ -7,7 +7,7 @@ description: Apply put.io frontend code patterns and seed repo-local `.patterns/
 
 Use this skill when writing or reviewing UI/frontend code in a put.io frontend repository, or when seeding the repo's `.patterns/` folder.
 
-Bundled references: `frontend-defaults.md` and `pattern-template.md`.
+Bundled references: [frontend defaults](./references/frontend-defaults.md) and [pattern template](./references/pattern-template.md).
 
 Use this skill for put.io-wide code defaults and `.patterns/` for repo-specific choices such as schema, state-machine, styling, and testing libraries.
 
@@ -26,8 +26,8 @@ Use this skill for put.io-wide code defaults and `.patterns/` for repo-specific 
 
 1. Inspect the repo: framework, build tool, styling system, state and data libraries, test runner, and whether `.patterns/` (or `docs/patterns/`) already exists.
 2. Read `AGENTS.md`, `README.md`, and any existing `.patterns/*.md` files relevant to your task before writing code.
-3. If `.patterns/` is silent on the area you are touching, read [references/frontend-defaults.md](references/frontend-defaults.md) and apply the put.io default unless the repo signals otherwise. Always read the *Errors* section before adding catch blocks, error boundaries, toast/empty-state errors, Sentry capture, or support-contact fallbacks.
-4. Match existing patterns in the code. If you must diverge, capture the new pattern as a draft `.patterns/<topic>.md` entry alongside the change, following [references/pattern-template.md](references/pattern-template.md).
+3. If `.patterns/` is silent on the area you are touching, read [frontend defaults](./references/frontend-defaults.md) and apply the put.io default unless the repo signals otherwise. Always read the *Errors* section before adding catch blocks, error boundaries, toast/empty-state errors, Sentry capture, or support-contact fallbacks.
+4. Match existing patterns in the code. If you must diverge, capture the new pattern as a draft `.patterns/<topic>.md` entry alongside the change, following [pattern template](./references/pattern-template.md).
 5. Run the repo's `verify` command. If UI is in scope, exercise the path in a browser or device — type checks and unit tests prove correctness, not feature behavior.
 6. Audit `.patterns/` for drift: a renamed library, removed approach, or stale example needs to be updated or removed in the same PR.
 
@@ -36,7 +36,7 @@ Use this skill for put.io-wide code defaults and `.patterns/` for repo-specific 
 Use `.patterns/` at the repo root.
 
 - One file per topic, kebab-case. Typical seeds: `state-machines.md`, `data-fetching.md`, `forms.md`, `styling.md`, `testing.md`, `error-handling.md`, `routing.md`.
-- Each file follows [references/pattern-template.md](references/pattern-template.md): Recommendation, Why, Relevant files, Rules, Anti-patterns.
+- Each file follows [pattern template](./references/pattern-template.md): Recommendation, Why, Relevant files, Rules, Anti-patterns.
 - Keep each file under ~300 lines so it loads on demand without dominating context.
 - Link `.patterns/` from the repo's `AGENTS.md` so future contributors and agents discover it automatically.
 
@@ -79,11 +79,11 @@ const render = (t: TransferStatus) =>
   );
 ```
 
-For non-Effect TypeScript and for native (Swift, Kotlin), the principle holds — the implementation tracks the repo's stack. See [references/frontend-defaults.md](references/frontend-defaults.md).
+For non-Effect TypeScript and for native (Swift, Kotlin), the principle holds — the implementation tracks the repo's stack. See [frontend defaults](./references/frontend-defaults.md).
 
 ## Canonical Code References
 
-When deciding how to structure a new boundary, parser, state machine, or error type, read sibling repos in this workspace before inventing something fresh. Concrete pointers live in [references/frontend-defaults.md](references/frontend-defaults.md).
+When deciding how to structure a new boundary, parser, state machine, or error type, read sibling repos in this workspace before inventing something fresh. Concrete pointers live in [frontend defaults](./references/frontend-defaults.md).
 
 ## Boundaries
 

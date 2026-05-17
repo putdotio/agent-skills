@@ -7,17 +7,17 @@ description: Structure put.io frontend-owned repositories around repo-local veri
 
 Use one delivery rule: every merge to `main` should already be publishable or deployable.
 
-Bundled references: `delivery-model.md`, `typescript.md`, `applications.md`, `secrets.md`, and `release-security.md`.
+Bundled references: [delivery model](./references/delivery-model.md), [TypeScript](./references/typescript.md), [applications](./references/applications.md), [secrets](./references/secrets.md), and [release security](./references/release-security.md).
 This skill owns repo shape and canonical commands, not host-specific deployment architecture or detailed frontend test harness design.
 
 ## Workflow
 
 1. Run the inspection commands below and capture the summary before editing.
-2. Read [references/delivery-model.md](references/delivery-model.md).
-3. If the repo is TypeScript, read [references/typescript.md](references/typescript.md).
-4. If the repo is an application, read [references/applications.md](references/applications.md).
-5. If the repo uses 1Password-backed local, live-test, build, signing, or deploy workflows, read [references/secrets.md](references/secrets.md) and standardize the local env shape.
-6. If the repo has secret-bearing release, deploy, signing, publish, beta, backfill, or binary-build workflows, read [references/release-security.md](references/release-security.md).
+2. Read [delivery model](./references/delivery-model.md).
+3. If the repo is TypeScript, read [TypeScript](./references/typescript.md).
+4. If the repo is an application, read [applications](./references/applications.md).
+5. If the repo uses 1Password-backed local, live-test, build, signing, or deploy workflows, read [secrets](./references/secrets.md) and standardize the local env shape.
+6. If the repo has secret-bearing release, deploy, signing, publish, beta, backfill, or binary-build workflows, read [release security](./references/release-security.md).
 7. If the repo owns live, e2e, QA, emulator, simulator, browser, extension, TV, native, or device test harness commands, keep this skill focused on repo-local entrypoints and sanitized env/profile names; detailed auth/session, flow, assertion, and artifact design belongs with the harness implementation and its local docs.
 8. Prefer one repo-local `verify` entrypoint that CI calls directly.
 9. Run the repo-local `verify` command locally before changing delivery automation. If it fails, fix that command first and rerun it until it passes.
