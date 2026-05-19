@@ -41,7 +41,7 @@ jobs:
     steps:
       - name: Create release bot token
         id: release-bot
-        uses: actions/create-github-app-token@1b10c78c7865c340bc4f6099eb2f838309f1e8c3 # v3
+        uses: actions/create-github-app-token@bcd2ba49218906704ab6c1aa796996da409d3eb1 # v3
         with:
           client-id: ${{ vars.PUTIO_RELEASE_BOT_CLIENT_ID }}
           private-key: ${{ secrets.PUTIO_RELEASE_BOT_PRIVATE_KEY }}
@@ -57,7 +57,7 @@ jobs:
           token: ${{ secrets.TESSL_TOKEN }}
 
       - name: Publish changed tiles
-        uses: uinaf/tessl-publish-action@5ff92c38ef055dadf9bf2ecb748651ce799ace25 # v2.1.1
+        uses: uinaf/tessl-publish-action@c886763f2a95d6971317fd4b8abe88679619ebad # v2.1.2
         with:
           review-threshold: "90"
           git-author-name: putio-release-bot[bot]
