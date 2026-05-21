@@ -14,7 +14,7 @@ Use this skill when designing or reviewing a test harness for a put.io frontend-
 3. Design the harness layers explicitly: adapter, CLI/API, auth/session, flow driver, assertions, proof artifacts, repo integration, observability, isolation, and boundaries.
 4. Keep the generic harness core focused on the test surface. Put product journeys, fixture names, content IDs, credentials, and expectations in the owning app repo or scenario files.
 5. For put.io auth, use the testing/development account `devs-fe-auto` / `devs+fe+auto@put.io` through global `putio` profiles, not a human account. Use the `putio-cli` skill first and inspect `putio describe --output json` before assuming commands, flags, output shape, or auth behavior.
-6. Make auth/session autonomous: one bounded 1Password render/injection step, then typed `putio` profile checks, device approval, authorization, seeding, and reset commands. Browser `put.io/link` completion, repeated human 1Password approvals, human browser sessions, and personal accounts are explicit fallback paths.
+6. Make auth/session autonomous: one bounded Infisical render step with limited dev/test credentials, then typed `putio` profile checks, device approval, authorization, seeding, and reset commands. Browser `put.io/link` completion, repeated human secret approvals, human browser sessions, and personal accounts are explicit fallback paths.
 7. Prefer deterministic commands and typed outputs over prose-only manual steps. Use narrow commands that are bootable, smokeable, interactable, observable, and isolated enough for agents to debug without repeated human help.
 8. Before implementation, check every harness layer from step 3 is covered. If a layer is missing, revise the design before writing code.
 9. After implementation, run the smoke or live-test entrypoint, inspect proof artifacts and logs, fix the root cause of failures, and rerun. If the platform cannot expose state directly, require stronger screenshots, logs, recordings, or review artifacts.
@@ -67,7 +67,7 @@ For a harness design or implementation plan, report:
 
 - Platform adapter and wrapped tools
 - CLI/API command surface
-- Auth/session setup, 1Password materialization, profile selection, and reset path
+- Auth/session setup, Infisical materialization, profile selection, and reset path
 - Flow driver capabilities
 - Assertion model
 - Proof artifacts
@@ -80,7 +80,8 @@ For a harness design or implementation plan, report:
 - Keep device IPs, passwords, certs, signing keys, tokens, content IDs, fixture internals, and personal local facts out of git.
 - Checked-in examples use placeholders.
 - For `putio` auth, use `putio auth status --profile <profile-name> --output json`, `putio auth profiles list --output json`, `PUTIO_CLI_PROFILE`, and `PUTIO_CLI_CONFIG_PATH` as the stable automation boundary. Keep CLI config paths ignored and isolated when a run needs disposable auth state.
-- Prefer a repo-owned `secrets-setup`, `op run --env-file=<template> -- <harness command>`, or equivalent typed wrapper for the one-shot 1Password step. Do not spin on `op` approval prompts or persist raw rendered secrets in checked-in files.
+- Prefer a repo-owned `secrets-setup`, `infisical run`, or equivalent typed wrapper for the one-shot Infisical step. Do not spin on approval prompts or persist raw rendered secrets in checked-in files.
+- Infisical-backed harness secrets must be limited dev/test accounts and fixtures, never admin accounts, production-wide credentials, signing keys, recovery keys, or CI/CD deploy/publish secrets.
 - For device-code or link flows, automate approval with the testing account through `putio`/approved API helpers when available. Browser-based `put.io/link` completion is a fallback only after the autonomous CLI path is missing or broken, and that limitation must be reported explicitly.
 - Repo `.env.local` or `.env` files may name a profile or config path, but must not contain raw put.io tokens in checked-in examples.
 - Do not bake product business logic into generic platform commands.

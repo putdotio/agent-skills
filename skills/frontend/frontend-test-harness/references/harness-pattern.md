@@ -79,12 +79,12 @@ Treat that skill as the source of truth for CLI discovery, structured output,
 auth profiles, paging, dry-runs, and write safety.
 
 Design for one bounded secret-materialization step followed by autonomous CLI
-flows. A good harness can render or inject approved 1Password-backed values once
+flows. A good harness can render approved Infisical-backed values once
 at startup, then run the rest of auth, device approval, authorization, and
 seeding through the testing account and `putio` profile state. Use the repo's
-standard secret path, such as a `secrets-setup` target, `op run
---env-file=<template> -- <command>`, or a typed wrapper around those mechanics.
-Do not make agents approve 1Password prompts repeatedly inside a scenario.
+standard secret path, such as a `secrets-setup` target, `infisical run`, or a
+typed wrapper around those mechanics. Do not make agents approve secret prompts
+repeatedly inside a scenario.
 
 Keep auth state durable across native app reinstalls, simulator wipes, and
 sideload cycles by defaulting to global `putio` profile state. Use repo-local
@@ -205,7 +205,7 @@ Expected repo shape:
 - Make/npm/pnpm targets for common flows
 - deterministic `verify`, `smoke`, or `live-test` entrypoints
 - sanitized `.env.example`
-- one-shot secret materialization or `op run` wrappers for auth-bearing live
+- one-shot secret materialization or `infisical run` wrappers for auth-bearing live
   checks
 - ignored local working directory
 - docs that distinguish hardware-backed checks from static checks

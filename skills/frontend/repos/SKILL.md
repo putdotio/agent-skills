@@ -16,7 +16,7 @@ This skill owns repo shape and canonical commands, not host-specific deployment 
 2. Read [delivery model](./references/delivery-model.md).
 3. If the repo is TypeScript, read [TypeScript](./references/typescript.md).
 4. If the repo is an application, read [applications](./references/applications.md).
-5. If the repo uses 1Password-backed local, live-test, build, signing, or deploy workflows, read [secrets](./references/secrets.md) and standardize the local env shape.
+5. If the repo uses local/dev secrets, live-test env files, Infisical, legacy `op`/1Password setup, or secret-bearing build/signing/deploy workflows, read [secrets](./references/secrets.md) and standardize the local env shape.
 6. If the repo has secret-bearing release, deploy, signing, publish, beta, backfill, or binary-build workflows, read [release security](./references/release-security.md).
 7. If the repo owns live, e2e, QA, emulator, simulator, browser, extension, TV, native, or device test harness commands, keep this skill focused on repo-local entrypoints and sanitized env/profile names; detailed auth/session, flow, assertion, and artifact design belongs with the harness implementation and its local docs.
 8. Prefer one repo-local `verify` entrypoint that CI calls directly.
@@ -33,14 +33,14 @@ Summary shape:
 - Verify entrypoint:
 - Delivery target:
 - Versioning/release:
-- 1Password/env needs:
+- Secret/env needs:
 - Template gaps:
 ```
 
 Useful inspection commands:
 
 ```bash
-rg -n '"verify"|"release"|"build"|semantic-release|deploy|publish|OP_SERVICE_ACCOUNT_TOKEN|PUTIO_1PASSWORD|op://' \
+rg -n '"verify"|"release"|"build"|semantic-release|deploy|publish|OP_SERVICE_ACCOUNT_TOKEN|PUTIO_1PASSWORD|op://|infisical|INFISICAL' \
   package.json Makefile .github README.md CONTRIBUTING.md SECURITY.md docs .env.example scripts tooling apps 2>/dev/null
 
 test -f package.json && jq '.scripts // {}' package.json
