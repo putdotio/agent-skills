@@ -53,9 +53,9 @@ If SDK release, publish, signing, or binary-build automation is in scope, also u
 For a new or changed endpoint, make the work traceable:
 
 ```bash
-rg -n "route_name|endpoint_path|field_name" ../putio-backend test src docs
-rg -n "route_name|endpoint_path|field_name" ../putio-web ../putio-ios ../putio-cli
 rg -n "route_name|endpoint_path|field_name" src test docs
+rg -n "route_name|endpoint_path|field_name" path/to/backend-or-fixtures
+rg -n "route_name|endpoint_path|field_name" path/to/first-party-consumer
 ```
 
 Then update the SDK in this order:
