@@ -1,6 +1,6 @@
 ---
 name: putio-frontend-patterns
-description: Apply put.io frontend code patterns and seed repo-local `.patterns/` conventions. Use when writing or reviewing UI/frontend code in a put.io frontend repo, picking the default approach for types, data parsing, state machines, error handling, components, or testing, or seeding/extending the repo's `.patterns/` folder. Skip for delivery and CI shape (use `putio-frontend-repos`), top-level docs (use `putio-frontend-docs`), or SDK packages (use `putio-sdk-dev`).
+description: Apply put.io frontend code patterns and seed repo-local `.patterns/` conventions. Use when writing or reviewing UI/frontend code in a put.io frontend repo, picking the default approach for types, data parsing, state machines, error handling, components, or testing, or seeding/extending the repo's `.patterns/` folder. Skip for repo shape, top-level docs, delivery, CI, or proof harness work (use `putio-frontend-repos`), or SDK packages (use `putio-sdk-dev`).
 ---
 
 # put.io Frontend Patterns
@@ -87,6 +87,5 @@ When deciding how to structure a new boundary, parser, state machine, or error t
 
 ## Boundaries
 
-- `putio-frontend-repos` — repo CI and delivery shape (verify, publish, deploy).
-- `putio-frontend-docs` — README, CONTRIBUTING, SECURITY structure.
+- `putio-frontend-repos` — repo shape, top-level docs, CI/delivery, and proof harness entrypoints.
 - `putio-sdk-dev` — SDK package patterns (namespaces, typed contracts, multi-language parity).

@@ -17,11 +17,15 @@ TESSL_THRESHOLD=92 ./scripts/review-skills.sh
 ./scripts/review-skills.sh --threshold 95
 ```
 
-Batch review does not support `--json`. For structured output, run Tessl directly on one skill:
+The wrapper pins the Tessl CLI through `TESSL_CLI_VERSION` and defaults to
+version `0.80.0`; bump that default intentionally instead of relying on moving npm
+latest.
+
+The batch wrapper does not support JSON output. For structured output, run Tessl directly on one skill:
 
 ```bash
-./scripts/tessl.sh skill review skills/frontend/docs
-./scripts/tessl.sh skill review --json --threshold 90 skills/frontend/repos
+npx tessl@0.80.0 skill review skills/frontend/repos
+npx tessl@0.80.0 skill review --json --threshold 90 skills/frontend/repos
 ```
 
 ## Optimize one skill
@@ -29,7 +33,7 @@ Batch review does not support `--json`. For structured output, run Tessl directl
 Apply one Tessl optimization pass to a single skill:
 
 ```bash
-./scripts/optimize-skills.sh frontend/docs
+./scripts/optimize-skills.sh frontend/repos
 ./scripts/optimize-skills.sh frontend/repos --threshold 92
 ```
 
@@ -38,7 +42,8 @@ This mutates files. Review the diff before committing.
 ## Notes
 
 - `review-skills.sh` is the batch entrypoint for local skill review
-- `tessl.sh` uses an installed `tessl` CLI first and falls back to `npx tessl` only when needed
+- `tessl.sh` runs the pinned Tessl CLI with `npx`
 - `optimize-skills.sh` applies mutations, so run it intentionally and inspect the resulting diff
-- CI runs `./scripts/review-skills.sh` on pull requests. The publish workflow
-  runs the same review before publishing `main` changes under `skills/**`
+- CI runs `./scripts/review-skills.sh` on pull requests and pushes to `main`.
+  The publish workflow runs the same review before publishing `main` changes
+  under `skills/**`

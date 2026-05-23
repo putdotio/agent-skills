@@ -12,8 +12,7 @@ interface:
     - New or changed `.patterns/` entries capture non-obvious repo choices without duplicating user/contributor docs.
 
     Constraints:
-    - Use $putio-frontend-repos for delivery and CI shape.
-    - Use $putio-frontend-docs for top-level docs.
+    - Use $putio-frontend-repos for repo shape, top-level docs, delivery, CI, and proof harness entrypoints.
     - Use $putio-sdk-dev for SDK package patterns.
     - Prefer explicit repo-local patterns over shared defaults.
 

@@ -72,7 +72,7 @@ Use this order unless the repo gives a strong reason not to:
 
 - Put environment bootstrap first.
 - Include only contributor-facing commands here: install toolchain, install dependencies, run locally, run checks.
-- Start from [contributing template](./contributing-template.md) when the repo needs a new contributor guide.
+- Start from [contributing template](./docs-contributing-template.md) when the repo needs a new contributor guide.
 - Keep commands copy-pastable and verified against the repo.
 - Document repo-specific development constraints only when they materially help contributors.
 - If the repo uses `.github/pull_request_template.md` or `.github/ISSUE_TEMPLATE/*`, treat them as part of the contributor doc surface and keep the high-level expectations aligned.
@@ -82,7 +82,7 @@ Use this order unless the repo gives a strong reason not to:
 - Keep it short and private-first.
 - Tell reporters not to file public issues for vulnerabilities.
 - Use `devs@put.io` as the contact email.
-- Start from [security template](./security-template.md) when the repo needs a new security policy.
+- Start from [security template](./docs-security-template.md) when the repo needs a new security policy.
 - Link to the security policy from `README.md` when helpful.
 
 ## LICENSE

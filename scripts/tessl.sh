@@ -1,8 +1,6 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-if command -v tessl >/dev/null 2>&1; then
-  exec tessl "$@"
-fi
+tessl_version="${TESSL_CLI_VERSION:-0.80.0}"
 
-exec npx tessl "$@"
+exec npx "tessl@$tessl_version" "$@"

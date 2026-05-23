@@ -18,9 +18,10 @@ jq -r '.name' skills/*/*/tile.json
 - `tile.json` is the source of truth for Tessl package identity and publishing
 - `agents/openai.yaml` is optional, but when present it is the source of truth for OpenAI or Codex picker-facing display names, descriptions, and default prompts
 - `.github/workflows/publish-skills.yml` runs a secretless review job first, then publishes from the `release` Environment without an approval gate
-- Pushes to `main` that touch `skills/**` publish only the tiles that changed
+- Pushes to `main` that touch `skills/**` or the publish workflow publish only the tiles that changed
+- Pushes with `[skip ci]` in the head commit message skip review and publish jobs
 - Manual workflow runs publish all tiles only when the run ref is `main`; non-`main` manual runs can review, but the publish job is skipped
-- The publish job uses [`uinaf/tessl-publish-action`](https://github.com/uinaf/tessl-publish-action) to detect changed tiles, run review and lint, and publish them
+- The publish job uses the Tessl publish action configured in `.github/workflows/publish-skills.yml` to detect changed tiles, run review and lint, and publish them
 - The action derives semantic version bumps from Conventional Commit messages: breaking changes -> `major`, `feat` -> `minor`, everything else -> `patch`
 - Before publish, the action probes `tessl tile publish --dry-run` and keeps bumping patch versions in the job workspace until Tessl accepts a free version
 - After a successful publish, the workflow commits the resulting `tile.json` version bumps back to `main` as `putio-release-bot[bot]` with a skip-CI commit message
@@ -50,6 +51,6 @@ The workflow still references the token as `${{ secrets.TESSL_TOKEN }}`; GitHub 
 ## Local checks
 
 ```bash
-tessl tile lint skills/frontend/docs
-tessl tile publish --dry-run skills/frontend/docs
+./scripts/tessl.sh tile lint skills/frontend/repos
+./scripts/tessl.sh tile publish --dry-run skills/frontend/repos
 ```

@@ -22,15 +22,15 @@ Use [Tessl](https://tessl.io/) to review and publish the skills in this repo to 
 
 ```bash
 ./scripts/review-skills.sh
-./scripts/optimize-skills.sh frontend/docs
+./scripts/optimize-skills.sh frontend/repos
 ```
 
 Per-skill checks:
 
 ```bash
-./scripts/tessl.sh skill review --json skills/frontend/docs
-./scripts/tessl.sh tile lint skills/frontend/docs
-./scripts/tessl.sh tile publish --dry-run skills/frontend/docs
+./scripts/tessl.sh skill review --json skills/frontend/repos
+./scripts/tessl.sh tile lint skills/frontend/repos
+./scripts/tessl.sh tile publish --dry-run skills/frontend/repos
 ```
 
 Publishing from GitHub Actions expects `TESSL_TOKEN` in the protected `release` Environment. See [Distribution](docs/DISTRIBUTION.md) for the publish flow and tile naming.

@@ -4,7 +4,7 @@ This repository stores shared agent skills for put.io development workflows.
 
 ## Setup
 
-There is no repo-local bootstrap step beyond access to Tessl for review and publish workflows. Use `./scripts/tessl.sh` so an installed `tessl` CLI is preferred and `npx tessl` is only used as a fallback.
+There is no repo-local bootstrap step beyond access to Tessl for review and publish workflows. Use `./scripts/tessl.sh`; it pins the Tessl CLI through `TESSL_CLI_VERSION` and defaults to version `0.80.0`
 
 ## Working in the repo
 
