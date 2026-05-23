@@ -71,6 +71,13 @@ Use this when touching GitHub Actions workflows that publish packages, upload ap
 - If a generated-tree or tool cache is unavoidable in a privileged job, namespace it by workflow, event, trust level, platform, and lockfile. Privileged jobs consume only caches written by the same trusted event class, and they still regenerate or verify generated trees before signing, publishing, or promotion
 - `bootstrap-ci.sh`-style shortcuts that skip regeneration only from lockfile equality are acceptable for local speed, but risky when a generated tree came from a shared CI cache
 
+## Release and Deploy Handoffs
+
+- Treat GitHub Actions artifacts as temporary CI scratch storage, not as a release or deployment registry. They are quota- and retention-coupled and can block deploys after build, test, or release has already succeeded.
+- Use Actions artifacts only for same-run handoff when quota, retention, and provenance are acceptable and no better immutable payload store exists.
+- For simple static surfaces where build, e2e, and deploy can safely share one trusted environment-scoped job, deploy the tested output from the runner filesystem and keep post-deploy smoke in a separate read-only job.
+- For versioned releases, deploy from the durable published boundary: GitHub Release asset, package registry version, container image digest, app-store/TestFlight build, or provider-native package. Verify the downloaded or promoted payload before loading deploy credentials where practical.
+
 ## npm Supply-Chain Incident Checks
 
 Reference: [TanStack npm supply-chain compromise postmortem](https://tanstack.com/blog/npm-supply-chain-compromise-postmortem) and [GitHub advisory GHSA-g7cv-rxg3-hmpx](https://github.com/advisories/GHSA-g7cv-rxg3-hmpx)
@@ -85,6 +92,7 @@ Reference: [TanStack npm supply-chain compromise postmortem](https://tanstack.co
 - Release workflows should build and upload the release artifact from the release tag
 - Promote an existing beta, TestFlight, App Store Connect, npm, or GitHub artifact into release only when provenance is recorded and verified
 - Required promotion provenance: commit SHA, tag, build number or package version, artifact digest, workflow run id, and the originating artifact identity
+- Do not publish a release artifact and then re-upload the same payload as an Actions artifact solely for deploy. Deploy should consume the release asset, registry package, image digest, or provider-native package directly.
 - When reviewing findings, separate stale evidence from current truth. If a direct cache or checkout path was removed, keep only the surviving path that still reaches signing, publishing, or promotion
 
 ## Live Settings to Check

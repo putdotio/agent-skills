@@ -39,6 +39,7 @@ test ! -e AGENTS.md || { test -L CLAUDE.md && test "$(readlink CLAUDE.md)" = "AG
 - Do not freestyle put.io README branding. If a repo is put.io-branded, follow the sibling-repo hero/logo/badge pattern unless the user explicitly asks for a different brand treatment.
 - Do not copy shared brand assets into package repos. Use the canonical hosted asset URL used by sibling repos unless the target repo is itself the static asset source.
 - Prefer one canonical location per fact. Point to docs or templates instead of copying long checklists between them.
+- When documenting release or deploy workflows, call out the durable handoff explicitly: same-job tested output, GitHub Release asset, registry package, image digest, or provider-native package. Do not document GitHub Actions artifacts as a release/deploy registry; they are temporary CI storage.
 - Keep volatile metrics such as test counts or coverage numbers out of durable docs.
 - Add sections only when they say something specific about the repo.
 - Cite or link external repos only when they are relevant to the generated docs or explicitly requested.

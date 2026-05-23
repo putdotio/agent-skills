@@ -85,5 +85,6 @@ App-shaped example:
 - For frontend test harnesses, expose stable repo-local targets and sanitized `.env.example` profile names here; keep auth/session, deep-link, fixture, platform-input, assertion, and proof-artifact doctrine in the harness implementation and local docs.
 - Use release tooling backed by a real repo precedent or team standard.
 - Keep manual release paths on trusted refs before they reach secret-bearing jobs.
+- Avoid GitHub Actions artifacts as a release/deploy registry. They are temporary CI storage with quota and retention failure modes; prefer same-job deploy handoff for simple static surfaces, or deploy from a GitHub Release asset, package registry, image digest, or provider-native package for versioned releases.
 - Put release credential policy, protected Environment setup, and tag rules in `docs/DISTRIBUTION.md`; leave contributor docs as workflow/setup guidance.
 - GitHub-facing repos should carry a useful pull request template and issue templates when the review or triage flow benefits from them.
