@@ -76,7 +76,8 @@ as part of it.
 Before designing or running `putio`-backed harness commands, load the `putio-cli`
 skill and inspect the current contract with `putio describe --output json`.
 Treat that skill as the source of truth for CLI discovery, structured output,
-auth profiles, paging, dry-runs, and write safety.
+auth profiles, paging, dry-runs, and write safety; keep only harness-specific
+auth expectations here.
 
 Design for one bounded secret-materialization step followed by autonomous CLI
 flows. A good harness can render approved Infisical-backed values once
@@ -107,19 +108,9 @@ checks, token injection into child harness commands, or device-code approval
 helpers. If the approved profile is missing, stop with the exact setup need
 instead of opening a browser or signing into a personal account.
 
-Use these `putio` boundaries when the CLI is available:
-
-- `putio auth status --profile <profile-name> --output json` proves readiness
-  without exposing token material
-- `putio auth profiles list --output json` lets the harness explain profile
-  state without reading secret values
-- `PUTIO_CLI_PROFILE=<profile-name>` selects the testing profile for child
-  commands
-- `PUTIO_CLI_CONFIG_PATH=<ignored-path>` isolates disposable harness auth state
-  when global profile state is not appropriate
-- `PUTIO_CLI_TOKEN` may be injected for headless setup, but it overrides
-  persisted profile selection and must not leak into checked-in examples or
-  proof artifacts
+When the CLI is available, harness commands may use profile selection, isolated
+config paths, and headless token injection as described by `putio-cli`. Keep
+token values out of checked-in examples and proof artifacts.
 
 For TV, native, browser-extension, and other device-code/link surfaces, prefer a
 typed command that completes the approval with the testing account through
