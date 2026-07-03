@@ -43,9 +43,22 @@ Apply one Tessl optimization pass to a single skill:
 
 This mutates files. Review the diff before committing.
 
+## Publish changed skills
+
+Publish changed Tessl tiles from the trusted `main` workflow:
+
+```bash
+./scripts/publish-skills.sh
+```
+
+Local runs default to dry-run mode. Set `PUBLISH_DRY_RUN=false` only when you
+intend to publish from an authenticated trusted checkout.
+
 ## Notes
 
 - `review-skills.sh` is the batch entrypoint for local skill review
+- `publish-skills.sh` is the workflow entrypoint for linting and publishing
+  changed tiles, including any eval scenarios under `evals/`
 - `tessl.sh` runs the pinned Tessl CLI with `npx`
 - `optimize-skills.sh` applies mutations, so run it intentionally and inspect the resulting diff
 - CI runs `./scripts/review-skills.sh` on pull requests and pushes to `main`.

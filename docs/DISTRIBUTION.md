@@ -21,9 +21,10 @@ jq -r '.name' skills/*/*/tile.json
 - Pushes to `main` that touch `skills/**` or the publish workflow publish only the tiles that changed
 - Pushes with `[skip ci]` in the head commit message skip review and publish jobs
 - Manual workflow runs publish all tiles only when the run ref is `main`; non-`main` manual runs can review, but the publish job is skipped
-- The publish job uses the Tessl publish action configured in `.github/workflows/publish-skills.yml` to detect changed tiles, run review and lint, and publish them
-- The action derives semantic version bumps from Conventional Commit messages: breaking changes -> `major`, `feat` -> `minor`, everything else -> `patch`
-- Before publish, the action probes `tessl tile publish --dry-run` and keeps bumping patch versions in the job workspace until Tessl accepts a free version
+- The publish job uses `scripts/publish-skills.sh` to detect changed tiles, lint them, and publish them with the Tessl CLI
+- `tessl tile publish` publishes eval scenarios from each tile's `evals/` directory
+- The script derives semantic version bumps from Conventional Commit messages: breaking changes -> `major`, `feat` -> `minor`, everything else -> `patch`
+- Before publish, the script probes `tessl tile publish --dry-run --bump <type>` so Tessl can choose the next available version
 - After a successful publish, the workflow commits the resulting `tile.json` version bumps back to `main` as `putio-release-bot[bot]` with a skip-CI commit message
 - Publish-path actions are pinned to full commit SHAs with trailing comments for their human version tags
 
@@ -53,4 +54,5 @@ The workflow still references the token as `${{ secrets.TESSL_TOKEN }}`; GitHub 
 ```bash
 ./scripts/tessl.sh tile lint skills/frontend/repos
 ./scripts/tessl.sh tile publish --dry-run skills/frontend/repos
+./scripts/tessl.sh tile publish --dry-run --bump patch skills/frontend/repos
 ```

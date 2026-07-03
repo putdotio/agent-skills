@@ -72,13 +72,24 @@ jobs:
         run: gh auth setup-git
 
       - name: Publish changed tiles
-        uses: uinaf/tessl-publish-action@c886763f2a95d6971317fd4b8abe88679619ebad # v2.1.2
-        with:
-          review-threshold: "90"
-          git-author-name: putio-release-bot[bot]
-          git-author-email: 283001373+putio-release-bot[bot]@users.noreply.github.com
-          git-committer-name: putio-release-bot[bot]
-          git-committer-email: 283001373+putio-release-bot[bot]@users.noreply.github.com
+        env:
+          PUBLISH_BEFORE_SHA: ${{ github.event.before }}
+          PUBLISH_AFTER_SHA: ${{ github.sha }}
+          PUBLISH_DRY_RUN: "false"
+        run: ./scripts/publish-skills.sh
+
+      - name: Commit published versions
         env:
           GH_TOKEN: ${{ steps.release-bot.outputs.token }}
           GITHUB_TOKEN: ${{ steps.release-bot.outputs.token }}
+        run: |
+          if git diff --quiet -- skills; then
+            echo "No version bump changes needed."
+            exit 0
+          fi
+
+          git config user.name "putio-release-bot[bot]"
+          git config user.email "283001373+putio-release-bot[bot]@users.noreply.github.com"
+          git add skills
+          git commit -m "chore: sync published tile versions [skip ci]"
+          git push origin HEAD:main
