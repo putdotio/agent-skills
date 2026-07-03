@@ -1,0 +1,31 @@
+{
+  "context": "Tests whether the frontend repos skill drives agents toward a canonical verify entrypoint and delivery documentation before changing automation.",
+  "type": "weighted_checklist",
+  "checklist": [
+    {
+      "name": "runs_repo_inspection_first",
+      "description": "Starts by inspecting package scripts, Makefile, GitHub workflows, docs, env examples, and delivery-related references before editing.",
+      "max_score": 2
+    },
+    {
+      "name": "creates_canonical_verify_entrypoint",
+      "description": "Recommends one repo-local `verify` command that CI calls directly, rather than duplicating build/test logic only in GitHub Actions.",
+      "max_score": 3
+    },
+    {
+      "name": "stabilizes_verify_before_delivery",
+      "description": "Says to run and fix the local verify command before changing publish or deploy automation.",
+      "max_score": 2
+    },
+    {
+      "name": "documents_distribution_contract",
+      "description": "Places release, publishing, or deployment contract details in `docs/DISTRIBUTION.md` with contributor docs linking to it when needed.",
+      "max_score": 2
+    },
+    {
+      "name": "names_smoke_or_gap",
+      "description": "Requires an artifact/app/proof smoke check after delivery changes, or explicitly records the missing smoke check as a repo gap.",
+      "max_score": 1
+    }
+  ]
+}

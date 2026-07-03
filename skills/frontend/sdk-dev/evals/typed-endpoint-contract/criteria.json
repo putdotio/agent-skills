@@ -1,0 +1,31 @@
+{
+  "context": "Tests whether the SDK skill enforces traceable endpoint changes across request types, response parsing, errors, tests, and docs.",
+  "type": "weighted_checklist",
+  "checklist": [
+    {
+      "name": "checks_sources_of_truth",
+      "description": "Starts by checking backend behavior/tests and current first-party app usage before widening the SDK public surface.",
+      "max_score": 2
+    },
+    {
+      "name": "updates_request_response_errors_together",
+      "description": "Requires request input type or query model, response parser/model, and operation-specific error mapping to be updated together.",
+      "max_score": 3
+    },
+    {
+      "name": "adds_public_client_surface",
+      "description": "Includes adding or updating the public method, namespace, or export in a domain-first API shape.",
+      "max_score": 2
+    },
+    {
+      "name": "requires_deterministic_tests",
+      "description": "Calls for deterministic coverage of request shaping, response parsing, error behavior, and public client contracts.",
+      "max_score": 2
+    },
+    {
+      "name": "updates_package_docs_when_public",
+      "description": "Says to update README, API docs, release notes, or equivalent package-facing docs when the public surface changes.",
+      "max_score": 1
+    }
+  ]
+}
