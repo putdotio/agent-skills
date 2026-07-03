@@ -21,6 +21,7 @@ npx --yes skills add putdotio/skills -g --all -y
 Use [Tessl](https://tessl.io/) to review and publish the skills in this repo to the `putio` workspace.
 
 ```bash
+make verify
 ./scripts/review-skills.sh
 ./scripts/optimize-skills.sh frontend/repos
 ```
@@ -43,6 +44,7 @@ Published skills keep their package metadata next to the skill. Use [Distributio
 
 - [Contributing](./CONTRIBUTING.md) for contributor workflow and validation
 - [Distribution](./docs/DISTRIBUTION.md) for publish flow and repository release details
+- [Evals](./docs/EVALS.md) for scenario layout and registry Impact checks
 - [Security](./SECURITY.md) for private vulnerability reporting
 
 ## Repo Internals

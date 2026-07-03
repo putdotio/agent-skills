@@ -24,6 +24,7 @@ For focused changes, review the affected skill directly:
 For broader changes, use the repository scripts:
 
 ```bash
+make verify
 ./scripts/review-skills.sh
 ```
 

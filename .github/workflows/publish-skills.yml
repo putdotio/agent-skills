@@ -17,6 +17,9 @@ jobs:
   review:
     if: ${{ github.event_name != 'push' || !contains(github.event.head_commit.message, '[skip ci]') }}
     runs-on: ubuntu-latest
+    environment:
+      name: release
+      deployment: false
     env:
       TESSL_AUTO_UPDATE_INTERVAL_MINUTES: "0"
       TESSL_THRESHOLD: "90"
@@ -31,6 +34,12 @@ jobs:
         with:
           node-version-file: ".node-version"
           package-manager-cache: false
+
+      - name: Set up Tessl
+        uses: tesslio/setup-tessl@25ec223fc0da33b41b8044ff5ab2b85235f4f91e # v2
+        with:
+          version: "0.90.0"
+          token: ${{ secrets.TESSL_TOKEN }}
 
       - name: Review skills with Tessl
         run: ./scripts/review-skills.sh
