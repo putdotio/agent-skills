@@ -10,6 +10,10 @@ Run Tessl review across every skill:
 ./scripts/review-skills.sh
 ```
 
+When Tessl authentication is unavailable, the wrapper runs `tile lint` for each
+skill package instead. This keeps unauthenticated CI useful while authenticated
+local and publish paths can still run scored reviews.
+
 Override the threshold or pass extra review flags:
 
 ```bash
@@ -45,5 +49,6 @@ This mutates files. Review the diff before committing.
 - `tessl.sh` runs the pinned Tessl CLI with `npx`
 - `optimize-skills.sh` applies mutations, so run it intentionally and inspect the resulting diff
 - CI runs `./scripts/review-skills.sh` on pull requests and pushes to `main`.
-  The publish workflow runs the same review before publishing `main` changes
-  under `skills/**`
+  Unauthenticated CI falls back to `tile lint`; authenticated local and publish
+  paths still run scored reviews before publishing `main` changes under
+  `skills/**`

@@ -1,0 +1,31 @@
+{
+  "context": "Tests whether the consolidated frontend repos skill covers proof-loop and device harness guidance formerly held by standalone harness tiles.",
+  "type": "weighted_checklist",
+  "checklist": [
+    {
+      "name": "routes_to_test_harness_reference",
+      "description": "Recognizes this as frontend proof-loop work and says to use the repo skill's test harness guidance, not feature-code or SDK guidance.",
+      "max_score": 2
+    },
+    {
+      "name": "designs_reproducible_harness",
+      "description": "Emphasizes repo-local commands, deterministic setup, typed inputs/outputs, and reproducible artifacts instead of local-machine-only steps.",
+      "max_score": 3
+    },
+    {
+      "name": "covers_observable_artifacts",
+      "description": "Includes screenshots, logs, runtime assertions, or comparable proof artifacts as expected harness outputs.",
+      "max_score": 2
+    },
+    {
+      "name": "connects_harness_to_verify_or_smoke",
+      "description": "Explains how the proof loop connects to the repo's verify command or a documented smoke path.",
+      "max_score": 2
+    },
+    {
+      "name": "keeps_private_local_details_out",
+      "description": "Avoids writing machine-specific paths, private workspace details, or personal device assumptions into public repo docs.",
+      "max_score": 1
+    }
+  ]
+}

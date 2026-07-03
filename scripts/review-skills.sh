@@ -7,6 +7,7 @@ tessl_cmd=("$repo_root/scripts/tessl.sh")
 
 threshold="${TESSL_THRESHOLD:-90}"
 args=()
+review_mode="review"
 
 has_threshold=false
 has_json=false
@@ -30,8 +31,18 @@ fi
 
 args+=("$@")
 
+if ! "${tessl_cmd[@]}" whoami >/dev/null 2>&1; then
+  review_mode="lint"
+  echo "Tessl review requires authentication; running tile lint instead."
+fi
+
 while IFS= read -r skill_md; do
   skill_dir="$(dirname "$skill_md")"
-  echo "== tessl review: ${skill_dir#skills/} =="
-  "${tessl_cmd[@]}" skill review "${args[@]}" "$skill_dir"
+  if [[ "$review_mode" == "review" ]]; then
+    echo "== tessl review: ${skill_dir#skills/} =="
+    "${tessl_cmd[@]}" skill review "${args[@]}" "$skill_dir"
+  else
+    echo "== tessl lint: ${skill_dir#skills/} =="
+    "${tessl_cmd[@]}" tile lint "$skill_dir"
+  fi
 done < <(find skills -mindepth 3 -maxdepth 3 -name SKILL.md | sort)

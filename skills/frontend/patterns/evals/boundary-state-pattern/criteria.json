@@ -1,0 +1,31 @@
+{
+  "context": "Tests whether the frontend patterns skill makes the agent recommend schema-driven parsing, explicit state modeling, and repo verification for a bug-sensitive UI flow.",
+  "type": "weighted_checklist",
+  "checklist": [
+    {
+      "name": "parses_unknown_at_boundary",
+      "description": "Recommends parsing unknown API JSON at the boundary with the repo's schema/parser approach before passing typed values into UI code.",
+      "max_score": 3
+    },
+    {
+      "name": "models_transfer_states_explicitly",
+      "description": "Recommends discriminated unions, exhaustive handling, or a state machine for transfer statuses instead of optional-field or boolean-salad state.",
+      "max_score": 3
+    },
+    {
+      "name": "rejects_type_escape_hatches",
+      "description": "Explicitly avoids `as` casts, non-null assertions, and loosely typed validated data as the solution to the draft component's problems.",
+      "max_score": 2
+    },
+    {
+      "name": "uses_repo_local_patterns_first",
+      "description": "Says to inspect AGENTS.md, README.md, and existing `.patterns/` or code precedent before applying default put.io patterns.",
+      "max_score": 1
+    },
+    {
+      "name": "includes_verification_plan",
+      "description": "Names an appropriate verification path, including the repo verify command and a browser/device exercise for the UI behavior.",
+      "max_score": 1
+    }
+  ]
+}

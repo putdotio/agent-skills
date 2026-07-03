@@ -1,0 +1,31 @@
+{
+  "context": "Tests whether the frontend patterns skill steers agents toward repo-local `.patterns/` documentation for non-obvious code conventions.",
+  "type": "weighted_checklist",
+  "checklist": [
+    {
+      "name": "audits_existing_repo_patterns",
+      "description": "Starts by inspecting current code, AGENTS.md, README.md, and any existing `.patterns/` or docs/patterns files before choosing a convention.",
+      "max_score": 2
+    },
+    {
+      "name": "captures_decision_in_patterns",
+      "description": "Recommends adding or updating a repo-root `.patterns/forms.md` style entry because multiple reasonable approaches exist.",
+      "max_score": 3
+    },
+    {
+      "name": "uses_expected_pattern_shape",
+      "description": "Describes the pattern entry with Recommendation, Why, Relevant files, Rules, and Anti-patterns or an equivalent complete structure.",
+      "max_score": 2
+    },
+    {
+      "name": "keeps_docs_boundary_clear",
+      "description": "Keeps code-convention guidance in `.patterns/` instead of burying it only in README or broad contributor docs.",
+      "max_score": 1
+    },
+    {
+      "name": "requires_drift_check_and_verify",
+      "description": "Includes updating stale examples or divergent code and running the repo verification path after changes.",
+      "max_score": 2
+    }
+  ]
+}
