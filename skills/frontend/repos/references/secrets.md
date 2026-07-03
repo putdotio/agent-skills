@@ -207,9 +207,9 @@ One-time per repo:
 # Create the Deployment Environment (idempotent)
 gh api -X PUT repos/<owner>/<repo>/environments/release
 
-# Add runtime secrets copied from the 1Password CI/restricted source item
+# Add runtime values copied from the 1Password CI/restricted source item
 gh secret set SENTRY_AUTH_TOKEN --env release --repo <owner>/<repo>
-gh secret set PUTIO_RELEASE_BOT_CLIENT_ID --env release --repo <owner>/<repo>
+gh variable set PUTIO_RELEASE_BOT_CLIENT_ID --env release --repo <owner>/<repo>
 gh secret set PUTIO_RELEASE_BOT_PRIVATE_KEY --env release --repo <owner>/<repo>
 
 # Configure deployment-branch policy; add reviewers only for intentionally approval-gated environments
@@ -232,9 +232,20 @@ jobs:
       - run: pnpm deploy
         env:
           SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
-          PUTIO_RELEASE_BOT_CLIENT_ID: ${{ secrets.PUTIO_RELEASE_BOT_CLIENT_ID }}
-          PUTIO_RELEASE_BOT_PRIVATE_KEY: ${{ secrets.PUTIO_RELEASE_BOT_PRIVATE_KEY }}
+      - id: release-bot
+        uses: actions/create-github-app-token@<sha>
+        with:
+          client-id: ${{ vars.PUTIO_RELEASE_BOT_CLIENT_ID }}
+          private-key: ${{ secrets.PUTIO_RELEASE_BOT_PRIVATE_KEY }}
+          permission-contents: write
+      - run: pnpm release:write
+        env:
+          GH_TOKEN: ${{ steps.release-bot.outputs.token }}
 ```
+
+Keep `PUTIO_RELEASE_BOT_PRIVATE_KEY` out of broad repo-owned commands such as
+install, build, test, and deploy preparation. Pass it only to the token-minting
+action, then pass the resulting short-lived token to the narrow final write step.
 
 Use `deployment: false` for package/library/CLI/skill release jobs whose Environment exists only to scope secrets. Keep deployment records for app deploys, signing, promotion, store submission, and any Environment with custom deployment protection rules.
 
