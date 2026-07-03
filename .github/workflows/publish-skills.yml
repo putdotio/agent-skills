@@ -66,6 +66,7 @@ jobs:
       - name: Set up Tessl
         uses: tesslio/setup-tessl@25ec223fc0da33b41b8044ff5ab2b85235f4f91e # v2
         with:
+          version: "0.90.0"
           token: ${{ secrets.TESSL_TOKEN }}
 
       - name: Authorize version-bump pushes

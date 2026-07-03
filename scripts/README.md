@@ -22,8 +22,8 @@ TESSL_THRESHOLD=92 ./scripts/review-skills.sh
 ```
 
 The wrapper pins the Tessl CLI through `TESSL_CLI_VERSION` and defaults to
-version `0.90.0`; bump that default intentionally instead of relying on moving npm
-latest.
+version `0.90.0`, the npm `latest` version verified on July 3, 2026. Bump that
+default intentionally instead of relying on moving npm latest.
 
 The batch wrapper does not support JSON output. For structured output, run Tessl directly on one skill:
 
