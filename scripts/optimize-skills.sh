@@ -9,6 +9,7 @@ fi
 repo_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$repo_root"
 tessl_cmd=("$repo_root/scripts/tessl.sh")
+workspace="${TESSL_WORKSPACE:-putio}"
 
 skill_name="$1"
 shift
@@ -20,4 +21,4 @@ if [[ ! -d "$skill_dir" ]]; then
   exit 1
 fi
 
-"${tessl_cmd[@]}" skill review --optimize --yes --max-iterations 1 "$skill_dir" "$@"
+"${tessl_cmd[@]}" review fix --workspace "$workspace" --yes --max-iterations 1 "$@" "$skill_dir"

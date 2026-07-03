@@ -6,6 +6,7 @@ on:
       - main
     paths:
       - "skills/**"
+      - "scripts/publish-skills.sh"
       - ".github/workflows/publish-skills.yml"
   workflow_dispatch:
 
@@ -71,7 +72,7 @@ jobs:
           GH_TOKEN: ${{ steps.release-bot.outputs.token }}
         run: gh auth setup-git
 
-      - name: Publish changed tiles
+      - name: Publish changed plugins
         env:
           PUBLISH_BEFORE_SHA: ${{ github.event.before }}
           PUBLISH_AFTER_SHA: ${{ github.sha }}
@@ -91,5 +92,5 @@ jobs:
           git config user.name "putio-release-bot[bot]"
           git config user.email "283001373+putio-release-bot[bot]@users.noreply.github.com"
           git add skills
-          git commit -m "chore: sync published tile versions [skip ci]"
+          git commit -m "chore: sync published plugin versions [skip ci]"
           git push origin HEAD:main

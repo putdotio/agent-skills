@@ -1,31 +1,31 @@
 # Distribution
 
-This repo publishes each skill as its own public Tessl tile in the `putio` workspace.
+This repo publishes each skill as its own public Tessl plugin in the `putio` workspace.
 
-## Tile names
+## Plugin names
 
-Do not maintain a hardcoded list here. The source of truth is the `name` field in each `skills/*/*/tile.json`.
+Do not maintain a hardcoded list here. The source of truth is the `name` field in each `skills/*/*/.tessl-plugin/plugin.json`.
 
-To inspect the current published tile names locally:
+To inspect the current published plugin names locally:
 
 ```bash
-jq -r '.name' skills/*/*/tile.json
+find skills -path '*/.tessl-plugin/plugin.json' -exec jq -r .name {} \;
 ```
 
 ## How publishing works
 
-- Each skill directory under `skills/*/*` has its own `tile.json`
-- `tile.json` is the source of truth for Tessl package identity and publishing
+- Each skill directory under `skills/*/*` has its own `.tessl-plugin/plugin.json`
+- `.tessl-plugin/plugin.json` is the source of truth for Tessl package identity and publishing
 - `agents/openai.yaml` is optional, but when present it is the source of truth for OpenAI or Codex picker-facing display names, descriptions, and default prompts
 - `.github/workflows/publish-skills.yml` runs a secretless review job first, then publishes from the `release` Environment without an approval gate
-- Pushes to `main` that touch `skills/**` or the publish workflow publish only the tiles that changed
+- Pushes to `main` that touch `skills/**`, `scripts/publish-skills.sh`, or the publish workflow publish only the plugins that changed
 - Pushes with `[skip ci]` in the head commit message skip review and publish jobs
-- Manual workflow runs publish all tiles only when the run ref is `main`; non-`main` manual runs can review, but the publish job is skipped
-- The publish job uses `scripts/publish-skills.sh` to detect changed tiles, lint them, and publish them with the Tessl CLI
-- `tessl tile publish` publishes eval scenarios from each tile's `evals/` directory
+- Manual workflow runs publish all plugins only when the run ref is `main`; non-`main` manual runs can review, but the publish job is skipped
+- The publish job uses `scripts/publish-skills.sh` to detect changed plugins, lint them, and publish them with the Tessl CLI
+- `tessl plugin publish` publishes eval scenarios from each plugin's `evals/` directory
 - The script derives semantic version bumps from Conventional Commit messages: breaking changes -> `major`, `feat` -> `minor`, everything else -> `patch`
-- Before publish, the script probes `tessl tile publish --dry-run --bump <type>` so Tessl can choose the next available version
-- After a successful publish, the workflow commits the resulting `tile.json` version bumps back to `main` as `putio-release-bot[bot]` with a skip-CI commit message
+- Before publish, the script probes `tessl plugin publish --dry-run --bump <type>` so Tessl can choose the next available version
+- After a successful publish, the workflow commits the resulting `.tessl-plugin/plugin.json` version bumps back to `main` as `putio-release-bot[bot]` with a skip-CI commit message
 - Publish-path actions are pinned to full commit SHAs with trailing comments for their human version tags
 
 ## Required GitHub Environment
@@ -52,7 +52,7 @@ The workflow still references the token as `${{ secrets.TESSL_TOKEN }}`; GitHub 
 ## Local checks
 
 ```bash
-./scripts/tessl.sh tile lint skills/frontend/repos
-./scripts/tessl.sh tile publish --dry-run skills/frontend/repos
-./scripts/tessl.sh tile publish --dry-run --bump patch skills/frontend/repos
+./scripts/tessl.sh plugin lint skills/frontend/repos
+./scripts/tessl.sh plugin publish --dry-run skills/frontend/repos
+./scripts/tessl.sh plugin publish --dry-run --bump patch skills/frontend/repos
 ```

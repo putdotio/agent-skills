@@ -10,7 +10,7 @@ Run Tessl review across every skill:
 ./scripts/review-skills.sh
 ```
 
-When Tessl authentication is unavailable, the wrapper runs `tile lint` for each
+When Tessl authentication is unavailable, the wrapper runs `plugin lint` for each
 skill package instead. This keeps unauthenticated CI useful while authenticated
 local and publish paths can still run scored reviews.
 
@@ -22,14 +22,14 @@ TESSL_THRESHOLD=92 ./scripts/review-skills.sh
 ```
 
 The wrapper pins the Tessl CLI through `TESSL_CLI_VERSION` and defaults to
-version `0.80.0`; bump that default intentionally instead of relying on moving npm
+version `0.90.0`; bump that default intentionally instead of relying on moving npm
 latest.
 
 The batch wrapper does not support JSON output. For structured output, run Tessl directly on one skill:
 
 ```bash
-npx tessl@0.80.0 skill review skills/frontend/repos
-npx tessl@0.80.0 skill review --json --threshold 90 skills/frontend/repos
+npx tessl@0.90.0 review run --workspace putio skills/frontend/repos
+npx tessl@0.90.0 review run --json --workspace putio --threshold 90 skills/frontend/repos
 ```
 
 ## Optimize one skill
@@ -45,7 +45,7 @@ This mutates files. Review the diff before committing.
 
 ## Publish changed skills
 
-Publish changed Tessl tiles from the trusted `main` workflow:
+Publish changed Tessl plugins from the trusted `main` workflow:
 
 ```bash
 ./scripts/publish-skills.sh
@@ -56,12 +56,12 @@ intend to publish from an authenticated trusted checkout.
 
 ## Notes
 
-- `review-skills.sh` is the batch entrypoint for local skill review
+- `review-skills.sh` is the batch entrypoint for local Tessl Review runs
 - `publish-skills.sh` is the workflow entrypoint for linting and publishing
-  changed tiles, including any eval scenarios under `evals/`
+  changed plugins, including any eval scenarios under `evals/`
 - `tessl.sh` runs the pinned Tessl CLI with `npx`
 - `optimize-skills.sh` applies mutations, so run it intentionally and inspect the resulting diff
 - CI runs `./scripts/review-skills.sh` on pull requests and pushes to `main`.
-  Unauthenticated CI falls back to `tile lint`; authenticated local and publish
+  Unauthenticated CI falls back to `plugin lint`; authenticated local and publish
   paths still run scored reviews before publishing `main` changes under
   `skills/**`

@@ -18,7 +18,7 @@ if [[ -z "$dry_run" ]]; then
   fi
 fi
 
-find_tile_dir() {
+find_plugin_dir() {
   local changed_path="$1"
   local current
 
@@ -29,7 +29,7 @@ find_tile_dir() {
   fi
 
   while [[ "$current" == skills* && "$current" != "." ]]; do
-    if [[ -f "$current/tile.json" ]]; then
+    if [[ -f "$current/.tessl-plugin/plugin.json" ]]; then
       printf '%s\n' "$current"
       return 0
     fi
@@ -39,15 +39,15 @@ find_tile_dir() {
   return 1
 }
 
-list_all_tiles() {
-  find skills -mindepth 2 -maxdepth 3 -name tile.json -print \
-    | sed 's#/tile.json$##' \
+list_all_plugins() {
+  find skills -mindepth 4 -maxdepth 5 -path '*/.tessl-plugin/plugin.json' -print \
+    | sed 's#/.tessl-plugin/plugin.json$##' \
     | sort -u
 }
 
-list_changed_tiles() {
+list_changed_plugins() {
   if [[ -z "$before_sha" || "$before_sha" == "$zero_sha" ]]; then
-    list_all_tiles
+    list_all_plugins
     return 0
   fi
 
@@ -57,7 +57,7 @@ list_changed_tiles() {
 
   git diff --name-only "$before_sha" "$after_sha" -- skills \
     | while IFS= read -r changed_path; do
-      find_tile_dir "$changed_path" || true
+      find_plugin_dir "$changed_path" || true
     done \
     | sort -u
 }
@@ -88,30 +88,30 @@ publish_bump_type() {
 }
 
 if [[ "$event_name" == "workflow_dispatch" ]]; then
-  mapfile -t tile_dirs < <(list_all_tiles)
+  mapfile -t plugin_dirs < <(list_all_plugins)
 else
-  mapfile -t tile_dirs < <(list_changed_tiles)
+  mapfile -t plugin_dirs < <(list_changed_plugins)
 fi
 
-if [[ "${#tile_dirs[@]}" -eq 0 ]]; then
-  echo "No changed Tessl tiles to publish."
+if [[ "${#plugin_dirs[@]}" -eq 0 ]]; then
+  echo "No changed Tessl plugins to publish."
   exit 0
 fi
 
 bump_type="$(publish_bump_type)"
-echo "Publishing ${#tile_dirs[@]} Tessl tile(s) with ${bump_type} bump:"
-printf '  %s\n' "${tile_dirs[@]}"
+echo "Publishing ${#plugin_dirs[@]} Tessl plugin(s) with ${bump_type} bump:"
+printf '  %s\n' "${plugin_dirs[@]}"
 
 if [[ "$dry_run" == "true" ]]; then
   echo "Dry-run mode is enabled; publish commands will not be executed."
 fi
 
-for tile_dir in "${tile_dirs[@]}"; do
+for plugin_dir in "${plugin_dirs[@]}"; do
   echo
-  echo "==> $tile_dir"
-  tessl tile lint "$tile_dir"
-  tessl tile publish --dry-run --bump "$bump_type" "$tile_dir"
+  echo "==> $plugin_dir"
+  tessl plugin lint "$plugin_dir"
+  tessl plugin publish --dry-run --bump "$bump_type" "$plugin_dir"
   if [[ "$dry_run" != "true" ]]; then
-    tessl tile publish --bump "$bump_type" "$tile_dir"
+    tessl plugin publish --bump "$bump_type" "$plugin_dir"
   fi
 done

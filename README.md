@@ -28,16 +28,16 @@ Use [Tessl](https://tessl.io/) to review and publish the skills in this repo to 
 Per-skill checks:
 
 ```bash
-./scripts/tessl.sh skill review --json skills/frontend/repos
-./scripts/tessl.sh tile lint skills/frontend/repos
-./scripts/tessl.sh tile publish --dry-run skills/frontend/repos
+./scripts/tessl.sh review run --json --workspace putio skills/frontend/repos
+./scripts/tessl.sh plugin lint skills/frontend/repos
+./scripts/tessl.sh plugin publish --dry-run skills/frontend/repos
 ```
 
-Publishing from GitHub Actions expects `TESSL_TOKEN` in the protected `release` Environment. See [Distribution](docs/DISTRIBUTION.md) for the publish flow and tile naming.
+Publishing from GitHub Actions expects `TESSL_TOKEN` in the protected `release` Environment. See [Distribution](docs/DISTRIBUTION.md) for the publish flow and plugin naming.
 
 ## Publishable skill shape
 
-Published skills keep their package metadata next to the skill. Use [Distribution](docs/DISTRIBUTION.md) as the source of truth for `tile.json`, optional `agents/openai.yaml`, and Tessl publishing behavior.
+Published skills keep their package metadata next to the skill. Use [Distribution](docs/DISTRIBUTION.md) as the source of truth for `.tessl-plugin/plugin.json`, optional `agents/openai.yaml`, and Tessl publishing behavior.
 
 ## Docs
 

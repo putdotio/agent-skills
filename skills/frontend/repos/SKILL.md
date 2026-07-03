@@ -65,22 +65,11 @@ Concrete example:
 
 ```yaml
 - name: Verify
-  run: pnpm verify
+  run: pnpm verify # or make verify for app-shaped repos
 
 - name: Release
   if: github.ref == 'refs/heads/main'
-  run: pnpm release
-```
-
-App-shaped example:
-
-```yaml
-- name: Verify
-  run: make verify
-
-- name: Deploy Beta
-  if: github.ref == 'refs/heads/main'
-  run: make deploy-beta
+  run: pnpm release # or make deploy-beta for app-shaped repos
 ```
 
 ## Guardrails
@@ -89,6 +78,6 @@ App-shaped example:
 - Prefer GitHub Actions for orchestration and repo-local commands as the canonical home for build, test, and deliver logic.
 - Use docs, release, deploy, and harness tooling backed by real repo precedent or team standard.
 - Keep manual release paths on trusted refs before they reach secret-bearing jobs.
-- Avoid GitHub Actions artifacts as a release/deploy registry. They are temporary CI storage with quota and retention failure modes; prefer same-job deploy handoff for simple static surfaces, or deploy from a GitHub Release asset, package registry, image digest, or provider-native package for versioned releases.
+- Do not use GitHub Actions artifacts as a release/deploy registry; prefer same-job deploy handoff, GitHub Release assets, package registries, image digests, or provider-native packages.
 - Put release credential policy, protected Environment setup, and tag rules in `docs/DISTRIBUTION.md`; leave contributor docs as workflow/setup guidance.
 - GitHub-facing repos should carry a useful pull request template and issue templates when the review or triage flow benefits from them.

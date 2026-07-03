@@ -4,7 +4,7 @@ This repository stores shared agent skills for put.io development workflows.
 
 ## Setup
 
-There is no repo-local bootstrap step beyond access to Tessl for review and publish workflows. Use `./scripts/tessl.sh`; it pins the Tessl CLI through `TESSL_CLI_VERSION` and defaults to version `0.80.0`
+There is no repo-local bootstrap step beyond access to Tessl for review and publish workflows. Use `./scripts/tessl.sh`; it pins the Tessl CLI through `TESSL_CLI_VERSION` and defaults to version `0.90.0`
 
 ## Working in the repo
 
@@ -18,7 +18,7 @@ There is no repo-local bootstrap step beyond access to Tessl for review and publ
 For focused changes, review the affected skill directly:
 
 ```bash
-./scripts/tessl.sh skill review --json skills/<group>/<name>
+./scripts/tessl.sh review run --json --workspace putio skills/<group>/<name>
 ```
 
 For broader changes, use the repository scripts:
@@ -27,7 +27,7 @@ For broader changes, use the repository scripts:
 ./scripts/review-skills.sh
 ```
 
-If you change publishable skill metadata such as `tile.json` or `agents/openai.yaml`, run the tile checks documented in [Overview](./README.md) and keep the picker-facing metadata aligned with the skill branding and scope.
+If you change publishable skill metadata such as `.tessl-plugin/plugin.json` or `agents/openai.yaml`, run the plugin checks documented in [Overview](./README.md) and keep the picker-facing metadata aligned with the skill branding and scope.
 
 ## Pull Requests
 
