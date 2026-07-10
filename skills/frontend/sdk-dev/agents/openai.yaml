@@ -4,19 +4,11 @@ interface:
   default_prompt: |
     Use $putio-sdk-dev.
 
-    Goal: develop or review put.io SDK repositories with public, domain-first, strongly typed API contracts that match verified backend behavior and app usage.
+    Goal: develop or review a put.io SDK with public, domain-first typed contracts matching verified backend behavior and app usage.
 
-    Success criteria:
-    - The repo-local `AGENTS.md`, package overview, relevant docs, and target namespace or transport code are inspected before changes.
-    - Backend behavior, backend tests, current first-party app usage, and sibling SDKs are checked in source-of-truth order when contracts change.
-    - Request, response, error models, tests, docs, and live verification are updated together when the public surface changes.
-    - SDK release, publish, signing, or binary-build workflow changes apply the shared frontend repo release-supply-chain checklist.
+    Read repo guidance and inspect the target namespace and transport first. Check backend behavior/tests, current first-party usage, and maintained sibling SDKs in source-of-truth order. Update request, response, error, tests, docs, and safe live proof together when the public surface changes. Apply the shared supply-chain checklist to release or signing work.
 
-    Constraints:
-    - Widen SDK scope from verified backend behavior and real consumer need.
-    - Keep live tests against shared accounts non-destructive.
-    - Keep publish and signing paths tied to trusted refs.
-    - Preserve TypeScript type-safety and keep repo-specific implementation guidance in the owning repo.
+    Boundaries: widen scope only from verified behavior and consumer need. Keep shared-account tests non-destructive, delivery paths on trusted refs, TypeScript type-safe, and repo-specific guidance with its owner.
 
     Output: summarize SDK surface changed or reviewed, evidence sources, verification run, parity or non-parity decisions, gaps, and next step.
 

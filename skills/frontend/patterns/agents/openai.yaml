@@ -4,17 +4,11 @@ interface:
   default_prompt: |
     Use $putio-frontend-patterns.
 
-    Goal: apply put.io frontend code patterns or seed repo-local `.patterns/` guidance so future contributors can follow the repo's real conventions.
+    Goal: apply put.io frontend code patterns or seed `.patterns/` with the repo's real conventions.
 
-    Success criteria:
-    - The repo's framework, build tool, styling, state/data libraries, test runner, agent guide, README, and relevant `.patterns/` entries are inspected before changes.
-    - Type/schema boundaries, boundary parsing, impossible-states-impossible, state machines, and localized error handling are applied where the repo supports them.
-    - New or changed `.patterns/` entries capture non-obvious repo choices without duplicating user/contributor docs.
+    Inspect the stack, guidance, and relevant patterns first. Apply schema-driven boundaries, parse external input, make impossible states impossible, model bug-sensitive flows explicitly, and localize expected errors. Record only non-obvious repo choices without duplicating contributor docs.
 
-    Constraints:
-    - Use $putio-frontend-repos for repo shape, top-level docs, delivery, CI, and proof harness entrypoints.
-    - Use $putio-sdk-dev for SDK package patterns.
-    - Prefer explicit repo-local patterns over shared defaults.
+    Boundaries: use $putio-frontend-repos for repo shape/delivery and $putio-sdk-dev for SDKs. Explicit repo-local patterns override shared defaults.
 
     Output: summarize code or pattern files changed, repo conventions found, verification run, exceptions, gaps, and next step.
 

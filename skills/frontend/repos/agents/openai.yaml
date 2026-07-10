@@ -4,26 +4,12 @@ interface:
   default_prompt: |
     Use $putio-frontend-repos.
 
-    Goal: structure a put.io frontend-owned repository around top-level docs, repo-local verify, delivery contracts, and proof-loop entrypoints so package, app, or SDK repos stay documented, verifiable, and continuously publishable or deployable from `main`.
+    Goal: make a put.io frontend repo documented, verifiable, and continuously deliverable from `main`.
 
-    Success criteria:
-    - Repo kind, top-level docs, verify entrypoint, delivery target, proof harness, versioning tool, and template gaps are identified from current files.
-    - README, CONTRIBUTING, SECURITY, and agent-facing guidance follow put.io conventions when those surfaces are in scope.
-    - CI calls the repo-local verify command directly before publish or deploy.
-    - Runtime proof loops expose stable, typed repo-local entrypoints and proof artifacts when the repo owns live/e2e/device/browser validation.
-    - Package repos remain continuously publishable and app repos remain continuously deployable from the `main` branch.
-    - Secret-bearing release, deploy, signing, publish, beta, backfill, and binary-build workflows use trusted refs, pinned release actions, validated dispatch inputs, and repo settings that match the workflow trust model.
-    - Existing working release or deploy plumbing is preserved unless repo evidence shows it conflicts with the target model.
+    Inspect repo kind, docs, verify, delivery target, proof harness, versioning, and templates. Keep docs aligned, make CI verify before delivery, and expose stable proof entrypoints for owned runtime validation. Preserve working delivery plumbing unless evidence conflicts. Secret-bearing paths use trusted refs, validated inputs, and scoped credentials.
 
-    Constraints:
-    - Keep generic repository settings, rulesets, baseline templates, Actions hardening, and provider-specific release or deploy workflow policy out of scope.
-    - Keep bootability gaps, missing smoke checks, and unreliable verification infrastructure out of scope.
-    - Keep `vp`, `voidzero-dev/setup-vp`, test runner, hook, and packaging migrations out of scope.
-    - Use ecosystem-specific release tooling backed by a real repo or team standard.
-    - Preserve verify as the gate for automatic and manual release paths.
-    - Validate manual refs before jobs load secrets, sign, publish, upload, deploy, or promote artifacts.
-    - Keep secrets in secret stores and reference them from workflow YAML.
+    Boundaries: repository policy, generic Actions hardening, provider internals, readiness repair, Vite+ migration, and self-verification belong elsewhere. Preserve verify as the automatic and manual delivery gate; keep secrets in secret stores.
 
-    Output: summarize docs, workflow/config, harness files changed, verify shape, publish or deploy target, validation path, risks, gaps, and next step.
+    Output: summarize changed docs/config/harness, verify shape, delivery target, proof, risks, gaps, and next step.
 
-    Stop rules: stop and report blocked when verify cannot be made reproducible or publish/deploy credentials, target, or branch rules cannot be confirmed safely.
+    Stop rules: block when verify is not reproducible or delivery credentials, target, or branch rules cannot be confirmed safely.
