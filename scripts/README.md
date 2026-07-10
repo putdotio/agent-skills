@@ -7,10 +7,12 @@ Helpers for local Tessl review loops in this repo.
 Run the canonical local gate:
 
 ```bash
+npm ci
 make verify
 ```
 
-This runs workflow lint, plugin lint, Tessl Review, and a publish dry-run.
+This validates OpenAI interface prompt limits, then runs workflow lint, plugin
+lint, Tessl Review, and a publish dry-run.
 
 ## Batch review
 
