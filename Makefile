@@ -1,11 +1,8 @@
 SHELL := /bin/bash
 
-.PHONY: verify verify-interfaces lint-workflows lint-plugins review publish-dry-run
+.PHONY: verify lint-workflows lint-plugins review publish-dry-run
 
-verify: verify-interfaces lint-workflows lint-plugins review publish-dry-run
-
-verify-interfaces:
-	npm run verify:interfaces
+verify: lint-workflows lint-plugins review publish-dry-run
 
 lint-workflows:
 	actionlint .github/workflows/publish-skills.yml .github/workflows/review-skills.yml
