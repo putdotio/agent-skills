@@ -9,5 +9,7 @@ Instructions for contributors in this repo.
 - Put common workflow once in the most relevant source file.
 - Keep skill descriptions self-activating: say what the skill does, when to use it, and the main boundary when overlap is likely.
 - When changing a skill, update any adjacent examples or references that would drift with it.
-- When changing a skill, run `./scripts/tessl.sh review run --workspace putio skills/<group>/<name>`; for broader skill work, run `./scripts/review-skills.sh` and use the feedback to tighten wording and workflow. Publishable skill package metadata lives in `.tessl-plugin/plugin.json`. `scripts/tessl.sh` pins the Tessl CLI through `TESSL_CLI_VERSION`; the default version is `0.92.0`
+- When changing a skill, run `./scripts/tessl.sh review run --workspace putio skills/<group>/<name>`; for broader skill work, run `make verify` and use the feedback to tighten wording and workflow.
+- `scripts/tessl.sh` owns the audited local Tessl CLI pin. Keep the `setup-tessl` workflow versions aligned with it.
+- Publishable skill package metadata lives in `.tessl-plugin/plugin.json`. Follow [Distribution](docs/DISTRIBUTION.md) for publishing and credential rotation.
 - `CLAUDE.md` should remain a symlink to this file.

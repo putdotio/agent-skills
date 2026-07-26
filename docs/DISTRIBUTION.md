@@ -17,7 +17,7 @@ find skills -path '*/.tessl-plugin/plugin.json' -exec jq -r .name {} \;
 - Each skill directory under `skills/*/*` has its own `.tessl-plugin/plugin.json`
 - `.tessl-plugin/plugin.json` is the source of truth for Tessl package identity and publishing
 - `agents/openai.yaml` is optional, but when present it is the source of truth for OpenAI or Codex picker-facing display names, descriptions, and default prompts
-- Tessl CLI usage is pinned to `0.92.0`, the current npm `latest` version verified on July 26, 2026
+- `scripts/tessl.sh` owns the audited local Tessl CLI pin; the `setup-tessl` workflow steps pin the same version
 - `.github/workflows/review-skills.yml` runs secretless plugin lint on pull requests and authenticated Tessl Review on trusted `main` pushes
 - `.github/workflows/publish-skills.yml` runs authenticated Tessl Review first, then publishes from the `release` Environment without an approval gate
 - Pushes to `main` that touch `skills/**`, `scripts/publish-skills.sh`, or the publish workflow publish only the plugins that changed
@@ -47,10 +47,47 @@ Create a Tessl API key for the `putio` workspace, then add it to the `release` E
 You can create the key either from the Tessl web UI or with the CLI:
 
 ```bash
-tessl api-key create --workspace putio --name github-actions-publish --role publisher
+expiry_date="YYYY-MM-DDT00:00:00Z"
+./scripts/tessl.sh api-key create \
+  --workspace putio \
+  --name github-actions-publish-release-YYYYMMDDHHMMSS \
+  --role publisher \
+  --expiry-date "$expiry_date"
 ```
 
 The workflow still references the token as `${{ secrets.TESSL_TOKEN }}`; GitHub resolves that value from the `release` Environment when the `main` release job starts.
+
+## Rotate the Tessl publisher key
+
+Create the replacement key before revoking the current key. Keep the generated
+value out of shell history, files, logs, and chat.
+
+1. Create a replacement publisher key with an explicit expiry using the command
+   above.
+2. Set the replacement value interactively. GitHub CLI encrypts it locally
+   before sending it:
+
+   ```bash
+   gh secret set TESSL_TOKEN --repo putdotio/skills --env release
+   ```
+
+3. Push a trusted `main` change that exercises both review and publish setup,
+   then confirm the jobs succeed:
+
+   ```bash
+   gh run list --repo putdotio/skills --limit 10
+   ```
+
+4. List Tessl key metadata and delete only the superseded key after the
+   replacement has succeeded in CI:
+
+   ```bash
+   ./scripts/tessl.sh api-key list --workspace putio
+   ./scripts/tessl.sh api-key delete --workspace putio <superseded-api-key-id>
+   ```
+
+If the workflow fails authentication, keep the previous key active while
+repairing the Environment secret.
 
 ## Local checks
 

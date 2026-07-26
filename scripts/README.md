@@ -11,6 +11,8 @@ make verify
 ```
 
 This runs workflow lint, plugin lint, Tessl Review, and a publish dry-run.
+It requires authenticated Tessl access with publisher permission. Use the batch
+review command below when those credentials are unavailable.
 
 ## Batch review
 
@@ -31,15 +33,15 @@ TESSL_THRESHOLD=92 ./scripts/review-skills.sh
 ./scripts/review-skills.sh --threshold 95
 ```
 
-The wrapper pins the Tessl CLI through `TESSL_CLI_VERSION` and defaults to
-version `0.92.0`, the npm `latest` version verified on July 26, 2026. Bump that
-default intentionally instead of relying on moving npm latest.
+The wrapper pins the audited Tessl CLI version in `scripts/tessl.sh`. Keep the
+`setup-tessl` workflow versions aligned with that default instead of relying on
+moving npm latest.
 
 The batch wrapper does not support JSON output. For structured output, run Tessl directly on one skill:
 
 ```bash
-npx tessl@0.92.0 review run --workspace putio skills/frontend/frontend-dev
-npx tessl@0.92.0 review run --json --workspace putio --threshold 90 skills/frontend/frontend-dev
+./scripts/tessl.sh review run --workspace putio skills/frontend/frontend-dev
+./scripts/tessl.sh review run --json --workspace putio --threshold 90 skills/frontend/frontend-dev
 ```
 
 ## Optimize one skill

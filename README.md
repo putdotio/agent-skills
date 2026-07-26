@@ -42,7 +42,6 @@ Published skills keep their package metadata next to the skill. Use [Distributio
 
 ## Docs
 
-- [Contributing](./CONTRIBUTING.md) for contributor workflow and validation
 - [Distribution](./docs/DISTRIBUTION.md) for publish flow and repository release details
 - [Evals](./docs/EVALS.md) for scenario layout and registry Impact checks
 - [Security](./SECURITY.md) for private vulnerability reporting
@@ -55,3 +54,7 @@ Published skills keep their package metadata next to the skill. Use [Distributio
 ## Contributing
 
 Use [Contributing](./CONTRIBUTING.md) for skill-authoring workflow and review expectations.
+
+## License
+
+Licensed under the [MIT License](./LICENSE).

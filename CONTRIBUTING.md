@@ -4,7 +4,14 @@ This repository stores shared agent skills for put.io development workflows.
 
 ## Setup
 
-There is no repo-local bootstrap step beyond access to Tessl for review and publish workflows. Use `./scripts/tessl.sh`; it pins the Tessl CLI through `TESSL_CLI_VERSION` and defaults to version `0.92.0`
+Use the Node.js version in `.node-version` with npm/npx, GNU Make, and
+`actionlint`. Run Tessl through `./scripts/tessl.sh`; the wrapper owns the
+audited CLI version for local checks.
+
+Authenticated Tessl access is optional for focused authoring. Batch review
+falls back to plugin lint when authentication is unavailable. The full
+`make verify` maintainer gate includes a publish dry-run and therefore requires
+a Tessl key with publisher permission.
 
 ## Working in the repo
 
@@ -27,6 +34,9 @@ For broader changes, use the repository scripts:
 make verify
 ./scripts/review-skills.sh
 ```
+
+Use `./scripts/review-skills.sh` when publisher credentials are unavailable.
+Maintainers should run `make verify` before publishing.
 
 If you change publishable skill metadata such as `.tessl-plugin/plugin.json` or `agents/openai.yaml`, run the plugin checks documented in [Overview](./README.md) and keep the picker-facing metadata aligned with the skill branding and scope.
 
