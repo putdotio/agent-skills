@@ -17,7 +17,7 @@ find skills -path '*/.tessl-plugin/plugin.json' -exec jq -r .name {} \;
 - Each skill directory under `skills/*/*` has its own `.tessl-plugin/plugin.json`
 - `.tessl-plugin/plugin.json` is the source of truth for Tessl package identity and publishing
 - `agents/openai.yaml` is optional, but when present it is the source of truth for OpenAI or Codex picker-facing display names, descriptions, and default prompts
-- Tessl CLI usage is pinned to `0.90.0`, the current npm `latest` version verified on July 3, 2026
+- Tessl CLI usage is pinned to `0.92.0`, the current npm `latest` version verified on July 26, 2026
 - `.github/workflows/review-skills.yml` runs secretless plugin lint on pull requests and authenticated Tessl Review on trusted `main` pushes
 - `.github/workflows/publish-skills.yml` runs authenticated Tessl Review first, then publishes from the `release` Environment without an approval gate
 - Pushes to `main` that touch `skills/**`, `scripts/publish-skills.sh`, or the publish workflow publish only the plugins that changed

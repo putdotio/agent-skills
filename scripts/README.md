@@ -32,14 +32,14 @@ TESSL_THRESHOLD=92 ./scripts/review-skills.sh
 ```
 
 The wrapper pins the Tessl CLI through `TESSL_CLI_VERSION` and defaults to
-version `0.90.0`, the npm `latest` version verified on July 3, 2026. Bump that
+version `0.92.0`, the npm `latest` version verified on July 26, 2026. Bump that
 default intentionally instead of relying on moving npm latest.
 
 The batch wrapper does not support JSON output. For structured output, run Tessl directly on one skill:
 
 ```bash
-npx tessl@0.90.0 review run --workspace putio skills/frontend/frontend-dev
-npx tessl@0.90.0 review run --json --workspace putio --threshold 90 skills/frontend/frontend-dev
+npx tessl@0.92.0 review run --workspace putio skills/frontend/frontend-dev
+npx tessl@0.92.0 review run --json --workspace putio --threshold 90 skills/frontend/frontend-dev
 ```
 
 ## Optimize one skill

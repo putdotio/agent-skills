@@ -1,6 +1,6 @@
 ---
 name: putio-frontend-dev
-description: "Develop, review, and standardize put.io frontend applications and packages. Use for feature code, typed boundaries, state and error modeling, components, repo-local `.patterns/`, top-level docs, canonical verify commands, CI and delivery, release or deploy workflows, local secret setup, and browser, native, TV, emulator, simulator, or device proof harnesses. SDK client and API contract design and put.io CLI consumer operations are outside this skill."
+description: "Develop, review, and standardize put.io frontend applications and packages. Use when asked to review put.io frontend code, build a feature, model state or errors, create components, capture repo-local `.patterns/`, improve top-level docs, set up CI or delivery, wire up a test harness, configure local secrets, or prove behavior in a browser, native app, TV, emulator, simulator, or device. SDK client and API contract design and put.io CLI consumer operations are outside this skill."
 ---
 
 # put.io Frontend Dev
@@ -37,6 +37,10 @@ own guidance and code precedent.
 - Browser, native, TV, emulator, simulator, and device proof:
   [test harness](./references/test-harness.md)
 
+Markdown links navigate this skill bundle. Other paths shown in the references,
+such as `.patterns/state-machines.md` or `.github/pull_request_template.md`,
+name files to create or inspect in the target repository.
+
 ## Shared Defaults
 
 - Parse external input at the boundary and derive types from the validated
@@ -63,8 +67,17 @@ own guidance and code precedent.
    homes.
 4. Keep workflow orchestration thin and put repeatable build, verify, deploy,
    and smoke logic behind repo-owned commands.
-5. Run the canonical verify command, then the relevant runtime, delivery, or
-   harness smoke path.
+5. Run the repo's canonical verify entrypoint, for example exactly one of:
+
+   ```bash
+   make verify
+   mise run verify
+   vp run verify
+   ```
+
+   If it fails, fix the root cause and rerun the same command until it passes.
+   Then run the relevant runtime, delivery, or harness smoke path; fix and
+   rerun that proof if it fails.
 6. Report changed behavior, verification, proof artifacts, risks, and remaining
    gaps.
 
