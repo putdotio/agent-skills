@@ -38,8 +38,8 @@ default intentionally instead of relying on moving npm latest.
 The batch wrapper does not support JSON output. For structured output, run Tessl directly on one skill:
 
 ```bash
-npx tessl@0.90.0 review run --workspace putio skills/frontend/repos
-npx tessl@0.90.0 review run --json --workspace putio --threshold 90 skills/frontend/repos
+npx tessl@0.90.0 review run --workspace putio skills/frontend/frontend-dev
+npx tessl@0.90.0 review run --json --workspace putio --threshold 90 skills/frontend/frontend-dev
 ```
 
 ## Optimize one skill
@@ -47,8 +47,8 @@ npx tessl@0.90.0 review run --json --workspace putio --threshold 90 skills/front
 Apply one Tessl optimization pass to a single skill:
 
 ```bash
-./scripts/optimize-skills.sh frontend/repos
-./scripts/optimize-skills.sh frontend/repos --threshold 92
+./scripts/optimize-skills.sh frontend/frontend-dev
+./scripts/optimize-skills.sh frontend/frontend-dev --threshold 92
 ```
 
 This mutates files. Review the diff before committing.

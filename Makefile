@@ -8,7 +8,7 @@ lint-workflows:
 	actionlint .github/workflows/publish-skills.yml .github/workflows/review-skills.yml
 
 lint-plugins:
-	for dir in skills/frontend/patterns skills/frontend/repos skills/frontend/sdk-dev; do \
+	for dir in skills/frontend/frontend-dev skills/frontend/sdk-dev; do \
 		./scripts/tessl.sh plugin lint "$$dir"; \
 	done
 

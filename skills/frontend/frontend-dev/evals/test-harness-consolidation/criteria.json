@@ -1,10 +1,10 @@
 {
-  "context": "Tests whether the consolidated frontend repos skill covers proof-loop and device harness guidance formerly held by standalone harness tiles.",
+  "context": "Tests whether the frontend dev skill covers proof-loop and device harness guidance for frontend surfaces.",
   "type": "weighted_checklist",
   "checklist": [
     {
       "name": "routes_to_test_harness_reference",
-      "description": "Recognizes this as frontend proof-loop work and says to use the repo skill's test harness guidance, not feature-code or SDK guidance.",
+      "description": "Recognizes this as frontend proof-loop work and says to use the frontend dev skill's test harness guidance rather than feature-code or SDK guidance.",
       "max_score": 2
     },
     {

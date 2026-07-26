@@ -1,6 +1,8 @@
 # Test Harness
 
-Use this reference when `putio-frontend-repos` work touches proof loops for put.io frontend-owned web, browser extension, TV, native, emulator, simulator, or device surfaces.
+Use this reference when `putio-frontend-dev` work touches proof loops for put.io
+frontend-owned web, browser extension, TV, native, emulator, simulator, or
+device surfaces.
 
 A useful harness wraps platform tools, exposes a typed command surface, prepares auth/session state, drives real product flows, asserts meaningful state, and leaves proof artifacts.
 

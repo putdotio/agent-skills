@@ -1,5 +1,5 @@
 {
-  "context": "Tests whether the frontend patterns skill makes the agent recommend schema-driven parsing, explicit state modeling, and repo verification for a bug-sensitive UI flow.",
+  "context": "Tests whether the frontend dev skill makes the agent recommend schema-driven parsing, explicit state modeling, and repo verification for a bug-sensitive UI flow.",
   "type": "weighted_checklist",
   "checklist": [
     {

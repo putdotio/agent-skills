@@ -1,0 +1,9 @@
+{
+  "name": "putio/frontend-dev",
+  "version": "0.1.0",
+  "description": "Develop, review, and standardize put.io frontend applications and packages across feature code, repo-local patterns, documentation, verification, delivery, release security, and runtime proof harnesses.",
+  "private": false,
+  "skills": [
+    "SKILL.md"
+  ]
+}

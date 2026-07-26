@@ -35,7 +35,8 @@ Read only what you need:
 - [language notes](./references/language-notes.md) for TypeScript, Swift, or Kotlin-specific guidance
 
 If the repo has a canonical verify command, use that as the source of truth before editing delivery automation.
-If SDK release, publish, signing, or binary-build automation is in scope, also use `putio-frontend-repos` and its release-supply-chain guidance.
+If SDK release, publish, signing, or binary-build automation is in scope, also
+apply the available shared frontend delivery and release-supply-chain guidance.
 
 ## Main Workflow
 

@@ -24,14 +24,14 @@ make verify
 Run one eval set manually when iterating on a plugin:
 
 ```bash
-./scripts/tessl.sh eval run skills/frontend/patterns
+./scripts/tessl.sh eval run skills/frontend/frontend-dev
 ./scripts/tessl.sh eval view <eval-run-id>
 ```
 
 Publishing also uploads the scenarios and starts a registry eval run:
 
 ```bash
-./scripts/tessl.sh plugin publish --dry-run --bump patch skills/frontend/patterns
+./scripts/tessl.sh plugin publish --dry-run --bump patch skills/frontend/frontend-dev
 ```
 
 ## Interpreting Registry Scores

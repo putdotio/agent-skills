@@ -1,5 +1,5 @@
 {
-  "context": "Tests whether the frontend repos skill drives agents toward a canonical verify entrypoint and delivery documentation before changing automation.",
+  "context": "Tests whether the frontend dev skill drives agents toward a canonical verify entrypoint and delivery documentation before changing automation.",
   "type": "weighted_checklist",
   "checklist": [
     {

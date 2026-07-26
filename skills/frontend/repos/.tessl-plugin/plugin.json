@@ -1,9 +1,0 @@
-{
-  "name": "putio/frontend-repos",
-  "version": "0.1.43",
-  "description": "Set up put.io frontend repos: README/CONTRIBUTING/SECURITY, CI, package scripts, verify commands, release workflows, deploy pipelines, test harnesses, and publish/deploy flows. Use for repo setup, repo cleanup, project setup, configuring CI or deployment, or making a package/app/SDK repo documented, verifiable, and deliverable. Skip feature code, SDK API work, Vite+ migrations, and self-verification.",
-  "private": false,
-  "skills": [
-    "SKILL.md"
-  ]
-}

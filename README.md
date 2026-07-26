@@ -23,15 +23,15 @@ Use [Tessl](https://tessl.io/) to review and publish the skills in this repo to 
 ```bash
 make verify
 ./scripts/review-skills.sh
-./scripts/optimize-skills.sh frontend/repos
+./scripts/optimize-skills.sh frontend/frontend-dev
 ```
 
 Per-skill checks:
 
 ```bash
-./scripts/tessl.sh review run --json --workspace putio skills/frontend/repos
-./scripts/tessl.sh plugin lint skills/frontend/repos
-./scripts/tessl.sh plugin publish --dry-run skills/frontend/repos
+./scripts/tessl.sh review run --json --workspace putio skills/frontend/frontend-dev
+./scripts/tessl.sh plugin lint skills/frontend/frontend-dev
+./scripts/tessl.sh plugin publish --dry-run skills/frontend/frontend-dev
 ```
 
 Publishing from GitHub Actions expects `TESSL_TOKEN` in the protected `release` Environment. See [Distribution](docs/DISTRIBUTION.md) for the publish flow and plugin naming.

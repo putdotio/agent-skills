@@ -55,7 +55,7 @@ The workflow still references the token as `${{ secrets.TESSL_TOKEN }}`; GitHub 
 ## Local checks
 
 ```bash
-./scripts/tessl.sh plugin lint skills/frontend/repos
-./scripts/tessl.sh plugin publish --dry-run skills/frontend/repos
-./scripts/tessl.sh plugin publish --dry-run --bump patch skills/frontend/repos
+./scripts/tessl.sh plugin lint skills/frontend/frontend-dev
+./scripts/tessl.sh plugin publish --dry-run skills/frontend/frontend-dev
+./scripts/tessl.sh plugin publish --dry-run --bump patch skills/frontend/frontend-dev
 ```

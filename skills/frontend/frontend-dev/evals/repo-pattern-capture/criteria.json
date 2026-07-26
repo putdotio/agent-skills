@@ -1,5 +1,5 @@
 {
-  "context": "Tests whether the frontend patterns skill steers agents toward repo-local `.patterns/` documentation for non-obvious code conventions.",
+  "context": "Tests whether the frontend dev skill steers agents toward repo-local `.patterns/` documentation for non-obvious code conventions.",
   "type": "weighted_checklist",
   "checklist": [
     {

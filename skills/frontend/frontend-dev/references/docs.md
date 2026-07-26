@@ -1,6 +1,7 @@
 # Top-Level Docs
 
-Use this reference when `putio-frontend-repos` work touches README, CONTRIBUTING, SECURITY, agent guidance, or other top-level repo docs.
+Use this reference when `putio-frontend-dev` work touches README, CONTRIBUTING,
+SECURITY, agent guidance, or other top-level repo docs.
 
 Shape put.io frontend repo docs around a clear split between user-facing docs and contributor-facing docs. Treat structure, labels, and ordering as part of the interface, not just as neutral file plumbing.
 
