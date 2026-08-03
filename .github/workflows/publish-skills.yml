@@ -67,17 +67,18 @@ jobs:
           permission-contents: write
       - name: Resolve release bot identity
         id: release-bot-identity
+        shell: bash
         env:
           GH_TOKEN: ${{ steps.release-bot.outputs.token }}
           APP_SLUG: ${{ steps.release-bot.outputs.app-slug }}
         run: |
           set -euo pipefail
-          user_id="$(gh api "/users/${APP_SLUG}[bot]" --jq .id)"
+          user_id="$(gh api "/users/${APP_SLUG}%5Bbot%5D" --jq .id)"
           if [[ ! "$user_id" =~ ^[0-9]+$ ]]; then
             echo "failed to resolve numeric bot user id for ${APP_SLUG}[bot]" >&2
             exit 1
           fi
-          echo "user-id=${user_id}" >> "$GITHUB_OUTPUT"
+          echo "user_id=${user_id}" >> "$GITHUB_OUTPUT"
       - name: Checkout
         uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
         with:
@@ -114,7 +115,7 @@ jobs:
           fi
 
           git config user.name "${{ steps.release-bot.outputs.app-slug }}[bot]"
-          git config user.email "${{ steps.release-bot-identity.outputs.user-id }}+${{ steps.release-bot.outputs.app-slug }}[bot]@users.noreply.github.com"
+          git config user.email "${{ steps.release-bot-identity.outputs.user_id }}+${{ steps.release-bot.outputs.app-slug }}[bot]@users.noreply.github.com"
           git add skills
           git commit -m "chore: sync published plugin versions [skip ci]"
           git push origin HEAD:main
