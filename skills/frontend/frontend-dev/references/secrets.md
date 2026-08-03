@@ -1,10 +1,9 @@
 # Env Setup
 
 Use this reference when a put.io frontend-owned repo has local/dev secrets,
-live-test env files, Infisical, or secret-bearing build, signing, release, or
-deploy workflows. Defines the repo-side mechanics — detect, scaffold, verify —
-and is self-contained: external contributors and future agents can apply it
-without access to internal operator docs.
+live-test env files, SOPS ciphertext inputs, or secret-bearing build, signing,
+release, or deploy workflows. It defines the public repo-side mechanics without
+requiring access to private operator docs.
 
 **Out of scope**: repos with native non-task-runner build systems (e.g. Xcode +
 Fastlane), repos that *hold* signing material consumed by tools like `match`,
@@ -14,14 +13,14 @@ rather than shared secret references. Those follow their repo-local setup.
 ## Detect
 
 ```bash
-rg -n 'infisical|INFISICAL|op (run|inject|read|item|whoami|signin)|OP_SERVICE_ACCOUNT_TOKEN|op://|load-secrets-action' \
+rg -n 'sops|SOPS|op (run|inject|read|item|whoami|signin)|OP_SERVICE_ACCOUNT_TOKEN|op://|load-secrets-action' \
   AGENTS.md README.md CONTRIBUTING.md SECURITY.md docs .github Makefile package.json build.gradle.kts Package.swift .env.example scripts tooling apps Tests src 2>/dev/null
 
 test -f .env.example && cat .env.example
 ```
 
-Repos with no real Infisical, CI secret-manager, or `.env.example` hits need
-none of the below — leave them alone.
+Repos with no SOPS input, CI secret boundary, or `.env.example` contract need
+none of the below. Leave them alone.
 
 If `.env.example` already exists with bare-key placeholders for non-secret or
 device-local values, preserve those entries. Do not replace safe placeholders
@@ -29,23 +28,30 @@ with secret-manager references.
 
 ## Standard Shape
 
-A local-dev secrets repo carries four artifacts. The `secrets-setup` target runs
-once per worktree to materialize `.env.local` from a specific Infisical path.
-Frameworks (Vite, Next.js) auto-read `.env.local`; shell-script flows should
-read `.env.local` too. Reserve `infisical run` for no-disk-persist one-shots.
-Development secrets should not keep a 1Password fallback. If a dev/live-test
-value still depends on `op`, migrate a limited dev/test version into Infisical
-and delete the old local-dev 1Password copy after verification.
+A local-dev secret consumer carries four artifacts:
 
-Infisical paths are for development and testing only. They must never contain
-admin accounts, production-wide credentials, personal accounts, signing keys,
-recovery keys, or CI/CD deploy/publish secrets.
+1. a generic repo-specific input such as `PUTIO_WEB_SOPS_FILE`
+2. a repo-owned `secrets-setup` wrapper with exact payload validation
+3. a gitignored `0600` output such as `.env.local`
+4. a matching `secrets-clean` command
+
+The maintainer supplies ciphertext outside the public repository. The wrapper
+decrypts only that file, validates the exact consumer contract, and writes the
+ignored output atomically. Frameworks may auto-read `.env.local`; shell flows
+must load it explicitly. To avoid a materialized plaintext output, use
+`sops exec-env --same-process <ciphertext> '<command>'` or a repo-owned process
+wrapper that validates before launch.
+
+Development secrets must not keep a broad password-manager fallback. Keep
+personal credentials, signing material, recovery identities, and CI/CD source
+copies outside the development payload.
 
 ### Tracked `.env.example`
 
 ```
 PUTIO_API_KEY=
 PUTIO_TEST_USER=
+# PUTIO_WEB_SOPS_FILE=/path/to/web.sops.env
 ```
 
 Keep `.env.example` as the public variable-name contract with safe placeholders.
@@ -54,10 +60,10 @@ templates unless the repo explicitly owns that exposure.
 
 ### `secrets-setup` / `secrets-clean` targets
 
-The target exports from one approved Infisical path, writes `.env.local`, and
-sets mode `0600`. After setup, repo commands read `.env.local` and do not keep
-calling the secret manager. `secrets-clean` removes the materialized
-`.env.local` before `git worktree remove`.
+The target delegates to a repo-owned wrapper. Do not embed private repository
+paths, recipients, recovery locations, or provider coordinates in a public
+command. After setup, normal repo commands read `.env.local` and do not decrypt
+again. `secrets-clean` removes the materialized file before worktree removal.
 
 Naming convention follows the runner: hyphen for Make / just / shell, colon for npm-style. Behaviour is identical.
 
@@ -65,8 +71,7 @@ Naming convention follows the runner: hyphen for Make / just / shell, colon for 
 # Makefile
 .PHONY: secrets-setup secrets-clean
 secrets-setup:
-	infisical export --domain https://eu.infisical.com/api --projectId <project-id> --env dev --path /<repo-or-flow> --format dotenv --output-file .env.local
-	chmod 600 .env.local
+	./scripts/secrets-setup.sh
 secrets-clean:
 	rm -f .env.local .env.local.* .env.local.swp
 ```
@@ -74,7 +79,7 @@ secrets-clean:
 ```json
 // package.json
 { "scripts": {
-  "secrets:setup": "infisical export --domain https://eu.infisical.com/api --projectId <project-id> --env dev --path /<repo-or-flow> --format dotenv --output-file .env.local && chmod 600 .env.local",
+  "secrets:setup": "bash ./scripts/secrets-setup.sh",
   "secrets:clean": "rm -f .env.local .env.local.* .env.local.swp"
 } }
 ```
@@ -82,13 +87,21 @@ secrets-clean:
 ```just
 # justfile
 secrets-setup:
-    infisical export --domain https://eu.infisical.com/api --projectId <project-id> --env dev --path /<repo-or-flow> --format dotenv --output-file .env.local
-    chmod 600 .env.local
+    ./scripts/secrets-setup.sh
 secrets-clean:
     rm -f .env.local .env.local.* .env.local.swp
 ```
 
-In a monorepo with per-app/package `.env.example` files, declare the target on each package (e.g. `apps/<app>/package.json`'s `secrets:setup`) so an agent can run `pnpm --filter @org/<app> secrets:setup` and materialise that one app's `.env.local`.
+In a monorepo with per-app/package inputs, declare the target on each package so
+an agent can materialize only that app's ignored output.
+
+The wrapper must fail closed when the ciphertext is missing, unencrypted,
+ambiguous, or undecryptable; when the exact key inventory or value formats are
+wrong; or when the fixed output is tracked, unsafe, or not a regular file. Do
+not expose a configurable output-path API or add a permanent unit-test suite for
+bootstrap plumbing. When setup behavior changes, prove it with real ciphertext,
+the actual consumer, mode `0600`, and cleanup; keep that evidence in the pull
+request rather than the default verification gate.
 
 ### `.gitignore`
 
@@ -102,41 +115,38 @@ The `!.env.example` exception is **required** — without it, the blanket `.env.
 
 ## Targets That Need Secrets
 
-Default verify (`build`, `test`, `lint`, `typecheck`) runs without secrets. Targets that need them declare `secrets-setup` as a task dependency:
+Default verify (`build`, `test`, `lint`, `typecheck`) runs without secrets.
+Secret-bearing targets consume an already materialized file and fail with a
+direct instruction to run `secrets-setup` when it is absent. Do not make normal
+repository commands decrypt credentials implicitly.
 
-```makefile
-live-test: secrets-setup
-	pnpm test:live
-```
-
-For no-disk-persist local/dev flows, wrap the command in `infisical run` instead:
+For no-disk-persist flows, use a repo-owned process wrapper that validates the
+payload before launch:
 
 ```bash
-infisical run --domain https://eu.infisical.com/api --projectId <project-id> --env dev --path /<repo-or-flow> -- pnpm test:live
+PUTIO_WEB_SOPS_FILE=/path/to/web.sops.env \
+  ./scripts/secrets-run.sh pnpm test:live
 ```
 
 Keep `secrets-setup` out of `prepare`, `postinstall`, and `prebuild` hooks —
 those run on install and would route every contributor through secret bootstrap.
 
-## Infisical Auth
+## SOPS Access
 
-Keep Infisical auth outside implementation repos:
+Each person and unattended machine uses its own age identity. The private
+identity lives in owner-only machine storage with a private backup; only its
+public recipient is shared with a vault operator. Never commit a private age
+identity or distribute one identity across people or machines.
 
-- **Workspace onboarding**: grant access to the Infisical `frontend` project and Development environment during setup
-- **Human local dev**: run `infisical login` once. The CLI stores its own local auth
-- **Local laptop agents**: use the user's approved Infisical CLI session only for dev-approved paths, or use a narrow machine identity when unattended access is required
-- **Shared devboxes / Cloud agents**: use a narrow Infisical machine identity scoped to local/dev paths
-
-Repos never commit, generate, or read Infisical machine-identity bootstrap
-credentials. They only export approved paths into ignored `.env.local` files.
-Infisical contents must be limited dev/test accounts, tokens, and fixtures that
-are safe for local agents to use.
-
-If login succeeds but a repo path cannot be exported, treat it as missing
-onboarding or path permission. Ask a workspace maintainer to grant the needed
-Infisical access instead of adding a 1Password fallback.
+Public implementation repos accept a generic ciphertext file path. They do not
+name the private vault, payload topology, recipients, or recovery system. If
+decryption fails, report the required input or missing access instead of adding
+a password-manager fallback or opening an interactive login flow.
 
 ## Verify
+
+Use this as change-acceptance evidence for the setup boundary, not as a
+permanent consumer-side unit-test suite:
 
 ```bash
 git check-ignore -v .env.local
@@ -156,7 +166,8 @@ test ! -f .env.local && echo cleanup ok
 
 - Build, test, lint, typecheck must pass without `.env.local`. If any depend on secrets, move the secret-dependent flow to a separate target (`live-test`, `deploy`, `release`) that documents its requirement
 - `secrets-setup` is a committer-only target in public repos; routine contributors ignore it
-- Keep secret-manager object names out of public docs when they reveal internal workflow details; document variable names and the repo-local command instead
+- Document only the generic SOPS input, repo-local command, ignored output, and cleanup command
+- Keep vault names, payload paths, recipients, recovery locations, and account identifiers out of public docs
 
 ## CI/CD
 
@@ -262,14 +273,15 @@ Generated dependency trees such as full CocoaPods `Pods` directories are not res
 
 ## Agent Contexts
 
-The same Infisical path and the same `secrets-setup` target work across local
-and hosted agent contexts.
+The same generic ciphertext input and repo-owned setup target work across local
+and hosted contexts. Identity provisioning remains outside the implementation
+repo.
 
 | Context | Credential source | Setup |
 |---|---|---|
-| **Human local dev** | `infisical login` browser-backed CLI auth | Run the repo's `secrets-setup` target when a task needs `.env.local` |
-| **Local laptop agent** | Approved local Infisical CLI auth, or a narrow machine identity when unattended access is required | Export only the repo path needed for the task |
-| **Shared devbox / Cloud agent** | Narrow Infisical machine identity scoped to local/dev paths | One-time setup per workspace or devbox |
+| **Human local dev** | Individual age identity | Run the repo's setup target only when the task needs secrets |
+| **Local laptop agent** | The machine owner's authorized age identity | Decrypt only the supplied consumer payload |
+| **Shared devbox / Cloud agent** | Dedicated machine age identity | Grant only the required payload capability |
 
 ### Per-worktree onboarding
 
@@ -284,12 +296,14 @@ cd ../<repo>.<topic>
 
 ### Harness ergonomics
 
-- Humans run `infisical login` once instead of approving repeated secret reads
-- Unattended runs use a devbox or Cloud agent with a narrow machine identity
+- Render or inject one approved payload once, then reuse the named `putio`
+  profile or ignored local state for the bounded test flow
+- Unattended runs use a dedicated machine identity with only the payloads they
+  need
 
 ### Untrusted code
 
 The line is **"anything you did not author personally"**, not "anything from a fork." Compromised internal accounts and malicious dependencies are real vectors. Mitigations per context:
 
-- **Local laptop**: Infisical project/path scope for dev secrets; 1Password stays for personal passwords and SSH/signing material
-- **Devbox / Cloud**: machine identity or rendered `.env.local` material can be exfiltrated. Run untrusted code (including internal-PR code from someone you don't personally trust) in a separate sandbox
+- **Local laptop**: an authorized age identity may decrypt every payload granted to that recipient; personal passwords and SSH/signing material remain separate
+- **Devbox / Cloud**: an age identity or rendered `.env.local` can be exfiltrated. Run untrusted code, including internal PR code you did not author, in a separate sandbox without those capabilities
