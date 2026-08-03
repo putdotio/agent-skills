@@ -28,7 +28,7 @@ find skills -path '*/.tessl-plugin/plugin.json' -exec jq -r .name {} \;
 - [Evals](./EVALS.md) describes scenario layout, local eval commands, and registry Impact triage
 - The script derives semantic version bumps from Conventional Commit messages: breaking changes -> `major`, `feat` -> `minor`, everything else -> `patch`
 - Before publish, the script probes `tessl plugin publish --dry-run --bump <type>` so Tessl can choose the next available version
-- After a successful publish, the workflow commits the resulting `.tessl-plugin/plugin.json` version bumps back to `main` as `putio-release-bot[bot]` with a skip-CI commit message
+- After a successful publish, the workflow commits the resulting `.tessl-plugin/plugin.json` version bumps back to `main` as `putio-releaser[bot]` with a skip-CI commit message
 - Publish-path actions are pinned to full commit SHAs with trailing comments for their human version tags
 
 ## Required GitHub Environment
@@ -40,7 +40,7 @@ Create a GitHub Environment named `release` for the publish job:
 - Store the Tessl publish token as the Environment secret `TESSL_TOKEN`; do not store it as a plain repository Actions secret
 - Store `PUTIO_RELEASE_BOT_CLIENT_ID` as an Environment variable and `PUTIO_RELEASE_BOT_PRIVATE_KEY` as an Environment secret
 - Protect `main` so only the put.io team can update it, with force-push and branch deletion blocked where GitHub supports those controls
-- `main` and `v*` release tags are restricted to trusted team/admin access plus `putio-release-bot` for release automation
+- `main` and `v*` release tags are restricted to trusted team/admin access plus `putio-releaser` for release automation
 
 Create a Tessl API key for the `putio` workspace, then add it to the `release` Environment as `TESSL_TOKEN`.
 

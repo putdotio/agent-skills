@@ -100,8 +100,8 @@ jobs:
             exit 0
           fi
 
-          git config user.name "putio-release-bot[bot]"
-          git config user.email "283001373+putio-release-bot[bot]@users.noreply.github.com"
+          git config user.name "${{ steps.release-bot.outputs.app-slug }}[bot]"
+          git config user.email "283001373+${{ steps.release-bot.outputs.app-slug }}[bot]@users.noreply.github.com"
           git add skills
           git commit -m "chore: sync published plugin versions [skip ci]"
           git push origin HEAD:main
