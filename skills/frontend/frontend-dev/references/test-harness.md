@@ -69,7 +69,7 @@ For a harness design or implementation plan, report the adapter, command surface
 - Keep device IPs, passwords, certs, signing keys, tokens, content IDs, fixture internals, and personal local facts out of git.
 - Checked-in examples use placeholders.
 - Keep auth/session automation on named testing profiles and ignored local config paths. Do not spin on approval prompts or persist raw rendered secrets in checked-in files.
-- Infisical-backed harness secrets must be limited dev/test accounts and fixtures, never admin accounts, production-wide credentials, signing keys, recovery keys, or CI/CD deploy/publish secrets.
+- Harness SOPS payloads must be limited to dev/test accounts and fixtures, never admin accounts, production-wide credentials, signing keys, recovery identities, or CI/CD deploy/publish secrets.
 - Repo `.env.local` or `.env` examples may name a profile or config path, but must not contain raw put.io tokens.
 - Keep product business logic out of generic platform commands.
 - Wait for meaningful runtime conditions instead of arbitrary sleeps.
