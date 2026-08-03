@@ -38,8 +38,9 @@ A local-dev secret consumer carries four artifacts:
 The maintainer supplies ciphertext outside the public repository. The wrapper
 decrypts only that file, validates the exact consumer contract, and writes the
 ignored output atomically. Frameworks may auto-read `.env.local`; shell flows
-must load it explicitly. For no-file flows, use `sops exec-env --same-process`
-or a repo-owned process wrapper that validates before launch.
+must load it explicitly. To avoid a materialized plaintext output, use
+`sops exec-env --same-process <ciphertext> '<command>'` or a repo-owned process
+wrapper that validates before launch.
 
 Development secrets must not keep a broad password-manager fallback. Keep
 personal credentials, signing material, recovery identities, and CI/CD source
@@ -72,14 +73,14 @@ Naming convention follows the runner: hyphen for Make / just / shell, colon for 
 secrets-setup:
 	./scripts/secrets-setup.sh
 secrets-clean:
-	rm -f .env.local
+	rm -f .env.local .env.local.* .env.local.swp
 ```
 
 ```json
 // package.json
 { "scripts": {
   "secrets:setup": "bash ./scripts/secrets-setup.sh",
-  "secrets:clean": "rm -f .env.local"
+  "secrets:clean": "rm -f .env.local .env.local.* .env.local.swp"
 } }
 ```
 
@@ -88,7 +89,7 @@ secrets-clean:
 secrets-setup:
     ./scripts/secrets-setup.sh
 secrets-clean:
-    rm -f .env.local
+    rm -f .env.local .env.local.* .env.local.swp
 ```
 
 In a monorepo with per-app/package inputs, declare the target on each package so
