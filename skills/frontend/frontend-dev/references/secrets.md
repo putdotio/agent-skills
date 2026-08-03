@@ -96,9 +96,11 @@ an agent can materialize only that app's ignored output.
 
 The wrapper must fail closed when the ciphertext is missing, unencrypted,
 ambiguous, or undecryptable; when the exact key inventory or value formats are
-wrong; or when the output is tracked, unsafe, or not a regular file. Keep the
-permanent test floor small: one valid render, one malformed payload, ignored
-`0600` output, and cleanup when a file is written.
+wrong; or when the fixed output is tracked, unsafe, or not a regular file. Do
+not expose a configurable output-path API or add a permanent unit-test suite for
+bootstrap plumbing. When setup behavior changes, prove it with real ciphertext,
+the actual consumer, mode `0600`, and cleanup; keep that evidence in the pull
+request rather than the default verification gate.
 
 ### `.gitignore`
 
@@ -112,12 +114,10 @@ The `!.env.example` exception is **required** — without it, the blanket `.env.
 
 ## Targets That Need Secrets
 
-Default verify (`build`, `test`, `lint`, `typecheck`) runs without secrets. Targets that need them declare `secrets-setup` as a task dependency:
-
-```makefile
-live-test: secrets-setup
-	pnpm test:live
-```
+Default verify (`build`, `test`, `lint`, `typecheck`) runs without secrets.
+Secret-bearing targets consume an already materialized file and fail with a
+direct instruction to run `secrets-setup` when it is absent. Do not make normal
+repository commands decrypt credentials implicitly.
 
 For no-disk-persist flows, use a repo-owned process wrapper that validates the
 payload before launch:
@@ -143,6 +143,9 @@ decryption fails, report the required input or missing access instead of adding
 a password-manager fallback or opening an interactive login flow.
 
 ## Verify
+
+Use this as change-acceptance evidence for the setup boundary, not as a
+permanent consumer-side unit-test suite:
 
 ```bash
 git check-ignore -v .env.local
