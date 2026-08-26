@@ -53,7 +53,7 @@ artifact=artifacts/live/screenshot.png
 
 Use JSON only when downstream tools need it. Human commands may print concise summaries, but proof commands should leave files behind.
 
-Do not put product business logic in generic platform commands. Keep platform verbs like `install`, `launch`, `keypress`, `screenshot`, `logs`, and `state` separate from scenario verbs like `play-video`, `open-transfer`, or `open-settings`.
+Do not put product business logic in generic platform commands. Keep platform verbs like `install`, `launch`, `keypress`, `screenshot`, `logs`, and `state` separate from scenario verbs like `play-video`, `open-transfer`, or `open-settings`
 
 ## 3. Auth And Session Setup
 
@@ -74,7 +74,7 @@ repo already owns that toolchain contract and explicitly chooses to pin the CLI
 as part of it.
 
 Before designing or running `putio`-backed harness commands, load the `putio-cli`
-skill and inspect the current contract with `putio describe --output json`.
+skill and inspect the current contract with `putio describe --output json`
 Treat that skill as the source of truth for CLI discovery, structured output,
 auth profiles, paging, dry-runs, and write safety; keep only harness-specific
 auth expectations here.

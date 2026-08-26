@@ -1,9 +1,0 @@
-{
-  "name": "putio/sdk-dev",
-  "version": "0.2.11",
-  "description": "Develop or review put.io SDK repositories, API clients, and client libraries across TypeScript, Swift, Kotlin, and similar packages. Use when adding or changing namespaces, tightening request or error types, aligning SDK behavior with backend and app usage, updating SDK verification flows, or checking how an SDK repo should be documented and released.",
-  "private": false,
-  "skills": [
-    "SKILL.md"
-  ]
-}

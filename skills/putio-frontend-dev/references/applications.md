@@ -6,7 +6,7 @@ Use this when the repo is an application rather than a published package.
 
 - Keep the same `VERIFY` first rule as package repos.
 - Treat deploys as the app equivalent of package publishing.
-- Prefer one repo-local deploy command per delivery target, such as `deploy-preview`, `deploy-beta`, or `deploy-production`.
+- Prefer one repo-local deploy command per delivery target, such as `deploy-preview`, `deploy-beta`, or `deploy-production`
 - Run deploy jobs from GitHub Actions after `VERIFY` passes.
 
 ## Expected Shape
@@ -28,4 +28,4 @@ Use this when the repo is an application rather than a published package.
 - Keep deploy logic behind local commands so workflow YAML stays thin.
 - Use the smallest set of secrets and permissions required for each deploy target.
 - Prefer continuous beta or preview delivery by default, with stricter promotion gates only where the product or platform requires them.
-- If the repo has multiple delivery targets, keep their commands explicit instead of overloading one generic `deploy`.
+- If the repo has multiple delivery targets, keep their commands explicit instead of overloading one generic `deploy`

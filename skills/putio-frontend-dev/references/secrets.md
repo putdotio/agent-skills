@@ -111,7 +111,7 @@ request rather than the default verification gate.
 !.env.example
 ```
 
-The `!.env.example` exception is **required** — without it, the blanket `.env.*` rule silently un-tracks the template. Verify with `git check-ignore -v .env.example` (it must report no match).
+The `!.env.example` exception is **required**: without it, the blanket `.env.*` rule silently un-tracks the template. Verify with `git check-ignore -v .env.example` (it must report no match).
 
 ## Targets That Need Secrets
 
@@ -128,8 +128,8 @@ PUTIO_WEB_SOPS_FILE=/path/to/web.sops.env \
   ./scripts/secrets-run.sh pnpm test:live
 ```
 
-Keep `secrets-setup` out of `prepare`, `postinstall`, and `prebuild` hooks —
-those run on install and would route every contributor through secret bootstrap.
+Keep `secrets-setup` out of `prepare`, `postinstall`, and `prebuild` hooks.
+Those run on install and would route every contributor through secret bootstrap.
 
 ## SOPS Access
 
@@ -201,7 +201,7 @@ Mandatory shape against PR-driven exfiltration and supply-chain attacks.
 
 Load-bearing:
 
-- **Deployment Environment for every workflow mapping a sensitive secret** — continuous release environments scope secrets without approval gates; production deploy, signing, promotion, or store-submission environments may add reviewers when a human gate is intended
+- **Deployment Environment for every workflow mapping a sensitive secret**: continuous release environments scope secrets without approval gates; production deploy, signing, promotion, or store-submission environments may add reviewers when a human gate is intended
 - **Dependabot** for the `github-actions` ecosystem so pinned action SHAs with same-line version comments get reviewable bumps. Verify each pinned SHA resolves to the comment's tag before committing it; stale upstream SHAs break Dependabot's updater
 - Branch/tag trust and trusted-team direct push mechanics live in [release security](./release-security.md)
 

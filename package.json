@@ -1,0 +1,18 @@
+{
+  "name": "@putdotio/agent-skills",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=24.19.0"
+  },
+  "packageManager": "pnpm@11.23.0",
+  "scripts": {
+    "lint:actions": "github-actionlint .github/workflows/*.yml",
+    "skills:lint": "skillcheck lint",
+    "verify": "pnpm run lint:actions && pnpm run skills:lint"
+  },
+  "devDependencies": {
+    "@uinaf/skillcheck": "0.5.0",
+    "github-actionlint": "1.7.12"
+  }
+}

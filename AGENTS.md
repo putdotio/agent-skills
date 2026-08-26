@@ -1,15 +1,21 @@
-# Agent Guide
+# AGENTS.md
 
-Instructions for contributors in this repo.
+Contributor guidance for this public put.io skill catalog.
 
-- Treat `AGENTS.md` as a routing layer, not a manual. Keep deeper detail inside each skill's `SKILL.md`.
-- Keep `README.md` concise and consumer-facing.
-- Shared put.io skills live under `skills/*`.
-- Prefer repo-relative links in checked-in Markdown.
-- Put common workflow once in the most relevant source file.
-- Keep skill descriptions self-activating: say what the skill does, when to use it, and the main boundary when overlap is likely.
-- When changing a skill, update any adjacent examples or references that would drift with it.
-- When changing a skill, run `./scripts/tessl.sh review run --workspace putio skills/<group>/<name>`; for broader skill work, run `make verify` and use the feedback to tighten wording and workflow.
-- `scripts/tessl.sh` owns the audited local Tessl CLI pin. Keep the `setup-tessl` workflow versions aligned with it.
-- Publishable skill package metadata lives in `.tessl-plugin/plugin.json`. Follow [Distribution](docs/DISTRIBUTION.md) for publishing and credential rotation.
-- `CLAUDE.md` should remain a symlink to this file.
+- Keep top-level docs short. Put task-specific depth in
+  `skills/<name>/references/` only when it changes agent decisions.
+- Skill frontmatter has `name` and `description` only. Descriptions must name
+  the put.io target, the requests that activate the skill, and the nearest
+  work that does not belong to it.
+- Keep each skill package standalone. Do not require or sequence against a
+  sibling package. State prerequisites and boundaries as capabilities.
+- Keep public skills free of private repository content, workspace inventory,
+  credentials, account details, support cases, and machine-local paths.
+- Keep current commands and volatile implementation details with the repository
+  that owns them. Link public upstream sources when a stable pointer is useful.
+- Keep `agents/openai.yaml` picker metadata aligned with `SKILL.md`.
+- Keep eval scenarios under `skills/<name>/evals/<scenario>/` as `task.md`
+  plus `criteria.json`.
+- Run `pnpm run verify` before handoff. CI runs the same keyless workflow and
+  skill lint gate.
+- Use repo-relative links in checked-in Markdown.

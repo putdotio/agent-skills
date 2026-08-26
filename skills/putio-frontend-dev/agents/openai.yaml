@@ -1,0 +1,4 @@
+interface:
+  display_name: "put.io frontend development"
+  short_description: "Build or review put.io frontend repositories"
+  default_prompt: "Use $putio-frontend-dev to build or review this put.io frontend change."

@@ -1,6 +1,6 @@
 # `.patterns/<topic>.md` Template
 
-A `.patterns/` entry is a short, opinionated record of how this repository handles one topic. It is not a tutorial and not a design doc — it is the answer a future contributor or agent would otherwise reverse-engineer from the codebase.
+A `.patterns/` entry is a short, opinionated record of how this repository handles one topic. It is not a tutorial and not a design doc: it is the answer a future contributor or agent would otherwise reverse-engineer from the codebase.
 
 Keep each file under ~300 lines. If it grows past that, split it.
 
@@ -56,13 +56,13 @@ Avoid:
 
 Short list of approaches that look reasonable but do not fit this repo. Each one with a one-sentence reason.
 
-- Approach X — reason it does not fit here.
-- Approach Y — reason it does not fit here.
+- Approach X: reason it does not fit here.
+- Approach Y: reason it does not fit here.
 ```
 
 ## Worked example
 
-Below is a fully-shaped entry for a hypothetical `.patterns/transfer-state.md` in a put.io frontend app. It is modeled on the real discriminated-union pattern in `putio-sdk-typescript/src/domains/transfers.ts`. Use it as a calibration target — your entry should feel about this concrete and this opinionated.
+Below is a fully-shaped entry for a hypothetical `.patterns/transfer-state.md` in a put.io frontend app. It is modeled on the real discriminated-union pattern in `putio-sdk-typescript/src/domains/transfers.ts`. Use it as a calibration target: your entry should feel about this concrete and this opinionated.
 
 ```markdown
 # Transfer State Pattern
@@ -71,9 +71,9 @@ Below is a fully-shaped entry for a hypothetical `.patterns/transfer-state.md` i
 
 For this repo, the transfer status surface follows the SDK's discriminated union exactly:
 
-1. Consume `Transfer` from `@putdotio/sdk` and never widen it. The SDK already encodes the LIVE / TORRENT_SEEDING / COMPLETED / ERROR branches as a `Schema.Union`.
+1. Consume `Transfer` from `@putdotio/sdk` and never widen it. The SDK already encodes the LIVE / TORRENT_SEEDING / COMPLETED / ERROR branches as a `Schema.Union`
 2. Render in components by exhaustively matching on `transfer.status`. Use Effect's `Match` (or a `switch` with a `never` fallthrough) so adding a new branch fails the type-checker at every call site.
-3. UI affordances (retry button, seeding indicator, error message) live on the branch that actually carries the data — no `transfer.error_message ?? ""` defaults, no `if (status === "ERROR" && error_message)` guards.
+3. UI affordances (retry button, seeding indicator, error message) live on the branch that actually carries the data: no `transfer.error_message ?? ""` defaults, no `if (status === "ERROR" && error_message)` guards.
 4. List subscriptions go through TanStack Query. Optimistic transitions on user action (cancel, retry) use `onMutate`/`onError` rollback; do not store a copy in Redux or local state.
 
 What you get:
@@ -87,7 +87,7 @@ What you get:
 - The SDK already pays the modeling cost (`putio-sdk-typescript/src/domains/transfers.ts`). Re-narrowing in app code is duplicate work that drifts.
 - Exhaustive matching has caught two real bugs in this repo where a new status was added and one screen forgot to render it (PR #482, PR #517).
 - TanStack Query's mutation rollback is enough for the optimistic flows we have. Adding Redux for transfers is the kind of premature abstraction we keep removing elsewhere.
-- We considered a feature-local `useTransferState` hook that returned a flat `{ status, error, progress }` bag — it loses the discriminated-union shape and reintroduces the guards we are trying to delete.
+- We considered a feature-local `useTransferState` hook that returned a flat `{ status, error, progress }` bag: it loses the discriminated-union shape and reintroduces the guards we are trying to delete.
 
 ## Relevant Files
 
@@ -172,16 +172,16 @@ test.each([
 
 ## Anti-Patterns
 
-- Re-declaring `type TransferStatus = "ERROR" | "COMPLETED" | ...` in app code — the SDK is the source of truth; redefining it lets the two drift.
-- Storing transfers in Redux to "react to changes everywhere" — TanStack Query already does this, with cache invalidation, retries, and rollback.
-- A `useTransferState` hook that returns a flat bag (`{ status, errorMessage, isSeeding }`) — it discards the discriminated union and reintroduces optional-chaining guards in every consumer.
-- Polling transfers from a `useEffect` with `setInterval` — use the query's `refetchInterval`. The interval lives next to the query key, not next to the component.
+- Re-declaring `type TransferStatus = "ERROR" | "COMPLETED" | ...` in app code: the SDK is the source of truth; redefining it lets the two drift.
+- Storing transfers in Redux to "react to changes everywhere": TanStack Query already does this, with cache invalidation, retries, and rollback.
+- A `useTransferState` hook that returns a flat bag (`{ status, errorMessage, isSeeding }`): it discards the discriminated union and reintroduces optional-chaining guards in every consumer.
+- Polling transfers from a `useEffect` with `setInterval`: use the query's `refetchInterval`. The interval lives next to the query key, not next to the component.
 ```
 
 ## Calibration tips
 
 - If a section is empty or feels like filler, delete the section. Better to ship a short entry than a padded one.
 - Use `Preferred` and `Avoid` snippets, not prose-only descriptions. Snippets read faster and rot slower.
-- Cite real files and real incidents. Generic advice belongs in this skill, not in `.patterns/`.
+- Cite real files and real incidents. Generic advice belongs in this skill, not in `.patterns/`
 - Update the entry in the same PR that changes the underlying pattern. A `.patterns/` file that lies is worse than no file.
 - Link out to canonical references in the put.io ecosystem (e.g., `putio-sdk-typescript`, `putio-cli`, or the relevant in-repo module) when the pattern is borrowed wholesale rather than re-derived.
