@@ -1,15 +1,17 @@
 ---
 name: putio-sdk-dev
-description: Develop or review put.io SDK repositories, API clients, and client libraries across TypeScript, Swift, Kotlin, and similar packages. Use when adding or changing namespaces, tightening request or error types, aligning SDK behavior with backend and app usage, updating SDK verification flows, or checking how an SDK repo should be documented and released.
+description: "Develop or review SDK and API client code owned by put.io across TypeScript, Swift, Kotlin, and similar packages. Use only when the target is a put.io SDK repository or the user explicitly asks for put.io SDK conventions. Do not use for unrelated SDKs, end-user application code, or putio CLI consumer operations."
 ---
 
-# put.io SDK Dev
+# put.io SDK development
 
-Use this skill when working in a put.io SDK repository rather than an end-user app.
+Apply put.io SDK conventions after the target repository's own guidance.
 
-Bundled references: [SDK vision](./references/sdk-vision.md), [patterns](./references/patterns.md), and [language notes](./references/language-notes.md).
+Read [SDK vision](./references/sdk-vision.md) for scope and parity,
+[patterns](./references/patterns.md) for typed boundaries and tests, and
+[language notes](./references/language-notes.md) for host-language conventions.
 
-## Quick Rules
+## Shared defaults
 
 - Treat each SDK as a public package, not an internal compatibility layer.
 - Treat TypeScript as the canonical full put.io API client, not just the richest reference.
@@ -18,27 +20,37 @@ Bundled references: [SDK vision](./references/sdk-vision.md), [patterns](./refer
 - Prove behavior with deterministic tests plus safe live tests when real API behavior matters.
 - Keep Swift and Kotlin scope narrower than TypeScript only when product usage justifies it.
 
-## Source Of Truth Order
+## Source order
 
-When docs, runtime behavior, and consumers disagree, trust sources in this order: local backend and tests, current first-party app usage, actively maintained SDKs, archived clients, then published Swagger or public API docs.
+When sources disagree, prefer local backend behavior and tests, current
+first-party app usage, maintained SDKs, archived clients, then published API
+documentation.
 
 Widen SDK surfaces only when real app use and verified backend behavior justify it.
 
-## Start Here
+## Start
 
 Read only what you need:
 
-- the repo-local `AGENTS.md`
+- the guidance inventory from
+  `git ls-files '*AGENTS.md' '*SKILL.md'`, including the root `AGENTS.md` and
+  every tracked guide that applies between the repo root and the files being
+  changed
+- the frontmatter and instructions from task-matching project-local `SKILL.md`
+  files under `.agents/skills/`, `.claude/skills/`, or `skills/`; ignore
+  dependency and vendored trees
 - the canonical verify and live-test commands from `README.md`, `AGENTS.md`, or `docs/*`
 - [SDK vision](./references/sdk-vision.md) for scope, parity, and endpoint-family decisions
 - [patterns](./references/patterns.md) for typed boundaries, error mapping, pagination, and live-test layering
 - [language notes](./references/language-notes.md) for TypeScript, Swift, or Kotlin-specific guidance
 
-If the repo has a canonical verify command, use that as the source of truth before editing delivery automation.
-If SDK release, publish, signing, or binary-build automation is in scope, also
-apply the available shared frontend delivery and release-supply-chain guidance.
+Target-repo guidance and matching repo-local skills override this shared skill.
 
-## Main Workflow
+If the repo has a canonical verify command, use that as the source of truth before editing delivery automation.
+Release, publish, signing, and binary-build automation follows the target
+repository's delivery and supply-chain guidance.
+
+## Workflow
 
 1. Inspect the target namespace and the shared transport or client runtime.
 2. Check backend behavior, backend tests, and current app usage before widening or changing a contract.
@@ -49,7 +61,7 @@ apply the available shared frontend delivery and release-supply-chain guidance.
 7. Run the repo's canonical verify command and fix failures before continuing.
 8. Update package-facing docs and release notes when the public surface changes.
 
-## Endpoint Change Recipe
+## Endpoint changes
 
 For a new or changed endpoint, make the work traceable:
 
@@ -97,11 +109,13 @@ make verify
 
 For runtime verification, prefer the repo's documented live-test entrypoints and follow the shared-account safety rules in that repo's testing docs.
 
-## Guardrails
+## Boundaries
 
 - Verify backend contracts with current docs, source, fixtures, or live probes rather than old SDKs alone.
 - Claim full verification only when the unit, fixture, and live layers that matter for the change were exercised.
 - Keep live coverage against shared accounts non-destructive.
 - Preserve naming, parity, and type-safety unless a documented reason justifies a change.
-- Apply the shared frontend repo release-supply-chain checklist before changing SDK release, publish, signing, or binary-build workflows.
-- Keep repo-specific implementation guidance in that repo's `AGENTS.md` or `docs/*`.
+- Keep repo-specific implementation guidance in that repo's `AGENTS.md` or
+  `docs/*`
+- Generic SDK work, end-user application code, and CLI consumer operations are
+  outside this skill.

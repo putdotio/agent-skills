@@ -1,22 +1,29 @@
 ---
 name: putio-frontend-dev
-description: "Develop, review, and standardize put.io frontend applications and packages. Use when asked to review put.io frontend code, build a feature, model state or errors, create components, capture repo-local `.patterns/`, improve top-level docs, set up CI or delivery, wire up a test harness, configure local secrets, or prove behavior in a browser, native app, TV, emulator, simulator, or device. SDK client and API contract design and put.io CLI consumer operations are outside this skill."
+description: "Develop or review end-user applications and shared frontend packages owned by put.io, including UI, state, tests, docs, test harnesses, and delivery. Use only when the target is a put.io frontend repository or the user explicitly asks for put.io frontend conventions. Do not use for unrelated frontend work, SDK client or API contract design, or putio CLI consumer operations."
 ---
 
-# put.io Frontend Dev
+# put.io frontend development
 
 Apply shared put.io frontend engineering defaults after the target repository's
 own guidance and code precedent.
 
 ## Start
 
-1. Read the target repo's `AGENTS.md`, `README.md`, relevant docs, and
-   `.patterns/` entries before editing.
-2. Identify the repo kind, stack, verify entrypoint, delivery target, and
+1. From the target repo root, inventory local guidance with
+   `git ls-files '*AGENTS.md' '*SKILL.md'`, then read its root `AGENTS.md` and
+   every tracked guide that applies between the root and the files being
+   changed.
+2. Discover tracked project-local `SKILL.md` files under `.agents/skills/`,
+   `.claude/skills/`, or `skills/`. Read the frontmatter and apply only the
+   task-matching skills; ignore dependency and vendored trees.
+3. Read the target repo's `README.md`, relevant docs, and `.patterns/` entries
+   before editing. Target-repo guidance and skills override this shared skill.
+4. Identify the repo kind, stack, verify entrypoint, delivery target, and
    runtime proof surface.
-3. Select only the references required for the task.
+5. Select only the references required for the task.
 
-## Reference Map
+## Reference map
 
 - Feature code, parsing, state, errors, components, and testing:
   [frontend defaults](./references/frontend-defaults.md)
@@ -41,7 +48,7 @@ Markdown links navigate this skill bundle. Other paths shown in the references,
 such as `.patterns/state-machines.md` or `.github/pull_request_template.md`,
 name files to create or inspect in the target repository.
 
-## Shared Defaults
+## Shared defaults
 
 - Parse external input at the boundary and derive types from the validated
   contract.
@@ -55,6 +62,9 @@ name files to create or inspect in the target repository.
 - Deliver from trusted `main` or validated release refs only after verification.
 - Exercise user-visible behavior in the real browser, app, simulator, emulator,
   or device surface when one exists.
+- Before a proof command launches a runtime, install cleanup and record whether
+  it started that exact target. On every exit, stop only targets it started and
+  confirm their absence; preserve pre-existing targets.
 
 ## Workflow
 

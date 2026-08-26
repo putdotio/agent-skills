@@ -1,6 +1,6 @@
 # put.io Frontend Defaults
 
-Defaults for put.io frontend repositories when `.patterns/<topic>.md` is silent. A repo's own `.patterns/` always wins — this file describes the fallback and cites real reference code.
+Defaults for put.io frontend repositories when `.patterns/<topic>.md` is silent. A repo's own `.patterns/` always wins: this file describes the fallback and cites real reference code.
 
 The principles below are universal across put.io frontend repos. The *implementations* vary by constraint (Effect Schema where it fits, lightweight parsers where bundle size dictates, native enums in Swift/Kotlin). Each section ends with what to imitate from which repo.
 
@@ -8,7 +8,7 @@ The principles below are universal across put.io frontend repos. The *implementa
 
 The contract lives in a schema. Types are derived from the schema. Code keeps each shape in one canonical place.
 
-- For TypeScript, the put.io default is Effect's `Schema`. See `putio-sdk-typescript` `src/domains/files.ts` — base schemas, broad schemas with optionals, query schemas, response envelopes — all named on a strict hierarchy: `FileBaseSchema` → `FileBroadSchema` → `FilesListEnvelopeSchema`.
+- For TypeScript, the put.io default is Effect's `Schema`. See `putio-sdk-typescript` `src/domains/files.ts`: base schemas, broad schemas with optionals, query schemas, and response envelopes named on a strict hierarchy: `FileBaseSchema` → `FileBroadSchema` → `FilesListEnvelopeSchema`
 - Type extraction follows the schema: `export type FileType = Schema.Schema.Type<typeof FileTypeSchema>`. Keep parallel hand-written `type X = { ... }` declarations out of schema-owned contracts.
 - Brand entity IDs so unrelated numeric or string IDs cannot cross. A small helper goes a long way:
 
@@ -21,9 +21,9 @@ The contract lives in a schema. Types are derived from the schema. Code keeps ea
   ```
 
 - Schemas live next to the boundary they describe: API responses next to the API client, form values next to the form, URL params next to the route.
-- For multi-consumer repos (server + web, app + SDK, monorepo with shared types), keep schemas in a *no-runtime* package — schema definitions only, no services, no helpers. The boundary between contract and implementation stays clean.
-- Where Effect Schema is too heavy for the target runtime, use small typed-narrowing helpers (`getRecord`, `getString`, `getNumber`) plus per-field type guards. The bar is the same: nothing leaves the boundary as `unknown`.
-- Where native typing exists (Swift `Codable`, Kotlin serialization), use it — but still parse at the boundary. See `putio-ios/Putio/Features/MediaPlayers/VideoPlayerViewController.swift` for `Codable` + `JSONEncoder`/`JSONDecoder` against `UserDefaults`.
+- For multi-consumer repos (server + web, app + SDK, monorepo with shared types), keep schemas in a *no-runtime* package: schema definitions only, no services, no helpers. The boundary between contract and implementation stays clean.
+- Where Effect Schema is too heavy for the target runtime, use small typed-narrowing helpers (`getRecord`, `getString`, `getNumber`) plus per-field type guards. The bar is the same: nothing leaves the boundary as `unknown`
+- Where native typing exists (Swift `Codable`, Kotlin serialization), use it, but still parse at the boundary. See `putio-ios/Putio/Features/MediaPlayers/VideoPlayerViewController.swift` for `Codable` + `JSONEncoder`/`JSONDecoder` against `UserDefaults`
 
 Imitate: `putio-sdk-typescript/src/domains/*.ts` for TypeScript schema shape and naming.
 
@@ -31,7 +31,7 @@ Imitate: `putio-sdk-typescript/src/domains/*.ts` for TypeScript schema shape and
 
 External input becomes a typed value at the boundary, or it does not enter the program.
 
-- Network responses, URL params, `localStorage`, `postMessage`, file contents, query strings, environment variables — all parsed at the edge.
+- Network responses, URL params, `localStorage`, `postMessage`, file contents, query strings, environment variables: all parsed at the edge.
 - A "validated" value still typed as `unknown`, `any`, `Record<string, unknown>`, or "the same shape but with `// trust me`" is **not parsed**. Keep going until the value is fully typed.
 - Parse failures are typed errors, not thrown strings. See `putio-sdk-typescript/src/core/http.ts`: `requestJson` → `decodeSuccessJson` for success branch, `decodeFailure` for HTTP error branch, both yielding `PutioSdkError` values.
 - For non-HTTP boundaries, the same rule holds. See `putio-cli/src/internal/config.ts` for env-var parsing wrapped in `Effect.try` → `CliConfigError`, and `putio-cli/src/commands/files.ts` for CLI input schemas (`FilesMkdirInputSchema`, `FilesDeleteInputSchema`) with embedded business rules.
@@ -64,8 +64,8 @@ The render tree should not need defensive checks.
   ```
 
 - Conditional response narrowing tied to query params: `putio-sdk-typescript/src/domains/account.ts` `AccountInfoResponseFor<TQuery>` adds `download_token`, `features`, `pas` only when the query asked for them. Run-time guard (`failMissingField`) backs the type-level guarantee.
-- For non-Effect TypeScript, plain discriminated unions still work. Model variants like `AppPaymentMethod` as `{ type: "cryptocurrency"; currency: Cryptocurrency } | { type: "card" } | { type: "local-option" }`.
-- For Swift, enums with associated values do the same job: `putio-ios/Putio/Features/Auth/TwoFactorAuth/EnableTwoFactorSecretViewModel.swift` `enum State { case idle, loading, success(data: String), failure(error: Error) }`.
+- For non-Effect TypeScript, plain discriminated unions still work. Model variants like `AppPaymentMethod` as `{ type: "cryptocurrency"; currency: Cryptocurrency } | { type: "card" } | { type: "local-option" }`
+- For Swift, enums with associated values do the same job: `putio-ios/Putio/Features/Auth/TwoFactorAuth/EnableTwoFactorSecretViewModel.swift` `enum State { case idle, loading, success(data: String), failure(error: Error) }`
 - Exhaustive matches at every fork. `Match` from Effect, `switch` with `never` fallthrough, or pattern matches in Swift. Adding a new state should fail the type checker until every site handles it.
 - For unions whose server end can extend (status enums, error codes), include an `unknown` fallback variant at the *list-item* parser, not the response parser. A new server status should leave one row in a degraded "unknown" state, not blank out the whole list.
 
@@ -73,7 +73,7 @@ Imitate: `putio-sdk-typescript/src/domains/transfers.ts` for HTTP response union
 
 ## State Machines for Bug-Sensitive Flows
 
-Auth, payment, video conversion, video playback, upload, transfer lifecycle — model them explicitly when transitions actually matter. Bugs in these flows cost trust.
+Auth, payment, video conversion, video playback, upload, transfer lifecycle: model them explicitly when transitions actually matter. Bugs in these flows cost trust.
 
 Use `useState` for trivial toggles, single-screen forms, or anywhere "did we forget a state" is not a real failure mode. Add a state machine when forgotten states are a real failure mode.
 
@@ -108,14 +108,14 @@ Use `useState` for trivial toggles, single-screen forms, or anywhere "did we for
   });
   ```
 
-  Effect owns services, DI, and error propagation. XState owns UX flow. They meet at `RuntimeClient.runPromise` inside `fromPromise` — no service refs in machine context, no closures over the runtime. A repo may pick another lib (Effect's `Machine`, a typed reducer); encode the choice in `.patterns/state-machines.md`.
+  Effect owns services, DI, and error propagation. XState owns UX flow. They meet at `RuntimeClient.runPromise` inside `fromPromise`: no service refs in machine context, no closures over the runtime. A repo may pick another lib (Effect's `Machine`, a typed reducer); encode the choice in `.patterns/state-machines.md`
 
 - **In Swift / Kotlin**, plain enums with associated values work. See `putio-ios/Putio/Features/History/HistoryViewModel.swift` `enum State { case idle, loading, empty, loaded, refreshing, failure(error: PutioSDKError) }` driven through a delegate callback.
 - The machine is the source of truth for which transitions are allowed. The UI dispatches events; it does not call `setState` to "force" a state.
-- Side effects (network, storage, navigation) live as `entry`, `exit`, or invoked services on states — never inline in event handlers.
+- Side effects (network, storage, navigation) live as `entry`, `exit`, or invoked services on states: never inline in event handlers.
 - Test the machine separately from the UI. Send events, assert state transitions, assert side effects fired.
 
-A specifically valuable shape: **reconnect / retry as explicit state**. For anything that polls or reconnects (transfer status stream, video player segment fetch, websocket session), keep the retry state as a plain struct with a `phase` discriminator and a *computed* `nextRetryAt` ISO timestamp — not a hidden `setTimeout`:
+A specifically valuable shape: **reconnect / retry as explicit state**. For anything that polls or reconnects (transfer status stream, video player segment fetch, websocket session), keep the retry state as a plain struct with a `phase` discriminator and a *computed* `nextRetryAt` ISO timestamp: not a hidden `setTimeout`:
 
 ```ts
 type ReconnectStatus = {
@@ -134,7 +134,7 @@ const nextDelayMs = (attempt: number, max = 7) =>
 
 Tests can assert exact retry timing instead of waiting on real timers. UI can render `nextRetryAt` directly without owning the timer.
 
-A related shape: **long-running ops emit `{ current, total, label }` progress events; the UI plugs in.** Keep migration, bulk file move, large upload, conversion-job code headless — it accepts a `progress?: (p: { current: number; total: number; label: string }) => void` callback. The CLI renders a TTY bar, the web app renders a modal, the native app renders a progress sheet. None of those concerns leak into the operation itself, and tests assert progress event sequence instead of UI output.
+A related shape: **long-running ops emit `{ current, total, label }` progress events; the UI plugs in.** Keep migration, bulk file move, large upload, conversion-job code headless: it accepts a `progress?: (p: { current: number; total: number; label: string }) => void` callback. The CLI renders a TTY bar, the web app renders a modal, the native app renders a progress sheet. None of those concerns leak into the operation itself, and tests assert progress event sequence instead of UI output.
 
 Imitate: `putio-cli/src/internal/auth-flow.ts` for Effect-native; `putio-ios` view models for native-language enum machines.
 
@@ -200,21 +200,25 @@ Imitate: `putio-sdk-typescript/src/core/errors.ts` for the typed error model; `p
 
 ## Effect Runtime Wiring (TypeScript)
 
-Where Effect is the runtime — and it is the put.io default for new TypeScript code outside legacy bundles — keep the wiring explicit:
+Effect is the put.io default runtime for new TypeScript code outside legacy
+bundles. Keep its wiring explicit:
 
-- Services as `Context.Tag`. See `putio-sdk-typescript/src/core/http.ts` `PutioSdkConfig` and `putio-cli/src/internal/runtime.ts` `CliRuntime`.
-- Live implementations as `Layer.effect` or `Layer.succeed`. Compose with `Layer.mergeAll` and explicit `Layer.provide`. See `putio-cli/src/internal/app-layer.ts`.
-- Promise-facing callers wrap effects via a small adapter — see `putio-sdk-typescript/src/core/client.ts` `provideSdk` that runs the effect against a `ManagedRuntime` and reshapes the failure with `rejectWithSdkFailure`. The Effect surface stays runtime-free; the Promise surface owns lifecycle (`dispose()`).
-- Tests provide layers with mock services, not by reaching into globals. See `putio-sdk-typescript/test/support/sdk-test.ts` `provideSdkTest(effect, mockHandler, config)`.
+- Services as `Context.Tag`. See `putio-sdk-typescript/src/core/http.ts` `PutioSdkConfig` and `putio-cli/src/internal/runtime.ts` `CliRuntime`
+- Live implementations as `Layer.effect` or `Layer.succeed`. Compose with `Layer.mergeAll` and explicit `Layer.provide`. See `putio-cli/src/internal/app-layer.ts`
+- Promise-facing callers wrap effects via a small adapter: see `putio-sdk-typescript/src/core/client.ts` `provideSdk` that runs the effect against a `ManagedRuntime` and reshapes the failure with `rejectWithSdkFailure`. The Effect surface stays runtime-free; the Promise surface owns lifecycle (`dispose()`).
+- Tests provide layers with mock services, not by reaching into globals. See `putio-sdk-typescript/test/support/sdk-test.ts` `provideSdkTest(effect, mockHandler, config)`
 
 ## Server State
 
-Server state is a different beast from UI state. It's not yours — it's a cache of someone else's truth — so it needs invalidation, deduplication, retry, refetch-on-focus, abort-on-unmount, and stale-while-revalidate. Every one of those is a bug source when hand-rolled in `useEffect` + `useState` + `fetch`.
+Server state is a cache of someone else's truth. It needs invalidation,
+deduplication, retry, refetch-on-focus, abort-on-unmount, and
+stale-while-revalidate. Hand-rolling those behaviors with `useEffect`,
+`useState`, and `fetch` creates avoidable bugs.
 
 The put.io default for HTTP-shaped server state is **TanStack Query**. New code in put.io web frontends should match this pattern.
 
 ```ts
-// queries/transfers.ts — keys are structured, namespaced, and typed.
+// queries/transfers.ts: keys are structured, namespaced, and typed.
 export const transfersKey = (filter: TransferFilter) =>
   ["transfers", filter] as const;
 
@@ -239,14 +243,14 @@ Rules:
 - **Use `useQuery` for server reads.** It provides loading, error, dedup, abort, retry, and stale-while-revalidate behavior in one place.
 - **Query keys are arrays, namespaced per feature**, with the input as a structured payload, not a stringified blob. `["transfers", filter]` not `` `transfers-${JSON.stringify(filter)}` ``. Cache invalidation works on prefix.
 - **Mutations invalidate the cache, not local state**. `onSuccess: invalidateQueries({ queryKey: ["transfers"] })`. Optimistic flows use `onMutate` to set + return a snapshot, `onError` to roll it back.
-- **TanStack Query for server reads, `useActionEffect` (or `useMutation`) for writes** — pick `useMutation` when there is a cache to invalidate; `useActionEffect` when the action is a one-off RPC with no cached read.
-- **Polling lives next to the query key**, not next to the component. `refetchInterval: 5_000` on the query, not `setInterval` in a `useEffect`.
+- **TanStack Query for server reads, `useActionEffect` (or `useMutation`) for writes**: pick `useMutation` when there is a cache to invalidate; `useActionEffect` when the action is a one-off RPC with no cached read.
+- **Polling lives next to the query key**, not next to the component. `refetchInterval: 5_000` on the query, not `setInterval` in a `useEffect`
 
 
 
 For form mutations in Effect-React code, the put.io default is a small `useActionEffect` bridge over React 19's `useActionState`. Keep the FormData → Schema → Effect flow as one typed pipeline.
 
-When the form mutates a server read that lives in a TanStack Query cache (rename in a file list, cancel in a transfer list, edit in a settings query), prefer `useMutation` from the *Server State* section above and call its `mutate` from the form's action handler — that way the cache invalidation lives next to the mutation. Reserve `useActionEffect` for one-off RPC actions with no cached read on the other side (login, OTP verification, fire-and-forget settings save).
+When the form mutates a server read that lives in a TanStack Query cache (rename in a file list, cancel in a transfer list, edit in a settings query), prefer `useMutation` from the *Server State* section above and call its `mutate` from the form's action handler: that way the cache invalidation lives next to the mutation. Reserve `useActionEffect` for one-off RPC actions with no cached read on the other side (login, OTP verification, fire-and-forget settings save).
 
 ```ts
 export const useActionEffect = <Payload, A, E, R>(
@@ -264,7 +268,7 @@ export const useActionEffect = <Payload, A, E, R>(
   );
 ```
 
-Usage — schema decode happens inside the Effect, parse errors stay typed alongside business errors, and there is no separate validate-then-submit step:
+Usage: schema decode happens inside the Effect, parse errors stay typed alongside business errors, and there is no separate validate-then-submit step:
 
 ```tsx
 const [error, action, pending] = useActionEffect(RuntimeClient, (formData: FormData) =>
@@ -285,7 +289,7 @@ const [error, action, pending] = useActionEffect(RuntimeClient, (formData: FormD
 
 Read keys explicitly via `formData.get(name)` (or `formData.getAll(name)` for multi-value fields like checkbox groups). This preserves repeated names and keeps attacker-controlled keys out of the schema decoder.
 
-A TanStack Query mutation that invalidates the relevant query keys does not need to update local state — the next read picks up the change. Skip optimistic updates unless the user-perceived latency actually warrants them.
+A TanStack Query mutation that invalidates the relevant query keys does not need to update local state: the next read picks up the change. Skip optimistic updates unless the user-perceived latency actually warrants them.
 
 ## Component and State Placement
 
@@ -303,9 +307,9 @@ put.io has multiple valid styling stacks depending on constraints:
 
 - Tailwind v4 + design tokens for new general-purpose web work.
 - Plain CSS modules + TS theme tokens where bundle size or old-browser support matters.
-- Emotion + Theme-UI in legacy bundles — maintain existing code while moving new work to current patterns.
+- Emotion + Theme-UI in legacy bundles: maintain existing code while moving new work to current patterns.
 
-Pick the repo's existing stack. If the repo is silent, default to Tailwind v4 for new web work. Encode the choice in `.patterns/styling.md`.
+Pick the repo's existing stack. If the repo is silent, default to Tailwind v4 for new web work. Encode the choice in `.patterns/styling.md`
 
 ## Testing Shape
 
@@ -315,11 +319,11 @@ Pick the repo's existing stack. If the repo is silent, default to Tailwind v4 fo
 - TypeScript repos use `vite-plus/test` (Vitest). E2E uses Playwright.
 - Assert on behavior with controlled clocks and public effects instead of logger output, real timers, or implementation internals.
 
-Imitate: `putio-cli/src/internal/state.test.ts` for Effect tests with `Effect.runPromiseExit` + `Cause.failureOption`.
+Imitate: `putio-cli/src/internal/state.test.ts` for Effect tests with `Effect.runPromiseExit` + `Cause.failureOption`
 
 ## Verification Before "Done"
 
-- Type-check, lint, unit tests pass — necessary, not sufficient for UI work.
+- Type-check, lint, unit tests pass: necessary, not sufficient for UI work.
 - Exercise the feature in a browser or device. Click the golden path. Try one edge case. Watch the network tab and console.
 - If the UI cannot be exercised (no dev server, no preview), say so explicitly in the PR and list type checks as partial evidence.
-- Run the repo's `verify` (or equivalent) — `putio-sdk-typescript/scripts/`, `putio-cli/scripts/`, and the modern frontend repos all expose one canonical command.
+- Run the repo's `verify` (or equivalent): `putio-sdk-typescript/scripts/`, `putio-cli/scripts/`, and the modern frontend repos all expose one canonical command.

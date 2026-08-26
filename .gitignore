@@ -1,1 +1,4 @@
-.claude/worktrees/
+.claude/
+node_modules/
+.skillcheck/results/
+.skillcheck/scratch/

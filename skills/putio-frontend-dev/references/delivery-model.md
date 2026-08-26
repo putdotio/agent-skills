@@ -15,7 +15,7 @@ Use this as the default frontend repo shape at put.io. Package repos publish con
 
 1. One repo-local verify command or script.
 2. One `verify` CI job that runs it.
-3. One delivery job gated on `verify`.
+3. One delivery job gated on `verify`
 4. Conventional commits or another deterministic release or deploy signal.
 5. No manual version bump or deploy checklist flow in normal delivery.
 6. No repo-local release-only tooling by default; prefer workflow-level execution.
@@ -35,7 +35,7 @@ template gaps: missing .github/pull_request_template.md
 - `VERIFY` covers lint, typecheck, build, tests, and any package-specific guardrails.
 - Workflow logic stays thin; repo commands own the complexity.
 - Orchestration stays in GitHub Actions unless there is an established repo standard that says otherwise.
-- Repos hosted on GitHub include collaboration templates when they improve review or triage, especially `.github/pull_request_template.md` and `.github/ISSUE_TEMPLATE/*`.
+- Repos hosted on GitHub include collaboration templates when they improve review or triage, especially `.github/pull_request_template.md` and `.github/ISSUE_TEMPLATE/*`
 - Package release jobs are safe to no-op when there are no releasable commits.
 - Delivery jobs use only the permissions and secrets they actually need.
 - Secret-bearing release, deploy, signing, publish, beta, backfill, and binary-build jobs follow [release security](./release-security.md).

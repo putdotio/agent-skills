@@ -1,0 +1,4 @@
+interface:
+  display_name: "put.io SDK development"
+  short_description: "Build or review put.io SDK repositories"
+  default_prompt: "Use $putio-sdk-dev to build or review this put.io SDK change."
