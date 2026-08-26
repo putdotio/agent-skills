@@ -11,9 +11,9 @@ A useful harness wraps platform tools, exposes a typed command surface, prepares
 1. Read [harness pattern](./test-harness-pattern.md) before shaping architecture, [platform notes](./test-harness-platform-notes.md) before picking tools, and [examples](./test-harness-examples.md) when you need concrete precedent.
 2. Inspect the target surface, wrapped platform tools, existing repo commands, local docs, and auth/session entrypoints before designing anything new.
 3. Design the harness layers explicitly: adapter, CLI/API, auth/session, flow driver, assertions, proof artifacts, repo integration, observability, isolation, and boundaries.
-4. Keep the generic harness core focused on the test surface. Put product journeys, fixture names, content IDs, credentials, and expectations in the owning app repo or scenario files.
-5. For auth/session, follow the testing-account, global `putio` profile, and one-shot secret-materialization rules in [harness pattern](./test-harness-pattern.md).
-6. Make human browser login, repeated secret approvals, and personal accounts explicit fallback paths, not the default harness design.
+4. Keep the generic harness core focused on the test surface. Put product journeys, fixture names, content IDs, profile names, and expectations in the owning app repo or scenario files. Account credentials stay in the authorized secret provider.
+5. For auth/session, follow the website-only credential boundary and profile rules in [harness pattern](./test-harness-pattern.md).
+6. Use authorized browser automation against the official login page when a test profile needs account authorization. Never reuse personal accounts, browser sessions, or ambient CLI authentication.
 7. Prefer deterministic commands and typed outputs over prose-only manual steps. Use narrow commands that are bootable, smokeable, interactable, observable, and isolated enough for agents to debug without repeated human help.
 8. Before implementation, check every harness layer from step 3 is covered. If a layer is missing, revise the design before writing code.
 9. After implementation, run the smoke or live-test entrypoint, inspect proof artifacts and logs, fix the root cause of failures, and rerun. If the platform cannot expose state directly, require stronger screenshots, logs, recordings, or review artifacts.
@@ -28,7 +28,6 @@ harness open-flow --name playback --fixture <fixture-name>
 harness press --key play-pause
 harness auth-status --profile <profile-name>
 harness auth-prepare --profile <profile-name>
-harness auth-render-vars --profile <profile-name> --env-file <ignored-env-file>
 harness auth-approve-device --profile <profile-name> --code <device-code>
 harness seed-account --profile <profile-name> --scenario <scenario-name>
 harness assert-screen --name player --artifact artifacts/live/player.png
@@ -68,8 +67,9 @@ For a harness design or implementation plan, report the adapter, command surface
 
 - Keep device IPs, passwords, certs, signing keys, tokens, content IDs, fixture internals, and personal local facts out of git.
 - Checked-in examples use placeholders.
-- Keep auth/session automation on named testing profiles and ignored local config paths. Do not spin on approval prompts or persist raw rendered secrets in checked-in files.
-- Harness SOPS payloads must be limited to dev/test accounts and fixtures, never admin accounts, production-wide credentials, signing keys, recovery identities, or CI/CD deploy/publish secrets.
+- Keep auth/session automation on named testing profiles. Account credentials stay inside authorized browser automation for the official login page and never enter harness or CLI configuration.
+- The secret provider may generate a current TOTP code for the browser automation process. Keep the TOTP seed, generated code, username, and password out of logs, command arguments, artifacts, and files.
+- Harness secret payloads may contain reversible dev/test fixtures, never account credentials, admin access, signing keys, recovery identities, or deploy and publish secrets.
 - Repo `.env.local` or `.env` examples may name a profile or config path, but must not contain raw put.io tokens.
 - Keep product business logic out of generic platform commands.
 - Wait for meaningful runtime conditions instead of arbitrary sleeps.

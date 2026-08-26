@@ -83,28 +83,31 @@ Then update the SDK in this order:
 
 ## Verification
 
-Run the checks that match the repo.
-Healthy SDK repos in this workspace should expose both:
+Use the owning repository's documented commands. Do not infer a Vite+, Gradle,
+or Make entrypoint from this shared skill.
+
+An SDK repo should expose both:
 
 - a default deterministic unit-test path that is safe for CI and local iteration
 - a separate documented live-test path for real API verification
 
 If one of those layers is missing, treat it as a repo gap to document or fix rather than silently accepting a weaker verification story.
 
-Minimal shape:
+Discover the owned commands before running them:
 
 ```bash
-rg -n "verify|liveTest|test:live|example" README.md AGENTS.md docs .github
-vp run verify && vp run test:live
-./gradlew verify && ./gradlew liveTest
-```
-
-Common examples in this workspace:
-
-```bash
-vp run verify
-./gradlew verify
-make verify
+rg --hidden -n "verify|check|test|example" . \
+  --glob 'README.md' \
+  --glob 'AGENTS.md' \
+  --glob 'docs/**' \
+  --glob '.github/**' \
+  --glob 'package.json' \
+  --glob 'Makefile' \
+  --glob 'pyproject.toml' \
+  --glob 'Cargo.toml' \
+  --glob 'build.gradle*' \
+  --glob 'settings.gradle*' \
+  --glob 'Package.swift' || true
 ```
 
 For runtime verification, prefer the repo's documented live-test entrypoints and follow the shared-account safety rules in that repo's testing docs.
