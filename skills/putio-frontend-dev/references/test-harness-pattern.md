@@ -74,6 +74,8 @@ The credential boundary is strict:
 - CLI, mobile, TV, extension, harness, and other client code must use the web
   app's OAuth or device-link flow. Those clients handle codes and tokens only,
   including OAuth refresh tokens.
+- Keep OAuth access and refresh tokens out of logs, state dumps, command
+  transcripts, proof artifacts, uploads, and checked-in files.
 - Authorized browser automation may enter credentials only into the official
   login page. Keep the values process-scoped and out of logs, artifacts,
   command arguments, client or harness configuration, and checked-in files.
@@ -84,7 +86,8 @@ The credential boundary is strict:
 When a harness uses the `putio` CLI:
 
 1. Find the globally installed `putio` binary on `PATH`.
-2. Read its live contract with `putio describe --output json`.
+2. Use the CLI's current discovery surface to inspect its supported commands
+   and schemas.
 3. Check the repository-configured profile before touching the target surface.
 4. If the profile lacks a usable OAuth session, run browser/device login for
    that profile and complete authorization on the configured official website.

@@ -96,7 +96,7 @@ If one of those layers is missing, treat it as a repo gap to document or fix rat
 Discover the owned commands before running them:
 
 ```bash
-rg --hidden -n "verify|liveTest|test:live|example" . \
+rg --hidden -n "verify|check|test|example" . \
   --glob 'README.md' \
   --glob 'AGENTS.md' \
   --glob 'docs/**' \
