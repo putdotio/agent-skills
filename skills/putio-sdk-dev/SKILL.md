@@ -100,7 +100,14 @@ rg --hidden -n "verify|liveTest|test:live|example" . \
   --glob 'README.md' \
   --glob 'AGENTS.md' \
   --glob 'docs/**' \
-  --glob '.github/**' || true
+  --glob '.github/**' \
+  --glob 'package.json' \
+  --glob 'Makefile' \
+  --glob 'pyproject.toml' \
+  --glob 'Cargo.toml' \
+  --glob 'build.gradle*' \
+  --glob 'settings.gradle*' \
+  --glob 'Package.swift' || true
 ```
 
 For runtime verification, prefer the repo's documented live-test entrypoints and follow the shared-account safety rules in that repo's testing docs.
