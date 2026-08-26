@@ -67,23 +67,27 @@ browser cookies, personal account, or ambient CLI authentication.
 
 The credential boundary is strict:
 
-- Only an official put.io web app may accept a username, password, or
-  one-time-password secret.
+- Only an official put.io website may accept a username, password, or current
+  one-time-password code.
+- Keep the long-lived TOTP seed inside the authorized secret provider. That
+  provider may generate the current code for process-scoped browser automation.
 - CLI, mobile, TV, extension, harness, and other client code must use the web
-  app's OAuth or device-link flow. Those clients handle codes and tokens only.
+  app's OAuth or device-link flow. Those clients handle codes and tokens only,
+  including OAuth refresh tokens.
 - Authorized browser automation may enter credentials only into the official
-  web login page. Keep the values process-scoped and out of logs, artifacts,
-  command arguments, and checked-in files.
-- Do not add direct credential exchange, local one-time-password generation,
-  or credential refresh to a client or harness.
+  login page. Keep the values process-scoped and out of logs, artifacts,
+  command arguments, client or harness configuration, and checked-in files.
+- Do not add account-credential exchange, TOTP generation, or reauthentication
+  with account credentials to a client or harness. Standards-based OAuth token
+  refresh remains supported.
 
 When a harness uses the `putio` CLI:
 
 1. Find the globally installed `putio` binary on `PATH`.
 2. Read its live contract with `putio describe --output json`.
 3. Check the repository-configured profile before touching the target surface.
-4. If the profile is missing or expired, run browser/device login for that
-   profile and complete authorization in the configured web app.
+4. If the profile lacks a usable OAuth session, run browser/device login for
+   that profile and complete authorization on the configured official website.
 5. Use the authenticated profile to approve device codes or seed reversible
    test state.
 
@@ -179,7 +183,7 @@ Expected repo shape:
 - Make/npm/pnpm targets for common flows
 - deterministic `verify`, `smoke`, or `live-test` entrypoints
 - sanitized `.env.example`
-- one-shot SOPS materialization or process injection for auth-bearing live checks
+- repository-configured OAuth profile and browser/device authorization setup
 - ignored local working directory
 - docs that distinguish hardware-backed checks from static checks
 - CI or manual workflow notes that explain which checks require a real device

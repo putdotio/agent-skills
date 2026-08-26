@@ -96,7 +96,11 @@ If one of those layers is missing, treat it as a repo gap to document or fix rat
 Discover the owned commands before running them:
 
 ```bash
-rg -n "verify|liveTest|test:live|example" README.md AGENTS.md docs .github
+rg --hidden -n "verify|liveTest|test:live|example" . \
+  --glob 'README.md' \
+  --glob 'AGENTS.md' \
+  --glob 'docs/**' \
+  --glob '.github/**' || true
 ```
 
 For runtime verification, prefer the repo's documented live-test entrypoints and follow the shared-account safety rules in that repo's testing docs.

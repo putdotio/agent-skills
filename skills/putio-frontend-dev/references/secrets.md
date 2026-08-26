@@ -296,10 +296,14 @@ cd ../<repo>.<topic>
 
 ### Harness ergonomics
 
-- Render or inject one approved payload once, then reuse the named `putio`
-  profile or ignored local state for the bounded test flow
-- Unattended runs use a dedicated machine identity with only the payloads they
-  need
+- Render or inject only non-account test fixtures into the harness. Account
+  credentials stay in the authorized secret provider and may be entered only by
+  process-scoped browser automation on the official put.io login page.
+- Reuse the resulting named OAuth profile or ignored local session state for
+  the bounded test flow. The harness and CLI receive codes or tokens, never the
+  username, password, or TOTP seed.
+- Unattended runs use dedicated machine identities with only the fixture and
+  browser-login capabilities they need.
 
 ### Untrusted code
 
