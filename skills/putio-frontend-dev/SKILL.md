@@ -57,6 +57,10 @@ name files to create or inspect in the target repository.
   blanking unrelated UI.
 - Keep effects at adapters and leaves so render trees remain pure.
 - Avoid type escape hatches that weaken the contract.
+- Accept usernames, passwords, and one-time-password secrets only in an
+  official put.io web app. CLI, mobile, TV, extension, harness, and other
+  clients must delegate account authorization to the web app through OAuth or
+  device-link flows and handle only the resulting codes or tokens.
 - Let repo-local `.patterns/` and established code override shared defaults.
 - Expose one repo-local `verify` entrypoint and make CI call it directly.
 - Deliver from trusted `main` or validated release refs only after verification.
