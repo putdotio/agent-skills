@@ -62,6 +62,10 @@ name files to create or inspect in the target repository.
   harness, and other clients must delegate account authorization to the website
   through OAuth or device-link flows and handle only the resulting codes or
   tokens.
+- When frontend work needs a shared test account, get its credentials from the
+  owning workspace's authorized private credential vault only at that browser
+  login boundary. Keep credential values, account details, and private vault
+  topology out of commands, logs, chat, proof artifacts, and public repos.
 - Let repo-local `.patterns/` and established code override shared defaults.
 - Expose one repo-local `verify` entrypoint and make CI call it directly.
 - Deliver from trusted `main` or validated release refs only after verification.
@@ -101,7 +105,9 @@ name files to create or inspect in the target repository.
 - SDK repositories belong to the dedicated SDK development workflow, including
   their docs, verification, release, and delivery shape.
 - Operating the `putio` CLI as a files, downloads, transfers, auth, or storage
-  consumer belongs to the CLI's consumer guidance.
+  consumer belongs to the CLI's consumer guidance. This skill owns only the
+  frontend test-account source and browser-authorization boundary used when a
+  frontend repo prepares an OAuth profile for its harness.
 - Repository policy, generic GitHub Actions hardening, Vite+ migrations, and
   bootability repair remain separate workflows. Independent review uses its own
   review workflow while this skill supplies the put.io frontend domain guidance.
