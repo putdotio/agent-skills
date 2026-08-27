@@ -1,0 +1,21 @@
+{
+  "context": "Tests frontend review activation while keeping adjacent put.io work in its owning workflow.",
+  "type": "weighted_checklist",
+  "checklist": [
+    {
+      "name": "keeps_frontend_review_in_scope",
+      "description": "Applies put.io frontend repository guidance to the read-only transfer-list review without treating review as an implementation request.",
+      "max_score": 4
+    },
+    {
+      "name": "routes_adjacent_work",
+      "description": "Routes the CLI operation, browser-only inspection, and SDK contract change to their separate owning workflows.",
+      "max_score": 4
+    },
+    {
+      "name": "does_not_export_frontend_rules",
+      "description": "Does not prescribe frontend architecture, verification, or delivery rules for the CLI, browser, or SDK tasks.",
+      "max_score": 2
+    }
+  ]
+}

@@ -1,8 +1,8 @@
-# Release Supply Chain
+# Release supply chain
 
 Use this when touching GitHub Actions workflows that publish packages, upload app builds, sign artifacts, deploy apps, promote beta builds, backfill releases, or build standalone binaries.
 
-## Trusted Refs
+## Trusted refs
 
 - Secret-bearing jobs check out fixed trusted refs: beta from `main`, release from a published `v*` tag, or an explicitly validated protected ref
 - Treat the workflow run ref and the checkout ref as separate trust boundaries. A GitHub Environment branch or tag policy constrains the run ref; it does not prove that `inputs.ref` is safe to check out later
@@ -10,7 +10,7 @@ Use this when touching GitHub Actions workflows that publish packages, upload ap
 - `workflow_dispatch` inputs are validated and bounded in a secretless step before they influence jobs that load secrets, sign artifacts, publish packages, or upload release assets
 - For manual backfills, validate the tag/ref in a separate secretless job, make build jobs depend on it, and use a sanitized output in `actions/checkout` `with.ref`
 
-## Repo Settings Model
+## Repo settings model
 
 - Public frontend-owned repos use five defaults: `main` push allowlist, resolved pull-request conversations, protected `v*` tags, approval-free continuous release Environments, and `putio-releaser` for automated GitHub writes
 - Private repos without paid GitHub protection document the limitation and compensate with Environment gates, fixed checkout refs, action pinning, validated manual inputs, and least-privilege credentials
@@ -21,12 +21,12 @@ Use this when touching GitHub Actions workflows that publish packages, upload ap
 - If a third-party publish action creates commits internally, verify it accepts release-bot identity inputs or honors `GIT_AUTHOR_*` / `GIT_COMMITTER_*`
 - Do not add CODEOWNERS as a blanket default for small frontend repos. Use owner-gated workflow or release-file review only when maintainers explicitly want that extra process.
 
-### Allowing the put.io Team to Push
+### Allowing the put.io team to push
 
 - Branch protection: rule for `main`, "Require a pull request before merging" off, "Require conversation resolution before merging" on, administrator enforcement on, "Restrict who can push" on, allowed actors `put-io` and `putio-releaser`
 - Rulesets: prefer a no-bypass baseline rule for deletion/force-push protection plus a narrow update rule for allowed push actors
 
-### Release Tags
+### Release tags
 
 - Tag ruleset: protect `v*`; allow only `putio-releaser` and org-admin bypass for creation, update, and deletion
 - Workflows that create GitHub Releases, upload release assets, or move `v*` tags use a `putio-releaser` installation token
@@ -39,7 +39,7 @@ Use this when touching GitHub Actions workflows that publish packages, upload ap
 - Keep multiline untrusted input out of `$GITHUB_ENV`; sanitize it first or use heredoc-safe patterns that cannot be broken by attacker-controlled delimiters
 - Move non-secret metadata prep before any secret-loading step whenever possible
 
-## Actions and Toolchains
+## Actions and toolchains
 
 - Use GitHub-hosted floating runner labels for routine CI and release jobs: `ubuntu-latest`, `windows-latest`, and `macos-latest`. Pin a runner image only when the OS image is part of the tested toolchain contract, and document that reason next to the workflow or in the repo release docs
 - Pin release, publish, upload, signing, and deploy actions to full commit SHAs with a trailing comment for the human version tag
@@ -54,7 +54,7 @@ Use this when touching GitHub Actions workflows that publish packages, upload ap
 - Keep security-sensitive build logic typed when the repo supports it without extra dependencies. In TypeScript repos, prefer `.ts` or `.mts` scripts over loosely typed `.mjs` for release-critical logic
 - Shell installers for downloaded binaries normalize the final executable mode, for example `0755`, and reject group/world-writable install directories unless the repo exposes an explicit opt-in for shared installs
 
-## SST Deploy Roles
+## SST deploy roles
 
 - Bind GitHub OIDC deploy roles to the repo and protected Environment that owns the deploy, and keep AWS account IDs, Route 53 zone IDs, certificate ARNs, and role ARNs in repo variables
 - For first SST deploys, start with enough AWS access for SST bootstrap plus the app's components, then trim after a successful deploy with CloudTrail or IAM Access Analyzer evidence
@@ -63,7 +63,7 @@ Use this when touching GitHub Actions workflows that publish packages, upload ap
 - For `StaticSite` assets and invalidations, include S3 bucket refresh reads used by the Pulumi AWS provider: ACL, CORS, policy, public-access-block, request-payment, tagging, website, versioning, logging, lifecycle, replication, encryption, and object-lock configuration
 - When SST creates CloudFront key-value store metadata for a static site, include `cloudfront-keyvaluestore:DescribeKeyValueStore` and `cloudfront-keyvaluestore:UpdateKeys` for the deploy role
 
-## Caches and Generated Trees
+## Caches and generated trees
 
 - Verify jobs may use dependency caches, but secret-bearing release, publish, signing, and deploy jobs do fresh dependency installs by default. Do not share package-manager caches between `pull_request` and privileged `push: main`, `workflow_dispatch`, or tag-driven jobs
 - Regenerate or verify generated dependency trees inside signed or release jobs. Examples include full CocoaPods `Pods` trees and other generated vendor directories
@@ -71,14 +71,14 @@ Use this when touching GitHub Actions workflows that publish packages, upload ap
 - If a generated-tree or tool cache is unavoidable in a privileged job, namespace it by workflow, event, trust level, platform, and lockfile. Privileged jobs consume only caches written by the same trusted event class, and they still regenerate or verify generated trees before signing, publishing, or promotion
 - `bootstrap-ci.sh`-style shortcuts that skip regeneration only from lockfile equality are acceptable for local speed, but risky when a generated tree came from a shared CI cache
 
-## Release and Deploy Handoffs
+## Release and deploy handoffs
 
 - Treat GitHub Actions artifacts as temporary CI scratch storage, not as a release or deployment registry. They are quota- and retention-coupled and can block deploys after build, test, or release has already succeeded.
 - Use Actions artifacts only for same-run handoff when quota, retention, and provenance are acceptable and no better immutable payload store exists.
 - For simple static surfaces where build, e2e, and deploy can safely share one trusted environment-scoped job, deploy the tested output from the runner filesystem and keep post-deploy smoke in a separate read-only job.
 - For versioned releases, deploy from the durable published boundary: GitHub Release asset, package registry version, container image digest, app-store/TestFlight build, or provider-native package. Verify the downloaded or promoted payload before loading deploy credentials where practical.
 
-## npm Supply-Chain Incident Checks
+## npm supply-chain incident checks
 
 Reference: [TanStack npm supply-chain compromise postmortem](https://tanstack.com/blog/npm-supply-chain-compromise-postmortem) and [GitHub advisory GHSA-g7cv-rxg3-hmpx](https://github.com/advisories/GHSA-g7cv-rxg3-hmpx)
 
@@ -95,7 +95,7 @@ Reference: [TanStack npm supply-chain compromise postmortem](https://tanstack.co
 - Do not publish a release artifact and then re-upload the same payload as an Actions artifact solely for deploy. Deploy should consume the release asset, registry package, image digest, or provider-native package directly.
 - When reviewing findings, separate stale evidence from current truth. If a direct cache or checkout path was removed, keep only the surviving path that still reaches signing, publishing, or promotion
 
-## Live Settings to Check
+## Live settings to check
 
 Before final severity or remediation calls, inspect live GitHub state:
 
@@ -106,6 +106,6 @@ Before final severity or remediation calls, inspect live GitHub state:
 - Actions permission policy and job-level `permissions`
 - where secrets live: repo, org, Environment, or external manager
 
-## Docs to Update
+## Docs to update
 
 When release, cache, provenance, or signing behavior changes, update repo-local docs in the same change. Put release and publishing behavior in `docs/DISTRIBUTION.md`; keep `CONTRIBUTING.md` focused on contributor setup and validation, and let `README.md` / `AGENTS.md` link to the distribution doc when useful.

@@ -1,4 +1,4 @@
-# Top-Level Docs
+# Top-level docs
 
 Use this reference when `putio-frontend-dev` work touches README, CONTRIBUTING,
 SECURITY, agent guidance, or other top-level repo docs.
@@ -7,7 +7,8 @@ Shape put.io frontend repo docs around a clear split between user-facing docs an
 
 ## Scope
 
-- In scope: put.io top-level doc shape, house style, public/private boundaries, sibling README alignment, and doc drift cleanup.
+- In scope: put.io top-level doc shape, house style, public/private boundaries,
+  target-repository README alignment, and doc drift cleanup.
 - Out of scope: broad specs, plans, decisions, runbooks, repository policy, Actions hardening, and runtime proof.
 
 ## Workflow
@@ -15,7 +16,8 @@ Shape put.io frontend repo docs around a clear split between user-facing docs an
 1. Inspect the repository before drafting.
 2. Identify the project type, user install and usage flow, contributor setup flow, any GitHub collaboration templates already in use, and the best existing docs to link.
 3. Read [README guideline](./docs-readme-guideline.md) before picking a final shape.
-4. For README hero, logo, or badge work, inspect 2-3 sibling put.io repo READMEs first and reuse the concrete house style instead of inventing a new shape.
+4. For README hero, logo, or badge work, use the target repo's existing public
+   assets and links. When it has no brand contract, keep the treatment minimal.
 5. Start from [contributing template](./docs-contributing-template.md) when creating or reshaping `CONTRIBUTING.md`
 6. Start from [security template](./docs-security-template.md) when creating or reshaping `SECURITY.md`
 7. Put each concern in its canonical home: user flow in `README.md`, contributor workflow in `CONTRIBUTING.md`, security reporting in `SECURITY.md`, and detailed review prompts in GitHub templates.
@@ -30,15 +32,24 @@ Shape put.io frontend repo docs around a clear split between user-facing docs an
 Concrete checks:
 
 ```bash
-rg -n "README|CONTRIBUTING|SECURITY|AGENTS|CLAUDE|docs/|pull_request_template|ISSUE_TEMPLATE" README.md CONTRIBUTING.md SECURITY.md AGENTS.md CLAUDE.md docs/ .github/
+rg --hidden -n "README|CONTRIBUTING|SECURITY|AGENTS|CLAUDE|docs/|pull_request_template|ISSUE_TEMPLATE" . \
+  --glob 'README.md' \
+  --glob 'CONTRIBUTING.md' \
+  --glob 'SECURITY.md' \
+  --glob 'AGENTS.md' \
+  --glob 'CLAUDE.md' \
+  --glob 'docs/**' \
+  --glob '.github/**' || true
 test -e README.md && test -e CONTRIBUTING.md
 test ! -e AGENTS.md || { test -L CLAUDE.md && test "$(readlink CLAUDE.md)" = "AGENTS.md"; }
 ```
 
 ## Guardrails
 
-- Do not freestyle put.io README branding. If a repo is put.io-branded, follow the sibling-repo hero/logo/badge pattern unless the user explicitly asks for a different brand treatment.
-- Do not copy shared brand assets into package repos. Use the canonical hosted asset URL used by sibling repos unless the target repo is itself the static asset source.
+- Do not freestyle put.io README branding. Preserve the target repo's public
+  hero, logo, and badge contract unless the user asks for a different treatment.
+- Do not copy shared brand assets into package repos. Reuse a public hosted
+  asset already owned by the target repo, or keep the README text-only.
 - Prefer one canonical location per fact. Point to docs or templates instead of copying long checklists between them.
 - When documenting release or deploy workflows, call out the durable handoff explicitly: same-job tested output, GitHub Release asset, registry package, image digest, or provider-native package. Do not document GitHub Actions artifacts as a release/deploy registry.
 - Keep volatile metrics such as test counts or coverage numbers out of durable docs, and add sections only when they say something specific about the repo.

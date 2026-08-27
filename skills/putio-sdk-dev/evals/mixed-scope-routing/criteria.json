@@ -1,0 +1,21 @@
+{
+  "context": "Tests SDK review activation while keeping adjacent put.io work in its owning workflow.",
+  "type": "weighted_checklist",
+  "checklist": [
+    {
+      "name": "keeps_sdk_review_in_scope",
+      "description": "Applies put.io SDK repository guidance to the read-only parser review without treating review as an implementation request.",
+      "max_score": 4
+    },
+    {
+      "name": "routes_adjacent_work",
+      "description": "Routes the frontend change, CLI operation, and browser-only inspection to their separate owning workflows.",
+      "max_score": 4
+    },
+    {
+      "name": "does_not_export_sdk_rules",
+      "description": "Does not prescribe SDK contract, parity, verification, or delivery rules for the frontend, CLI, or browser tasks.",
+      "max_score": 2
+    }
+  ]
+}

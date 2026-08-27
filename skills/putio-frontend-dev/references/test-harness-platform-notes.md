@@ -1,8 +1,8 @@
-# Platform Notes
+# Platform notes
 
 Use these notes as starting points. Verify current platform tooling in the target repo before implementing.
 
-## Web And Browser Extensions
+## Web and browser extensions
 
 Likely tools:
 
@@ -26,7 +26,7 @@ Good proof:
 - route or extension entrypoint opens the expected product flow
 - screenshot, trace, console log, or runtime state dump is saved with the summary
 
-## iOS / Android Native
+## iOS / Android native
 
 Likely tools:
 
@@ -155,7 +155,7 @@ Good proof:
 
 Keep signing identities, provisioning profiles, device identifiers, and account facts outside git.
 
-## Future Weird Platforms
+## Future weird platforms
 
 For webOS, game consoles, set-top boxes, browser-kiosk environments, or vendor clouds, start from the same architecture:
 

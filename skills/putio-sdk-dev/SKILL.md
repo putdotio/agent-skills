@@ -1,15 +1,11 @@
 ---
 name: putio-sdk-dev
-description: "Develop or review SDK and API client code owned by put.io across TypeScript, Swift, Kotlin, and similar packages. Use only when the target is a put.io SDK repository or the user explicitly asks for put.io SDK conventions. Do not use for unrelated SDKs, end-user application code, or putio CLI consumer operations."
+description: "Develop or review SDK and API client code owned by put.io across TypeScript, Swift, Kotlin, and similar packages. Use only for work in a put.io SDK repository or explicit requests for put.io SDK conventions. Do not use for unrelated SDKs, browser-only put.io inspection, end-user application code, or putio CLI operations."
 ---
 
 # put.io SDK development
 
 Apply put.io SDK conventions after the target repository's own guidance.
-
-Read [SDK vision](./references/sdk-vision.md) for scope and parity,
-[patterns](./references/patterns.md) for typed boundaries and tests, and
-[language notes](./references/language-notes.md) for host-language conventions.
 
 ## Shared defaults
 
@@ -26,16 +22,18 @@ When sources disagree, prefer local backend behavior and tests, current
 first-party app usage, maintained SDKs, archived clients, then published API
 documentation.
 
+Start with sources present in the target repository. Add backend or first-party
+consumer evidence only when it is authorized and available.
+
 Widen SDK surfaces only when real app use and verified backend behavior justify it.
 
 ## Start
 
 Read only what you need:
 
-- the guidance inventory from
-  `git ls-files '*AGENTS.md' '*SKILL.md'`, including the root `AGENTS.md` and
-  every tracked guide that applies between the repo root and the files being
-  changed
+- the guidance inventory from `git ls-files '*AGENTS.md' '*SKILL.md'`, including
+  the root `AGENTS.md` when tracked and every guide that applies between the
+  repo root and the files being changed
 - the frontmatter and instructions from task-matching project-local `SKILL.md`
   files under `.agents/skills/`, `.claude/skills/`, or `skills/`; ignore
   dependency and vendored trees
@@ -63,13 +61,26 @@ repository's delivery and supply-chain guidance.
 
 ## Endpoint changes
 
-For a new or changed endpoint, make the work traceable:
+For a new or changed endpoint, discover the tracked source, test, fixture, and
+consumer paths first. Search only paths that exist:
 
 ```bash
-rg -n "route_name|endpoint_path|field_name" src test docs
-rg -n "route_name|endpoint_path|field_name" path/to/backend-or-fixtures
-rg -n "route_name|endpoint_path|field_name" path/to/first-party-consumer
+git ls-files -z -- \
+  ':(glob)**/src/**' \
+  ':(glob)**/test/**' \
+  ':(glob)**/tests/**' \
+  ':(glob)**/Tests/**' \
+  ':(glob)**/Sources/**' \
+  ':(glob)**/docs/**' \
+  ':(glob)**/fixtures/**' \
+  ':(glob)**/Package.swift' \
+  ':(glob)**/build.gradle' \
+  ':(glob)**/package.json' |
+  xargs -0 rg -n "route_name|endpoint_path|field_name" -- || true
 ```
+
+Repeat this search from a backend, fixture, or first-party consumer checkout
+only when that source is available and authorized.
 
 Then update the SDK in this order:
 

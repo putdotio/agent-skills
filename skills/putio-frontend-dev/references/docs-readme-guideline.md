@@ -1,9 +1,9 @@
-# Frontend Repo Docs Guideline
+# Frontend repo docs guideline
 
 Use this when shaping top-level docs for a put.io frontend repo. Copy the structure, not the wording.
 Documentation is part of the interface; optimize for scanability, rhythm, and visual clarity, not just correctness.
 
-## Core Split
+## Core split
 
 - `README.md` is user-facing.
 - `CONTRIBUTING.md` is developer-facing.
@@ -34,19 +34,20 @@ Use this order unless the repo gives a strong reason not to:
 - Link to `SECURITY.md` from the README when it materially helps navigation, while keeping the main user flow clear.
 - Link to deeper docs before the README turns into a handbook.
 
-## Hero And Badges
+## Hero and badges
 
 - Use a brand block only when the repo has a real recognizable asset.
-- For put.io-branded repos, inspect sibling README heroes before editing and reuse the established concrete pattern: centered `<div>`, `https://static.put.io/images/putio-boncuk.png`, compact title, short purpose copy, and flat black badges when badges apply.
-- Treat the shared logo as a hosted brand asset. Do not copy `putio-boncuk.png` or other shared logo files into package repos; only the static asset source repo should own the file.
+- Match an existing hero or badge pattern in the target repository. If none
+  exists, keep the README text-first.
+- Link an asset already owned or referenced by the target repository. Do not
+  copy shared brand files into it.
 - Keep the hero compact: name, one-sentence purpose, optional positioning sentence.
 - Good badges: CI status, version, downloads when relevant, license.
 - Use badges only when they help trust, adoption, or navigation.
-- For put.io repos that use shields badges, follow the `putio-sdk-typescript` pattern: `style=flat`, `colorA=000000`, `colorB=000000`, and `style="text-decoration:none;"` on each badge link.
+- When the target repository already uses shields badges, preserve its style.
 - Keep badge styling consistent within the hero block.
-- If examples disagree, prefer examples from the same repo kind first: TypeScript packages before apps, apps before SDKs, and the static asset repo only for asset ownership.
 
-## Docs Section
+## Docs section
 
 - Use this section to link to deeper docs without dumping their contents into the README.
 - Keep the section even when the repo only has a small set of links.

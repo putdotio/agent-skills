@@ -45,7 +45,7 @@ Good boundaries:
 - keep generic remote-control and screenshot primitives separate from app journeys
 - keep scenario expectations in named scripts or scenario files so the platform driver remains reusable
 
-## Frontend-owned Web And Native Apps
+## Frontend-owned web and native apps
 
 Use the same shape for web, browser extension, iOS, Android, and tvOS surfaces.
 The wrapped tools change, but the harness contract stays stable.
@@ -68,7 +68,7 @@ Good boundaries:
 - keep platform control separate from product scenarios
 - make missing simulator, emulator, browser, device, or auth profile errors fail early with exact setup needs
 
-## What To Copy
+## What to copy
 
 Copy the shape, not the exact implementation:
 
@@ -83,7 +83,7 @@ Copy the shape, not the exact implementation:
 - proof artifacts written to predictable paths
 - concise failure messages that point to the failing platform step
 
-## What Not To Copy
+## What not to copy
 
 Do not make a new harness depend on another platform's quirks:
 

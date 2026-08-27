@@ -1,4 +1,4 @@
-# SDK Patterns
+# SDK patterns
 
 Use these examples when a put.io SDK repo needs concrete implementation shape and the repo does not already establish a stronger local pattern.
 
@@ -164,7 +164,7 @@ public struct ListFilesQuery: Sendable, Equatable {
 }
 ```
 
-## Verification Layers
+## Verification layers
 
 Healthy SDK repos should keep two layers distinct:
 

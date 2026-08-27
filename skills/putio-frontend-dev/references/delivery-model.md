@@ -1,8 +1,8 @@
-# Repo Delivery Model
+# Repo delivery model
 
 Use this as the default frontend repo shape at put.io. Package repos publish continuously. App repos deploy continuously.
 
-## Core Model
+## Core model
 
 - `VERIFY` runs on pull requests and `main` pushes.
 - delivery runs on `main` only, after `VERIFY` passes.
@@ -11,7 +11,7 @@ Use this as the default frontend repo shape at put.io. Package repos publish con
 - Delivery is continuous: every merge to `main` is assumed publishable or deployable.
 - Keep one canonical owner per concern instead of duplicating the same rule across commands, workflows, and docs.
 
-## Default Shape
+## Default shape
 
 1. One repo-local verify command or script.
 2. One `verify` CI job that runs it.
@@ -56,7 +56,7 @@ Semantic-release example:
 }
 ```
 
-## Collaboration Templates
+## Collaboration templates
 
 Keep review and triage prompts close to the repo instead of relying on maintainers to remember them.
 

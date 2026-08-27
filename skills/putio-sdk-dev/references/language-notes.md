@@ -1,4 +1,4 @@
-# SDK Language Notes
+# SDK language notes
 
 Use the section that matches the SDK repo you are changing.
 
@@ -15,11 +15,10 @@ Use the section that matches the SDK repo you are changing.
 - Prefer `async throws` and native Swift value types.
 - Keep the package surface open-source-safe and preserve package-manager install paths.
 - Verify the example app when auth or integration behavior changes.
-- Prefer coroutine-first APIs, typed public results, and Kotlin-native surfaces as long-term contracts.
 
 ## Kotlin
 
-- Prefer coroutine-first APIs.
+- Prefer coroutine-first APIs, typed public results, and Kotlin-native surfaces.
 - Keep models serialization-friendly.
 - Prefer explicit error contracts over generic failures.
 - Stay close to the TypeScript contract shape without forcing full endpoint parity.

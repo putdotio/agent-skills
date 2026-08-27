@@ -1,15 +1,15 @@
-# Application Repo Defaults
+# Application repo defaults
 
 Use this when the repo is an application rather than a published package.
 
-## Core Model
+## Core model
 
 - Keep the same `VERIFY` first rule as package repos.
 - Treat deploys as the app equivalent of package publishing.
 - Prefer one repo-local deploy command per delivery target, such as `deploy-preview`, `deploy-beta`, or `deploy-production`
 - Run deploy jobs from GitHub Actions after `VERIFY` passes.
 
-## Expected Shape
+## Expected shape
 
 - one repo-local `verify` entrypoint
 - one CI verify job that runs it on pull requests and `main` pushes
@@ -17,7 +17,7 @@ Use this when the repo is an application rather than a published package.
 - a deterministic promotion signal, usually pushes or tags on `main`
 - no manual checklist-driven deploy flow unless the platform truly requires it
 
-## Delivery Targets
+## Delivery targets
 
 - Web apps: preview or production hosting
 - Native apps: TestFlight, beta tracks, or store delivery

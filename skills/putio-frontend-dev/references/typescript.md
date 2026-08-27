@@ -1,4 +1,4 @@
-# TypeScript Repo Defaults
+# TypeScript repo defaults
 
 Use the new `putio-sdk-typescript` layout as the default TypeScript package reference, and keep the same verify-first delivery shape for TypeScript app repos too.
 
@@ -14,7 +14,7 @@ Use the new `putio-sdk-typescript` layout as the default TypeScript package refe
 - When `@semantic-release/git` writes a release commit, mint a `putio-releaser` installation token and set `GIT_AUTHOR_*` and `GIT_COMMITTER_*` so commit metadata matches the app bot identity.
 - If `main` or `v*` is protected, verify `putio-releaser` is allowed before relying on version-bump commits, tag creation, GitHub Releases, or asset uploads.
 
-## Expected Shape
+## Expected shape
 
 - local commands for `check`, `build`, `test`, and `verify`
 - CI setup with full-SHA-pinned `voidzero-dev/setup-vp` for repos that use Vite+ (`vp`), including release jobs
@@ -23,7 +23,7 @@ Use the new `putio-sdk-typescript` layout as the default TypeScript package refe
 - `verify` on pull requests and `main` pushes
 - a GitHub Actions delivery job on `main` after `verify` passes
 
-## Build Tooling
+## Build tooling
 
 - Use the current team default toolchain for package builds, including Vite+ and `tsdown` where appropriate.
 - Keep build-tool choice behind repo scripts so the workflow model does not change when packaging details do.
