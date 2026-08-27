@@ -89,9 +89,14 @@ When a harness uses the `putio` CLI:
 2. Use the CLI's current discovery surface to inspect its supported commands
    and schemas.
 3. Check the repository-configured profile before touching the target surface.
-4. If the profile lacks a usable OAuth session, run browser/device login for
-   that profile and complete authorization on the configured official website.
-5. Use the authenticated profile to approve device codes or seed reversible
+4. If the profile lacks a usable OAuth session, get the shared test-account
+   credentials from the owning workspace's authorized private credential vault.
+   Keep the long-lived TOTP seed there and generate only the current code for
+   the process-scoped browser login.
+5. Enter the credentials only on the configured official website, complete the
+   CLI's browser/device authorization for that profile, and let the CLI store
+   the returned OAuth token.
+6. Use the authenticated profile to approve device codes or seed reversible
    test state.
 
 The separate `putio-cli` skill is useful when installed, but the harness must
