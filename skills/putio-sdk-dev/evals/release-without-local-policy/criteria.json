@@ -1,0 +1,31 @@
+{
+  "context": "Tests whether the SDK skill remains standalone for release work when the target repository has no local supply-chain policy.",
+  "type": "weighted_checklist",
+  "checklist": [
+    {
+      "name": "keeps_sdk_release_in_scope",
+      "description": "Handles SDK publishing and release safety within the SDK workflow instead of delegating to a sibling skill.",
+      "max_score": 2
+    },
+    {
+      "name": "uses_trusted_refs_and_credentials",
+      "description": "Requires a verified trusted ref, narrowly scoped credentials, and OIDC or trusted publishing when supported.",
+      "max_score": 2
+    },
+    {
+      "name": "isolates_privileged_dependencies",
+      "description": "Requires pinned actions, frozen fresh installs, and no pull-request cache reuse in privileged release jobs.",
+      "max_score": 2
+    },
+    {
+      "name": "verifies_the_package",
+      "description": "Runs canonical verification and inspects the packed or built artifact before credentials are loaded for publishing.",
+      "max_score": 2
+    },
+    {
+      "name": "uses_a_durable_handoff",
+      "description": "Publishes from the release tag and uses registry or release artifacts with provenance instead of temporary Actions artifacts as the durable boundary.",
+      "max_score": 2
+    }
+  ]
+}

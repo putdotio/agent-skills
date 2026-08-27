@@ -31,9 +31,9 @@ Widen SDK surfaces only when real app use and verified backend behavior justify 
 
 Read only what you need:
 
-- the guidance inventory from `git ls-files '*AGENTS.md' '*SKILL.md'`, including
-  the root `AGENTS.md` when tracked and every guide that applies between the
-  repo root and the files being changed
+- every filesystem `AGENTS.md` that applies from the target repo root to the
+  files being changed, including untracked files, followed by the tracked
+  auxiliary guidance inventory from `git ls-files '*AGENTS.md' '*SKILL.md'`
 - the frontmatter and instructions from task-matching project-local `SKILL.md`
   files under `.agents/skills/`, `.claude/skills/`, or `skills/`; ignore
   dependency and vendored trees
@@ -41,12 +41,14 @@ Read only what you need:
 - [SDK vision](./references/sdk-vision.md) for scope, parity, and endpoint-family decisions
 - [patterns](./references/patterns.md) for typed boundaries, error mapping, pagination, and live-test layering
 - [language notes](./references/language-notes.md) for TypeScript, Swift, or Kotlin-specific guidance
+- [release security](./references/release-security.md) when publishing,
+  signing, releasing, or building distributable binaries
 
 Target-repo guidance and matching repo-local skills override this shared skill.
 
 If the repo has a canonical verify command, use that as the source of truth before editing delivery automation.
-Release, publish, signing, and binary-build automation follows the target
-repository's delivery and supply-chain guidance.
+Target-repo delivery and supply-chain guidance overrides the shared release
+defaults.
 
 ## Workflow
 

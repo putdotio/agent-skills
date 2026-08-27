@@ -10,10 +10,9 @@ own guidance and code precedent.
 
 ## Start
 
-1. From the target repo root, inventory local guidance with
-   `git ls-files '*AGENTS.md' '*SKILL.md'`. Read the root `AGENTS.md` when it is
-   tracked, then every guide that applies between the root and the files being
-   changed.
+1. Read every filesystem `AGENTS.md` that applies from the target repo root to
+   the files being changed, including untracked files. Then inventory tracked
+   auxiliary guidance with `git ls-files '*AGENTS.md' '*SKILL.md'`.
 2. Discover tracked project-local `SKILL.md` files under `.agents/skills/`,
    `.claude/skills/`, or `skills/`. Read the frontmatter and apply only the
    task-matching skills; ignore dependency and vendored trees.

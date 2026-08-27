@@ -18,4 +18,9 @@ Contributor guidance for this public put.io skill catalog.
   plus `criteria.json`.
 - Run `pnpm run verify` before handoff. CI runs the same keyless workflow and
   skill lint gate.
+- For pull requests, freeze the final head and wait for every requested
+  automated reviewer to finish against that head. Green CI and conversation
+  resolution do not cover a review that is still in flight.
+- Verify every finding. Fix valid findings, reply with the proving commit or
+  evidence, and resolve their threads before merging.
 - Use repo-relative links in checked-in Markdown.
