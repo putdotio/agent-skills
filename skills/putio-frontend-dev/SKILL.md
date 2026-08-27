@@ -1,6 +1,6 @@
 ---
 name: putio-frontend-dev
-description: "Develop or review end-user applications and shared frontend packages owned by put.io, including UI, state, tests, docs, test harnesses, and delivery. Use only for work in a put.io frontend repository or explicit requests for put.io frontend conventions. Do not use for unrelated frontend work, browser-only put.io inspection, SDK or API client work, or putio CLI operations."
+description: "Develop or review end-user applications and shared frontend packages owned by put.io, including UI, state, tests, docs, test harnesses, and delivery. Use only for work in a put.io frontend repository or explicit requests for put.io frontend conventions. Do not use for unrelated frontend work, browser-only put.io inspection, SDK or API client work, or standalone putio CLI consumer operations; frontend test-harness auth setup remains in scope."
 ---
 
 # put.io frontend development
@@ -40,7 +40,8 @@ own guidance and code precedent.
   [environment setup](./references/secrets.md)
 - Secret-bearing release, signing, publishing, and deployment:
   [release security](./references/release-security.md)
-- Browser, native, TV, emulator, simulator, and device proof:
+- Browser, native, TV, emulator, simulator, device proof, and shared test-account
+  browser authorization:
   [test harness](./references/test-harness.md)
 
 Markdown links navigate this skill bundle. Other paths shown in the references,
@@ -62,10 +63,6 @@ name files to create or inspect in the target repository.
   harness, and other clients must delegate account authorization to the website
   through OAuth or device-link flows and handle only the resulting codes or
   tokens.
-- When frontend work needs a shared test account, get its credentials from the
-  owning workspace's authorized private credential vault only at that browser
-  login boundary. Keep credential values, account details, and private vault
-  topology out of commands, logs, chat, proof artifacts, and public repos.
 - Let repo-local `.patterns/` and established code override shared defaults.
 - Expose one repo-local `verify` entrypoint and make CI call it directly.
 - Deliver from trusted `main` or validated release refs only after verification.
@@ -105,9 +102,8 @@ name files to create or inspect in the target repository.
 - SDK repositories belong to the dedicated SDK development workflow, including
   their docs, verification, release, and delivery shape.
 - Operating the `putio` CLI as a files, downloads, transfers, auth, or storage
-  consumer belongs to the CLI's consumer guidance. This skill owns only the
-  frontend test-account source and browser-authorization boundary used when a
-  frontend repo prepares an OAuth profile for its harness.
+  consumer belongs to the CLI's consumer guidance. Frontend test-harness auth
+  setup follows [test harness](./references/test-harness.md).
 - Repository policy, generic GitHub Actions hardening, Vite+ migrations, and
   bootability repair remain separate workflows. Independent review uses its own
   review workflow while this skill supplies the put.io frontend domain guidance.
