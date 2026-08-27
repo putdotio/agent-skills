@@ -1,4 +1,4 @@
-# SDK Vision
+# SDK vision
 
 ## Purpose
 
@@ -6,14 +6,14 @@ Define the shared product and engineering doctrine for put.io SDKs across TypeSc
 
 This document exists so the SDK repos do not drift into three different philosophies. It is not a promise that every SDK exposes every endpoint or every abstraction in the same way. It is the contract for how we want put.io SDKs to feel, evolve, and prove correctness.
 
-## Core Position
+## Core position
 
 - `putio-sdk-typescript` is the canonical full put.io API client in the workspace and should mirror the backend surface one to one
-- `putio-sdk-swift` and `putio-sdk-kotlin` do not need feature-for-feature parity with TypeScript
+- The Swift and Kotlin SDKs do not need feature-for-feature parity with TypeScript
 - Swift and Kotlin still need the same quality bar: native APIs, typed boundaries, typed errors, safe live verification, and public-package discipline
 - The SDKs are public products, not thin internal shims
 
-## Product Intent
+## Product intent
 
 The SDK family should make put.io feel trustworthy, native, and pleasant to build on.
 
@@ -24,20 +24,22 @@ That means:
 - no SDK should expose a sloppy or weakly typed surface just because its scope is smaller
 - differences in scope must be deliberate and documented, not accidental drift
 
-## First-Party Consumers
+## First-party consumers
 
 Scope decisions should be grounded in real first-party consumers, not symmetry for its own sake.
 
-Today the strongest signals are:
+Use capability categories instead of a private repository inventory:
 
-- `putio-web`, which drives the broadest product and management surface
-- `putio-cli`, which is also an OAuth and automation client with real command families for auth, account, files, events, transfers, and download links
-- `putio-ios` and `putio-sdk-swift`, which currently bias toward consumer, playback, and account-management native flows
-- `putio-sdk-kotlin`, which currently biases toward the same native-consumer lane rather than broad management coverage
+- broad TypeScript clients that cover product and management surfaces
+- typed command-line automation across auth, account, files, events, transfers,
+  and downloads
+- Swift and Kotlin consumer apps that cover playback and account management
 
-This means TypeScript should remain the canonical full-surface contract reference not only because of the web app, but also because the CLI needs a typed automation-friendly surface. It does not mean Swift and Kotlin can stop at a tiny playback wrapper. The native baseline still needs a real consumer product surface with core account and security capabilities.
+TypeScript remains the full-surface contract because web management and typed
+automation both need it. Swift and Kotlin remain narrower, but their baseline
+still includes core account and security capabilities.
 
-## Shared Principles
+## Shared principles
 
 ### Public-package mindset
 
@@ -82,7 +84,7 @@ This means TypeScript should remain the canonical full-surface contract referenc
 - Treat mock-heavy self-verification as a starting point; add the real contract checks the change needs
 - If a repo cannot prove its real behavior safely, document that as a gap
 
-## Language Doctrine
+## Language doctrine
 
 ### TypeScript
 
@@ -108,7 +110,7 @@ TypeScript should usually lead on:
 
 ### Swift
 
-`putio-sdk-swift` should be unapologetically native.
+The Swift SDK should be unapologetically native.
 
 - Prefer `async throws`
 - Prefer `URLSession`
@@ -129,7 +131,7 @@ Swift should not regress into:
 
 ### Kotlin
 
-`putio-sdk-kotlin` should be coroutine-first and Android-friendly without becoming Android-only.
+The Kotlin SDK should be coroutine-first and Android-friendly without becoming Android-only.
 
 - Prefer `suspend` APIs
 - Prefer `OkHttp` plus `kotlinx.serialization`
@@ -146,7 +148,7 @@ Kotlin should not drift into:
 - raw response bags
 - synchronous wrapper APIs as the main public surface
 
-## Scope Policy
+## Scope policy
 
 Scope parity is not the goal for every SDK. Quality parity is.
 
@@ -164,7 +166,7 @@ When deciding whether a namespace belongs in Swift or Kotlin, check:
 3. whether the feature belongs in a consumer or playback-oriented native app
 4. whether the extra surface would be maintained to the same quality bar
 
-## Capability Matrix
+## Capability matrix
 
 Use this as the default scope bias for native SDKs and as a completeness reminder for TypeScript. It is a product-direction tool, not a hard ban on future expansion.
 
@@ -199,7 +201,7 @@ The current bias is:
 - Swift and Kotlin should stay excellent at the native consumer lane first: auth, account basics, settings, two-factor and related security flows, files, transfers, search, history, trash, subtitles, and other playback-adjacent helpers
 - Native SDKs may grow beyond that, but endpoint breadth must be earned by product need, not by parity pressure
 
-## Verification Policy
+## Verification policy
 
 Healthy put.io SDK repos should provide:
 
@@ -222,7 +224,7 @@ Coverage is a guardrail, not the product. Still, SDK repos should carry a meanin
 - raw JSON compatibility layers as a long-term surface
 - adding endpoints with weak typing just to increase apparent coverage
 
-## What Good Looks Like
+## What good looks like
 
 A healthy put.io SDK family looks like this:
 

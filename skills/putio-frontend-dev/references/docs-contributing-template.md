@@ -1,4 +1,4 @@
-# Frontend `CONTRIBUTING.md` Template
+# Frontend `CONTRIBUTING.md` template
 
 Use this as a starting point for frontend repos. Adapt the commands, toolchain, and development notes to the repo, but keep the file focused on contributor setup and validation.
 
@@ -15,7 +15,7 @@ Install the required toolchain and then install dependencies:
 <install-command>
 ```
 
-## Run Locally
+## Run locally
 
 Start the project in local development mode:
 
@@ -35,13 +35,13 @@ Run the full project checks before opening or updating a pull request:
 
 Add or remove commands based on the repo. Keep only the checks contributors are actually expected to run.
 
-## Development Notes
+## Development notes
 
 - Add only repo-specific notes that materially help contributors.
 - Explain required environment variables, local services, or architecture constraints only when they affect day-to-day development.
 - Link to deeper docs if the notes start getting long.
 
-## Pull Requests
+## Pull requests
 
 - Keep changes focused and explicit.
 - Add or update tests when behavior changes.

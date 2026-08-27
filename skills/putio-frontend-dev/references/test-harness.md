@@ -1,4 +1,4 @@
-# Test Harness
+# Test harness
 
 Use this reference when `putio-frontend-dev` work touches proof loops for put.io
 frontend-owned web, browser extension, TV, native, emulator, simulator, or
@@ -59,7 +59,7 @@ interface PlatformAdapter {
 }
 ```
 
-## Output Shape
+## Output shape
 
 For a harness design or implementation plan, report the adapter, command surface, auth/session path, flow driver, assertions, proof artifacts, repo integration, observability, isolation, and remaining boundaries.
 

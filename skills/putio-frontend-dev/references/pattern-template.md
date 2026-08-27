@@ -1,4 +1,4 @@
-# `.patterns/<topic>.md` Template
+# `.patterns/<topic>.md` template
 
 A `.patterns/` entry is a short, opinionated record of how this repository handles one topic. It is not a tutorial and not a design doc: it is the answer a future contributor or agent would otherwise reverse-engineer from the codebase.
 
@@ -7,7 +7,7 @@ Keep each file under ~300 lines. If it grows past that, split it.
 ## Required sections
 
 ```markdown
-# <Topic> Pattern
+# <Topic> pattern
 
 ## Recommendation
 
@@ -19,11 +19,11 @@ The one-or-two-paragraph answer. Lead with what this repo does, in numbered step
 
 What you get from this pattern (3-5 bullets).
 
-## Why This Pattern
+## Why this pattern
 
 3-6 bullets. The reasoning a future reader needs to evaluate whether the pattern still fits when conditions change. Reference real constraints: framework choice, library upstream design, team convention, prior incident.
 
-## Relevant Files
+## Relevant files
 
 A bulleted list of files in this repo that establish or follow the pattern. Repo-relative paths.
 
@@ -52,7 +52,7 @@ Avoid:
 
 ...
 
-## Anti-Patterns
+## Anti-patterns
 
 Short list of approaches that look reasonable but do not fit this repo. Each one with a one-sentence reason.
 
@@ -62,10 +62,12 @@ Short list of approaches that look reasonable but do not fit this repo. Each one
 
 ## Worked example
 
-Below is a fully-shaped entry for a hypothetical `.patterns/transfer-state.md` in a put.io frontend app. It is modeled on the real discriminated-union pattern in `putio-sdk-typescript/src/domains/transfers.ts`. Use it as a calibration target: your entry should feel about this concrete and this opinionated.
+Below is a complete entry for a hypothetical `.patterns/transfer-state.md` in a
+put.io frontend app. Use it as a calibration target for concrete rules and
+examples.
 
 ```markdown
-# Transfer State Pattern
+# Transfer state pattern
 
 ## Recommendation
 
@@ -82,14 +84,14 @@ What you get:
 - A new transfer status added upstream surfaces as a build error in every component that renders transfers.
 - Loading/empty/error UI lives next to the query, not duplicated across screens.
 
-## Why This Pattern
+## Why this pattern
 
-- The SDK already pays the modeling cost (`putio-sdk-typescript/src/domains/transfers.ts`). Re-narrowing in app code is duplicate work that drifts.
-- Exhaustive matching has caught two real bugs in this repo where a new status was added and one screen forgot to render it (PR #482, PR #517).
+- The SDK already owns the transfer union. Re-narrowing it in app code creates a
+  second contract that can drift.
 - TanStack Query's mutation rollback is enough for the optimistic flows we have. Adding Redux for transfers is the kind of premature abstraction we keep removing elsewhere.
 - We considered a feature-local `useTransferState` hook that returned a flat `{ status, error, progress }` bag: it loses the discriminated-union shape and reintroduces the guards we are trying to delete.
 
-## Relevant Files
+## Relevant files
 
 - `src/features/transfers/TransferRow.tsx`
 - `src/features/transfers/queries.ts`
@@ -170,7 +172,7 @@ test.each([
 });
 ```
 
-## Anti-Patterns
+## Anti-patterns
 
 - Re-declaring `type TransferStatus = "ERROR" | "COMPLETED" | ...` in app code: the SDK is the source of truth; redefining it lets the two drift.
 - Storing transfers in Redux to "react to changes everywhere": TanStack Query already does this, with cache invalidation, retries, and rollback.

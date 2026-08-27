@@ -1,4 +1,4 @@
-# Frontend `SECURITY.md` Template
+# Frontend `SECURITY.md` template
 
 Use this as a starting point for frontend repos. Adapt the scope and supported-version wording to the repo, but keep the document short and private-first.
 
@@ -31,7 +31,7 @@ Useful reports usually include issues involving:
 - keep testing non-destructive, low-volume, and service-safe
 - limit reports to technical vulnerabilities in this project
 
-## Supported Versions
+## Supported versions
 
 Describe the repo's actual support policy here. If the repo has no formal version-support policy, say so plainly.
 

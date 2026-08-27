@@ -1,6 +1,6 @@
 ---
 name: putio-frontend-dev
-description: "Develop or review end-user applications and shared frontend packages owned by put.io, including UI, state, tests, docs, test harnesses, and delivery. Use only when the target is a put.io frontend repository or the user explicitly asks for put.io frontend conventions. Do not use for unrelated frontend work, SDK client or API contract design, or putio CLI consumer operations."
+description: "Develop or review end-user applications and shared frontend packages owned by put.io, including UI, state, tests, docs, test harnesses, and delivery. Use only for work in a put.io frontend repository or explicit requests for put.io frontend conventions. Do not use for unrelated frontend work, browser-only put.io inspection, SDK or API client work, or putio CLI operations."
 ---
 
 # put.io frontend development
@@ -11,13 +11,13 @@ own guidance and code precedent.
 ## Start
 
 1. From the target repo root, inventory local guidance with
-   `git ls-files '*AGENTS.md' '*SKILL.md'`, then read its root `AGENTS.md` and
-   every tracked guide that applies between the root and the files being
+   `git ls-files '*AGENTS.md' '*SKILL.md'`. Read the root `AGENTS.md` when it is
+   tracked, then every guide that applies between the root and the files being
    changed.
 2. Discover tracked project-local `SKILL.md` files under `.agents/skills/`,
    `.claude/skills/`, or `skills/`. Read the frontmatter and apply only the
    task-matching skills; ignore dependency and vendored trees.
-3. Read the target repo's `README.md`, relevant docs, and `.patterns/` entries
+3. When tracked, read `README.md`, relevant docs, and `.patterns/` entries
    before editing. Target-repo guidance and skills override this shared skill.
 4. Identify the repo kind, stack, verify entrypoint, delivery target, and
    runtime proof surface.
@@ -99,13 +99,12 @@ name files to create or inspect in the target repository.
 
 ## Boundaries
 
-- SDK namespaces, request and response contracts, client parity, and
-  operation-specific API errors belong to the dedicated SDK development
-  workflow. This skill still applies to an SDK repo's docs, verification,
-  release, and delivery shape.
+- SDK repositories belong to the dedicated SDK development workflow, including
+  their docs, verification, release, and delivery shape.
 - Operating the `putio` CLI as a files, downloads, transfers, auth, or storage
   consumer belongs to the CLI's consumer guidance.
-- Repository policy, generic GitHub Actions hardening, Vite+ migrations,
-  bootability repair, and independent review remain separate workflows.
+- Repository policy, generic GitHub Actions hardening, Vite+ migrations, and
+  bootability repair remain separate workflows. Independent review uses its own
+  review workflow while this skill supplies the put.io frontend domain guidance.
 - Keep private workspace inventory, machine-specific facts, credentials, and
   private support context out of this public skill.

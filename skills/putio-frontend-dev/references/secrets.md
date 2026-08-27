@@ -1,4 +1,4 @@
-# Env Setup
+# Env setup
 
 Use this reference when a put.io frontend-owned repo has local/dev secrets,
 live-test env files, SOPS ciphertext inputs, or secret-bearing build, signing,
@@ -26,7 +26,7 @@ If `.env.example` already exists with bare-key placeholders for non-secret or
 device-local values, preserve those entries. Do not replace safe placeholders
 with secret-manager references.
 
-## Standard Shape
+## Standard shape
 
 A local-dev secret consumer carries four artifacts:
 
@@ -50,7 +50,7 @@ copies outside the development payload.
 
 ```
 PUTIO_API_KEY=
-PUTIO_TEST_USER=
+PUTIO_TEST_FIXTURE_ID=
 # PUTIO_WEB_SOPS_FILE=/path/to/web.sops.env
 ```
 
@@ -113,7 +113,7 @@ request rather than the default verification gate.
 
 The `!.env.example` exception is **required**: without it, the blanket `.env.*` rule silently un-tracks the template. Verify with `git check-ignore -v .env.example` (it must report no match).
 
-## Targets That Need Secrets
+## Targets that need secrets
 
 Default verify (`build`, `test`, `lint`, `typecheck`) runs without secrets.
 Secret-bearing targets consume an already materialized file and fail with a
@@ -131,7 +131,7 @@ PUTIO_WEB_SOPS_FILE=/path/to/web.sops.env \
 Keep `secrets-setup` out of `prepare`, `postinstall`, and `prebuild` hooks.
 Those run on install and would route every contributor through secret bootstrap.
 
-## SOPS Access
+## SOPS access
 
 Each person and unattended machine uses its own age identity. The private
 identity lives in owner-only machine storage with a private backup; only its
@@ -162,7 +162,7 @@ grep -q 'op://' .env.local && echo "WRONG: unresolved op:// in .env.local" || ec
 test ! -f .env.local && echo cleanup ok
 ```
 
-## Public Repo Notes
+## Public repo notes
 
 - Build, test, lint, typecheck must pass without `.env.local`. If any depend on secrets, move the secret-dependent flow to a separate target (`live-test`, `deploy`, `release`) that documents its requirement
 - `secrets-setup` is a committer-only target in public repos; routine contributors ignore it
@@ -215,7 +215,7 @@ Additional hygiene:
 One-time per repo:
 
 ```bash
-# Create the Deployment Environment (idempotent)
+# Create the deployment environment (idempotent)
 gh api -X PUT repos/<owner>/<repo>/environments/release
 
 # Add runtime values copied from the 1Password CI/restricted source item
@@ -224,7 +224,7 @@ gh variable set PUTIO_RELEASE_BOT_CLIENT_ID --env release --repo <owner>/<repo>
 gh secret set PUTIO_RELEASE_BOT_PRIVATE_KEY --env release --repo <owner>/<repo>
 
 # Configure deployment-branch policy; add reviewers only for intentionally approval-gated environments
-# in Settings → Environments → release (UI; gh api supports it but the body shape is awkward)
+# in settings → environments → release (UI; gh api supports it but the body shape is awkward)
 ```
 
 Workflow YAML for a deploy / release / live-test job:
@@ -271,7 +271,7 @@ Cache keys include `${{ github.event_name }}` so PR (no-secrets) jobs cannot poi
 
 Generated dependency trees such as full CocoaPods `Pods` directories are not restored into signed or release jobs across trust boundaries. Cache download artifacts instead, or namespace generated-tree caches by workflow/trust level and regenerate or verify before signing.
 
-## Agent Contexts
+## Agent contexts
 
 The same generic ciphertext input and repo-owned setup target work across local
 and hosted contexts. Identity provisioning remains outside the implementation
