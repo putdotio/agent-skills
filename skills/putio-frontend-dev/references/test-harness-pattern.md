@@ -83,25 +83,10 @@ The credential boundary is strict:
   with account credentials to a client or harness. Standards-based OAuth token
   refresh remains supported.
 
-When a harness uses the `putio` CLI:
-
-1. Find the globally installed `putio` binary on `PATH`.
-2. Use the CLI's current discovery surface to inspect its supported commands
-   and schemas.
-3. Check the repository-configured profile before touching the target surface.
-4. If the profile lacks a usable OAuth session, get the shared test-account
-   credentials from the owning workspace's authorized private credential vault.
-   Keep the long-lived TOTP seed there and generate only the current code for
-   the process-scoped browser login.
-5. Enter the credentials only on the configured official website, complete the
-   CLI's browser/device authorization for that profile, and let the CLI store
-   the returned OAuth token.
-6. Use the authenticated profile to approve device codes or seed reversible
-   test state.
-
-The separate `putio-cli` skill is useful when installed, but the harness must
-remain usable without it. Keep required CLI capabilities and setup errors in the
-owning repository. Do not copy volatile CLI commands into this shared skill.
+When a harness calls the globally installed `putio` binary, follow the
+[CLI harness contract](./test-harness-cli.md). It owns runtime discovery,
+structured output, profile auth, paging, dry-runs, and write safety without
+requiring the separate consumer CLI skill.
 
 Keep profile state global so it survives app reinstalls, simulator wipes, and
 sideload cycles. Use a repo-local config path only when a test needs isolated
