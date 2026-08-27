@@ -40,9 +40,10 @@ own guidance and code precedent.
   [environment setup](./references/secrets.md)
 - Secret-bearing release, signing, publishing, and deployment:
   [release security](./references/release-security.md)
-- Browser, native, TV, emulator, simulator, device proof, and shared test-account
-  browser authorization:
+- Browser, native, TV, emulator, simulator, and device proof:
   [test harness](./references/test-harness.md)
+- Shared test-account browser authorization:
+  [test harness pattern](./references/test-harness-pattern.md)
 
 Markdown links navigate this skill bundle. Other paths shown in the references,
 such as `.patterns/state-machines.md` or `.github/pull_request_template.md`,
@@ -103,7 +104,7 @@ name files to create or inspect in the target repository.
   their docs, verification, release, and delivery shape.
 - Operating the `putio` CLI as a files, downloads, transfers, auth, or storage
   consumer belongs to the CLI's consumer guidance. Frontend test-harness auth
-  setup follows [test harness](./references/test-harness.md).
+  setup follows [test harness pattern](./references/test-harness-pattern.md).
 - Repository policy, generic GitHub Actions hardening, Vite+ migrations, and
   bootability repair remain separate workflows. Independent review uses its own
   review workflow while this skill supplies the put.io frontend domain guidance.
