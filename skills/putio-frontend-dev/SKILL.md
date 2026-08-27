@@ -105,8 +105,8 @@ name files to create or inspect in the target repository.
 - SDK repositories belong to the dedicated SDK development workflow, including
   their docs, verification, release, and delivery shape.
 - Operating the `putio` CLI as a files, downloads, transfers, auth, or storage
-  consumer belongs to the CLI's consumer guidance. Frontend harnesses that call
-  the installed CLI follow the
+  consumer belongs to the CLI's consumer guidance. Frontend harnesses use the
+  installed CLI through the
   [CLI harness contract](./references/test-harness-cli.md).
 - Repository policy, generic GitHub Actions hardening, Vite+ migrations, and
   bootability repair remain separate workflows. Independent review uses its own
