@@ -65,12 +65,22 @@ For a new or changed endpoint, discover the tracked source, test, fixture, and
 consumer paths first. Search only paths that exist:
 
 ```bash
-git ls-files | rg '(^|/)(src|test|tests|Tests|Sources|docs|fixtures)/|Package.swift|build.gradle|package.json' || true
-rg -n "route_name|endpoint_path|field_name" .
+git ls-files -z -- \
+  ':(glob)**/src/**' \
+  ':(glob)**/test/**' \
+  ':(glob)**/tests/**' \
+  ':(glob)**/Tests/**' \
+  ':(glob)**/Sources/**' \
+  ':(glob)**/docs/**' \
+  ':(glob)**/fixtures/**' \
+  ':(glob)**/Package.swift' \
+  ':(glob)**/build.gradle' \
+  ':(glob)**/package.json' |
+  xargs -0 rg -n "route_name|endpoint_path|field_name" -- || true
 ```
 
-Repeat the second command from a backend, fixture, or first-party consumer
-checkout only when that source is available and authorized.
+Repeat this search from a backend, fixture, or first-party consumer checkout
+only when that source is available and authorized.
 
 Then update the SDK in this order:
 
