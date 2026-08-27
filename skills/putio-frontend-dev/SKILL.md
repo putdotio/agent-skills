@@ -44,6 +44,8 @@ own guidance and code precedent.
   [test harness](./references/test-harness.md)
 - Shared test-account browser authorization:
   [test harness pattern](./references/test-harness-pattern.md)
+- CLI-backed harness discovery, auth, reads, and writes:
+  [CLI harness contract](./references/test-harness-cli.md)
 
 Markdown links navigate this skill bundle. Other paths shown in the references,
 such as `.patterns/state-machines.md` or `.github/pull_request_template.md`,
@@ -103,8 +105,9 @@ name files to create or inspect in the target repository.
 - SDK repositories belong to the dedicated SDK development workflow, including
   their docs, verification, release, and delivery shape.
 - Operating the `putio` CLI as a files, downloads, transfers, auth, or storage
-  consumer belongs to the CLI's consumer guidance. Frontend test-harness auth
-  setup follows [test harness pattern](./references/test-harness-pattern.md).
+  consumer belongs to the CLI's consumer guidance. Frontend harnesses use the
+  installed CLI through the
+  [CLI harness contract](./references/test-harness-cli.md).
 - Repository policy, generic GitHub Actions hardening, Vite+ migrations, and
   bootability repair remain separate workflows. Independent review uses its own
   review workflow while this skill supplies the put.io frontend domain guidance.
