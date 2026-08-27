@@ -41,7 +41,8 @@ Use this when touching GitHub Actions workflows that publish packages, upload ap
 
 ## Actions and toolchains
 
-- Use GitHub-hosted floating runner labels for routine CI and release jobs: `ubuntu-latest`, `windows-latest`, and `macos-latest`. Pin a runner image only when the OS image is part of the tested toolchain contract, and document that reason next to the workflow or in the repo release docs
+- Use Blacksmith runners for routine CI and release jobs: `blacksmith-2vcpu-ubuntu-2404`, `blacksmith-2vcpu-windows-2025`, and `blacksmith-6vcpu-macos-latest`. The `blacksmith-sh` GitHub App must cover every adopting repository. Pin an OS image when it is part of the tested toolchain contract, and document that reason next to the workflow or in the repo release docs
+- Keep npm Trusted Publishing jobs on GitHub-hosted `ubuntu-latest` because npm rejects self-hosted runners. Do not replace OIDC with a long-lived `NPM_TOKEN` without an explicit secret-boundary decision
 - Pin release, publish, upload, signing, and deploy actions to full commit SHAs with a trailing comment for the human version tag
 - Configure Dependabot for the `github-actions` ecosystem when workflows pin actions by SHA. Dependabot updates SHA-pinned actions when the same line includes the version tag comment, so prefer exact comments such as `# v1.10.0` over broad moving-major comments such as `# v1`
 - Before committing a pinned action ref, verify that the SHA still exists upstream and resolves to the advertised tag. Stale or garbage-collected SHAs can make Dependabot update jobs fail even when the workflow still looks pinned
