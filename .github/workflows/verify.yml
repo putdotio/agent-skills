@@ -12,7 +12,7 @@ permissions:
 jobs:
   verify:
     name: Verify repository
-    runs-on: blacksmith-2vcpu-ubuntu-2404
+    runs-on: blacksmith-2vcpu-ubuntu-2404-arm
     timeout-minutes: 10
     steps:
       - name: Checkout

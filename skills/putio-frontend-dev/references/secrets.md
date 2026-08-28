@@ -235,7 +235,7 @@ jobs:
     environment:
       name: release
       deployment: false
-    runs-on: blacksmith-2vcpu-ubuntu-2404
+    runs-on: blacksmith-2vcpu-ubuntu-2404-arm
     permissions:
       contents: read
     steps:
