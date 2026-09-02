@@ -41,10 +41,9 @@ Use this when touching GitHub Actions workflows that publish packages, upload ap
 
 ## Actions and toolchains
 
-- Public repositories use GitHub-hosted runners: `ubuntu-24.04-arm` for routine Linux CI and release jobs, `ubuntu-24.04` for jobs that produce or depend on x86_64 artifacts, `windows-2025` for Windows, and `macos-latest` for macOS. GitHub-hosted minutes are free for public repositories, so Blacksmith only adds cost there
-- Private repositories use Blacksmith: `blacksmith-2vcpu-ubuntu-2404-arm` for routine Linux CI, `blacksmith-2vcpu-ubuntu-2404` for x86_64 artifacts, `blacksmith-2vcpu-windows-2025` for Windows, and `blacksmith-6vcpu-macos-latest` for macOS. macOS bills at 20x the Linux rate, so keep macOS jobs short. The `blacksmith-sh` GitHub App must cover every adopting repository
+- Use GitHub-hosted runners everywhere: `ubuntu-24.04-arm` for routine Linux CI and release jobs, `ubuntu-24.04` for jobs that produce or depend on x86_64 artifacts, `windows-2025` for Windows, and `macos-latest` for macOS. Public repositories get unlimited free minutes; private repositories draw from the org's free tier. Revisit Blacksmith only if the private-repo free tier runs out, and never for public repositories, where it only adds cost
 - Pin an OS image when it is part of the tested toolchain contract, and document that reason next to the workflow or in the repo release docs
-- Keep npm Trusted Publishing jobs on GitHub-hosted `ubuntu-latest` because npm rejects self-hosted runners, even in private repositories. Do not replace OIDC with a long-lived `NPM_TOKEN` without an explicit secret-boundary decision
+- Keep npm Trusted Publishing jobs on GitHub-hosted `ubuntu-latest` because npm rejects self-hosted runners. Do not replace OIDC with a long-lived `NPM_TOKEN` without an explicit secret-boundary decision
 - Pin release, publish, upload, signing, and deploy actions to full commit SHAs with a trailing comment for the human version tag
 - Configure Dependabot for the `github-actions` ecosystem when workflows pin actions by SHA. Dependabot updates SHA-pinned actions when the same line includes the version tag comment, so prefer exact comments such as `# v1.10.0` over broad moving-major comments such as `# v1`
 - Before committing a pinned action ref, verify that the SHA still exists upstream and resolves to the advertised tag. Stale or garbage-collected SHAs can make Dependabot update jobs fail even when the workflow still looks pinned
