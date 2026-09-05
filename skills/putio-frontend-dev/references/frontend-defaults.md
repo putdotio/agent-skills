@@ -255,7 +255,7 @@ Rules:
 - **TanStack Query for server reads, `useActionEffect` (or `useMutation`) for writes**: pick `useMutation` when there is a cache to invalidate; `useActionEffect` when the action is a one-off RPC with no cached read.
 - **Polling lives next to the query key**, not next to the component. `refetchInterval: 5_000` on the query, not `setInterval` in a `useEffect`
 
-
+## Forms
 
 For form mutations in Effect-React code, the put.io default is a small `useActionEffect` bridge over React 19's `useActionState`. Keep the FormData → Schema → Effect flow as one typed pipeline.
 
