@@ -260,11 +260,6 @@ action, then pass the resulting short-lived token to the narrow final write step
 
 Use `deployment: false` for package/library/CLI/skill release jobs whose Environment exists only to scope secrets. Keep deployment records for app deploys, signing, promotion, store submission, and any Environment with custom deployment protection rules.
 
-Migrating an existing CI/CD secret workflow: copy the exact runtime values from
-the CI/restricted 1Password item into the GitHub Environment first, switch the
-workflow's job to declare `environment:`, remove `op`/1Password runtime loading,
-then delete any repo-level or service-account secret.
-
 ### Cache scoping
 
 Cache keys include `${{ github.event_name }}` so PR (no-secrets) jobs cannot poison caches consumed by `push: main` (with-secrets) jobs.

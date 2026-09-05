@@ -1,6 +1,6 @@
 # TypeScript repo defaults
 
-Use the new `putio-sdk-typescript` layout as the default TypeScript package reference, and keep the same verify-first delivery shape for TypeScript app repos too.
+Use the `putio-sdk-typescript` layout as the default TypeScript package reference, and keep the same verify-first delivery shape for TypeScript app repos too.
 
 ## Defaults
 

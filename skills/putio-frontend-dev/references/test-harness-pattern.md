@@ -13,7 +13,7 @@ Examples:
 
 - Playwright, browser extension tooling, and browser automation APIs
 - Tizen CLI and `sdb`
-- `roku-deploy` and Roku External Control Protocol
+- `@putdotio/rokit` over Roku External Control Protocol and the developer installer
 - Android `adb`
 - Apple platform tooling for iOS/tvOS builds, install, launch, logs, and screenshots
 - Emulator, simulator, or cloud-device provider CLIs

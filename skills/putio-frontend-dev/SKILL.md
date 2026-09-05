@@ -16,8 +16,9 @@ own guidance and code precedent.
 2. Discover tracked project-local `SKILL.md` files under `.agents/skills/`,
    `.claude/skills/`, or `skills/`. Read the frontmatter and apply only the
    task-matching skills; ignore dependency and vendored trees.
-3. When tracked, read `README.md`, relevant docs, and `.patterns/` entries
-   before editing. Target-repo guidance and skills override this shared skill.
+3. Read the `README.md` sections, docs, and `.patterns/` entries that cover
+   the area being changed. Target-repo guidance and skills override this shared
+   skill.
 4. Identify the repo kind, stack, verify entrypoint, delivery target, and
    runtime proof surface.
 5. Select only the references required for the task.
@@ -70,6 +71,10 @@ name files to create or inspect in the target repository.
 - Keep verification logic in repo-owned commands that CI calls. Preserve an
   established task graph; use one `verify` entrypoint when creating a new lane.
 - Deliver from trusted `main` or validated release refs only after verification.
+- Finish in-scope edits, checks, and fixes without pausing for approval; ask
+  before anything destructive, paid, public, or outside the task, such as
+  deploys, publishes, secret or provider changes, external writes, and
+  force-pushes.
 - Exercise user-visible behavior in the real browser, app, simulator, emulator,
   or device surface when one exists.
 - Before a proof command launches a runtime, install cleanup and record whether
@@ -106,8 +111,8 @@ name files to create or inspect in the target repository.
   consumer belongs to the CLI's consumer guidance. Frontend harnesses use the
   installed CLI through the
   [CLI harness contract](./references/test-harness-cli.md).
-- Repository policy, generic GitHub Actions hardening, Vite+ migrations, and
-  bootability repair remain separate workflows. Independent review uses its own
-  review workflow while this skill supplies the put.io frontend domain guidance.
+- Repository policy, generic GitHub Actions hardening, build-tool migrations,
+  bootability repair, and independent code review are outside this skill; it
+  supplies put.io frontend domain guidance to whichever workflow does that work.
 - Keep private workspace inventory, machine-specific facts, credentials, and
   private support context out of this public skill.

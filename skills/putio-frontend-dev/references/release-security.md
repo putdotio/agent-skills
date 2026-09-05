@@ -82,9 +82,9 @@ Use this when touching GitHub Actions workflows that publish packages, upload ap
 
 ## npm supply-chain incident checks
 
-Reference: [TanStack npm supply-chain compromise postmortem](https://tanstack.com/blog/npm-supply-chain-compromise-postmortem) and [GitHub advisory GHSA-g7cv-rxg3-hmpx](https://github.com/advisories/GHSA-g7cv-rxg3-hmpx)
+Worked example: [TanStack npm supply-chain compromise postmortem](https://tanstack.com/blog/npm-supply-chain-compromise-postmortem) and [GitHub advisory GHSA-g7cv-rxg3-hmpx](https://github.com/advisories/GHSA-g7cv-rxg3-hmpx)
 
-- For TanStack-style incidents, scan manifests and lockfiles for the published IOC before running installs: malicious `optionalDependencies` entries pointing `@tanstack/setup` at `github:tanstack/router#79ac49eedf774dd4b0cfa308722bc463cfe5885c`, unexpected `router_init.js`, and affected package versions from the active advisory
+- When an active advisory publishes indicators of compromise, scan manifests and lockfiles for them before running installs: unexpected `optionalDependencies` or git-pinned entries, unexpected lifecycle scripts or init files, and the affected package versions
 - If any affected version was installed on a developer machine or CI runner, treat that host as compromised. Rotate registry, GitHub, cloud, SSH, Vault, and package-manager credentials reachable from the host before publishing again
 - OIDC removes the long-lived npm token theft path, but the workflow identity can still be abused if the release job runs compromised code. Keep trusted refs, fresh release installs, no shared release caches, and a narrow release credential boundary.
 - SLSA or npm provenance proves where a package was built, not that the runner was clean. Keep provenance checks, but do not use them as a substitute for trusted workflow boundaries, fresh release installs, and no shared release caches

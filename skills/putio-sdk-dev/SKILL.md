@@ -136,6 +136,7 @@ For runtime verification, prefer the repo's documented live-test entrypoints and
 - Verify backend contracts with current docs, source, fixtures, or live probes rather than old SDKs alone.
 - Claim full verification only when the unit, fixture, and live layers that matter for the change were exercised.
 - Keep live coverage against shared accounts non-destructive.
+- Finish in-scope edits, verification, and fixes without pausing for approval; ask before publishing, release writes, coverage-threshold changes, and live writes that are not reversible.
 - Preserve naming, parity, and type-safety unless a documented reason justifies a change.
 - Keep repo-specific implementation guidance in that repo's `AGENTS.md` or
   `docs/*`

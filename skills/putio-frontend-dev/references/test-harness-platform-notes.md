@@ -79,7 +79,7 @@ Good proof:
 
 Likely tools:
 
-- `roku-deploy`
+- `@putdotio/rokit`
 - Roku External Control Protocol
 - SceneGraph or app debug query surfaces when available
 

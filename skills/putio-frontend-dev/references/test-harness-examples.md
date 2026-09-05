@@ -30,7 +30,7 @@ Good boundaries:
 
 Pattern signals:
 
-- Make targets wrap common live-device workflows
+- `pnpm roku` scripts wrap common live-device workflows
 - TypeScript scripts drive live Roku checks
 - Roku ECP handles launch, deeplinks, keypresses, and screenshots
 - SceneGraph/runtime queries support assertions when available
