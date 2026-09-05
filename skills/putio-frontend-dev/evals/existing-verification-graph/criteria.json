@@ -1,0 +1,31 @@
+{
+  "context": "Checks that existing verification graphs, proof validity and consumer/platform boundaries survive a targeted frontend change.",
+  "type": "weighted_checklist",
+  "checklist": [
+    {
+      "name": "preserves_owner_graph",
+      "description": "Keeps the documented lanes and does not create a replacement verify wrapper or collapse separate package/device checks into every default run.",
+      "max_score": 2
+    },
+    {
+      "name": "reuses_valid_proof",
+      "description": "Reuses the passing web and browser evidence for unchanged web-only source and environment; a new turn or completed handoff alone does not trigger another run.",
+      "max_score": 2
+    },
+    {
+      "name": "checks_affected_consumers",
+      "description": "For shared UI behavior, includes both web and TV dependent lanes and installed tarball verification, retaining separate browser and remote interaction acceptance.",
+      "max_score": 2
+    },
+    {
+      "name": "honors_invalidation_and_full_gate",
+      "description": "After a root lockfile change, runs the owner-mandated full gate and refreshes affected runtime/package proof instead of reusing invalidated results; uncertainty also retains the full gate.",
+      "max_score": 2
+    },
+    {
+      "name": "reports_proof_and_authority_limits",
+      "description": "Separates executed/reused proof from unavailable TV acceptance, names the missing device flow, and does not claim browser checks prove remote behavior or infer permission for live writes, deployment or paid evaluation.",
+      "max_score": 2
+    }
+  ]
+}

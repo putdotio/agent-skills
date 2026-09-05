@@ -67,7 +67,8 @@ name files to create or inspect in the target repository.
   through OAuth or device-link flows and handle only the resulting codes or
   tokens.
 - Let repo-local `.patterns/` and established code override shared defaults.
-- Expose one repo-local `verify` entrypoint and make CI call it directly.
+- Keep verification logic in repo-owned commands that CI calls. Preserve an
+  established task graph; use one `verify` entrypoint when creating a new lane.
 - Deliver from trusted `main` or validated release refs only after verification.
 - Exercise user-visible behavior in the real browser, app, simulator, emulator,
   or device surface when one exists.
@@ -86,17 +87,14 @@ name files to create or inspect in the target repository.
    homes.
 4. Keep workflow orchestration thin and put repeatable build, verify, deploy,
    and smoke logic behind repo-owned commands.
-5. Run the repo's canonical verify entrypoint, for example exactly one of:
-
-   ```bash
-   make verify
-   mise run verify
-   vp run verify
-   ```
-
-   If it fails, fix the root cause and rerun the same command until it passes.
-   Then run the relevant runtime, delivery, or harness smoke path; fix and
-   rerun that proof if it fails.
+5. Select the owner's documented checks for the affected behavior and its
+   dependents. Run the full canonical gate when owner policy requires it,
+   shared inputs changed, or focused coverage is uncertain. Preserve separate
+   installed-package, downstream-consumer, browser and device proof where
+   those boundaries matter; command discovery does not authorize live actions.
+   Fix failures and refresh affected proof. Reuse passing proof while its
+   source, inputs and environment remain valid; a new turn or handoff alone
+   does not require another run. Name unavailable proof and its exact blocker.
 6. Report changed behavior, verification, proof artifacts, risks, and remaining
    gaps.
 

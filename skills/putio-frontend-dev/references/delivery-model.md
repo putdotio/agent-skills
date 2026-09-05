@@ -2,6 +2,11 @@
 
 Use this as the default frontend repo shape at put.io. Package repos publish continuously. App repos deploy continuously.
 
+Preserve an established multi-app task graph and its owner-defined verification
+lanes. The single-entrypoint shape below is a starting point for new setups,
+not a reason to replace scoped checks or fold separate package/device proof
+into every default run. Retain full gates where the owner requires them.
+
 ## Core model
 
 - `VERIFY` runs on pull requests and `main` pushes.

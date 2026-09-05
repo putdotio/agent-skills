@@ -335,4 +335,6 @@ Pick the repo's existing stack. If the repo is silent, default to Tailwind v4 fo
 - Type-check, lint, unit tests pass: necessary, not sufficient for UI work.
 - Exercise the feature in a browser or device. Click the golden path. Try one edge case. Watch the network tab and console.
 - If the UI cannot be exercised (no dev server, no preview), say so explicitly in the PR and list type checks as partial evidence.
-- Run the target repository's `verify` command or documented equivalent.
+- Use the target repository's affected/dependent checks, retaining mandated
+  full gates and separate runtime proof. Reuse valid results until changes,
+  failures or a concrete concern invalidate them.

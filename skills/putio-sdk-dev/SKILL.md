@@ -58,7 +58,13 @@ defaults.
 4. Add or update deterministic coverage for request shaping, parsing, errors, and public client contracts.
 5. Add or refresh safe live verification when production behavior matters and the surface is reversible.
 6. Keep multiple public clients aligned when the repo exposes more than one interface style.
-7. Run the repo's canonical verify command and fix failures before continuing.
+7. Select the owner's documented checks for the affected contracts and their
+   dependents, including installed-package and downstream-consumer proof when
+   relevant. Run the full canonical gate when mandated, shared inputs changed,
+   or focused coverage is uncertain. Fix failures and refresh affected proof;
+   reuse passing results while their source, inputs and environment remain
+   valid. Record unavailable proof and its exact blocker without claiming it
+   passed or inferring authorization from command discovery.
 8. Update package-facing docs and release notes when the public surface changes.
 
 ## Endpoint changes
