@@ -171,44 +171,25 @@ test ! -f .env.local && echo cleanup ok
 
 ## CI/CD
 
-Mandatory shape against PR-driven exfiltration and supply-chain attacks.
+Workflow trust boundaries, ref validation, action pinning, Dependabot,
+Environment posture, cache scoping, and branch/tag push mechanics are owned by
+[release security](./release-security.md). This section covers where secrets
+live and how a job receives them.
 
 ### Trigger discipline
 
 - **PR verify on `pull_request`** runs without sensitive secrets. `pull_request` from internal branches DOES receive `secrets.*` when referenced; the gate is "workflow author leaves it unwired"
 - **Continuous release on `push: main`** references Environment-scoped secrets without reviewer gates. `workflow_dispatch` is only allowed when the Environment's deployment-branch policy restricts the runnable ref to `main` or protected release branches, and the job does not separately check out an arbitrary input ref
-- **Secret-bearing manual flows** validate any requested tag/ref in a secretless job first, then check it out with `actions/checkout` `with.ref` only after validation. Environment branch/tag policy protects the workflow run ref, not a later `inputs.ref` checkout
-- **Use `pull_request` for code-running steps** such as checkout PR head, label automation with checkout, or composite actions running PR-supplied scripts
 - **Use direct trusted triggers for secret-bearing follow-ups** rather than `workflow_run` triggered by a `pull_request` workflow that reads PR data
-- Pin reusable workflows to SHA and use owner-gated review only when the repo intentionally carries that process
 
 ### Where secrets live
 
 - Important CI/CD source values live in 1Password CI or restricted owner vaults for human administration and rotation
 - Workflow runtime values live as GitHub Environment secrets, npm/GitHub trusted-publishing configuration, or OIDC-backed provider configuration
 - CI must not call `op`, `1Password/load-secrets-action`, or use `OP_SERVICE_ACCOUNT_TOKEN` to fetch secrets at runtime
-- Continuous release Environment approval is none; approval-gated production deploy, signing, promotion, or store-submission environments document reviewers explicitly
-- Package/library/CLI/skill publish jobs use the Environment as a secret boundary with `deployment: false`; app deploy, signing, promotion, and store-submission jobs keep deployment records when those records are useful
-
-### Workflow defaults
-
-- Top-level `permissions: {}` (deny by default); each job opts into the minimum it needs
-- Third-party actions pinned to SHA
-- Secret-bearing jobs read GitHub Environment secrets directly or assume provider roles through OIDC
-- `workflow_dispatch` inputs pass through `env`, are validated and bounded before shell use, then flow through sanitized step outputs
-
-### Repo configuration
-
-Load-bearing:
-
-- **Deployment Environment for every workflow mapping a sensitive secret**: continuous release environments scope secrets without approval gates; production deploy, signing, promotion, or store-submission environments may add reviewers when a human gate is intended
-- **Dependabot** for the `github-actions` ecosystem so pinned action SHAs with same-line version comments get reviewable bumps. Verify each pinned SHA resolves to the comment's tag before committing it; stale upstream SHAs break Dependabot's updater
-- Branch/tag trust and trusted-team direct push mechanics live in [release security](./release-security.md)
-
-Additional hygiene:
-
-- Optional owner-gated review on `.github/workflows/**`, `.github/actions/**`, `.env.example`, the `secrets-setup`/`secrets-clean` target body, and lockfiles when maintainers want that process
-- Signed commits where repo contributors can tolerate the friction
+- Top-level `permissions: {}` (deny by default); each job opts into the minimum it needs and reads Environment secrets directly or assumes provider roles through OIDC
+- Every workflow mapping a sensitive secret uses a deployment Environment: continuous release environments scope secrets without approval gates; production deploy, signing, promotion, or store-submission environments add reviewers only when a human gate is intended
+- Optional owner-gated review on `.github/workflows/**`, `.github/actions/**`, `.env.example`, the `secrets-setup`/`secrets-clean` target body, and lockfiles when maintainers want that process; signed commits where contributors can tolerate the friction
 
 ### Setup recipe
 
@@ -259,12 +240,6 @@ install, build, test, and deploy preparation. Pass it only to the token-minting
 action, then pass the resulting short-lived token to the narrow final write step.
 
 Use `deployment: false` for package/library/CLI/skill release jobs whose Environment exists only to scope secrets. Keep deployment records for app deploys, signing, promotion, store submission, and any Environment with custom deployment protection rules.
-
-### Cache scoping
-
-Cache keys include `${{ github.event_name }}` so PR (no-secrets) jobs cannot poison caches consumed by `push: main` (with-secrets) jobs.
-
-Generated dependency trees such as full CocoaPods `Pods` directories are not restored into signed or release jobs across trust boundaries. Cache download artifacts instead, or namespace generated-tree caches by workflow/trust level and regenerate or verify before signing.
 
 ## Agent contexts
 

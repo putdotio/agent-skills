@@ -1,6 +1,6 @@
 ---
 name: putio-sdk-dev
-description: "Develop or review SDK and API client code owned by put.io across TypeScript, Swift, Kotlin, and similar packages. Use only for work in a put.io SDK repository or explicit requests for put.io SDK conventions. Do not use for unrelated SDKs, browser-only put.io inspection, end-user application code, or putio CLI operations."
+description: "Develop or review put.io SDK and API client packages in TypeScript, Swift, Kotlin, and similar languages. Use in a put.io SDK repository or for put.io SDK conventions. Not for unrelated SDKs, browser-only put.io inspection, end-user application code, or putio CLI operations."
 ---
 
 # put.io SDK development
@@ -44,11 +44,8 @@ Read only what you need:
 - [release security](./references/release-security.md) when publishing,
   signing, releasing, or building distributable binaries
 
-Target-repo guidance and matching repo-local skills override this shared skill.
-
-If the repo has a canonical verify command, use that as the source of truth before editing delivery automation.
-Target-repo delivery and supply-chain guidance overrides the shared release
-defaults.
+Target-repo guidance, matching repo-local skills, the repo's canonical verify
+command, and its delivery or supply-chain policy override this shared skill.
 
 ## Workflow
 

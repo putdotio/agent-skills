@@ -1,6 +1,6 @@
 # Examples
 
-These examples are training references for the harness pattern. They are not the product this skill creates.
+These examples are training references for the harness pattern. They are not the product this skill creates. Copy the shape, not the exact implementation.
 
 ## `taizn`
 
@@ -47,41 +47,17 @@ Good boundaries:
 
 ## Frontend-owned web and native apps
 
-Use the same shape for web, browser extension, iOS, Android, and tvOS surfaces.
-The wrapped tools change, but the harness contract stays stable.
+Web, browser extension, iOS, Android, and tvOS surfaces use the same
+[harness pattern](./test-harness-pattern.md); only the wrapped tools change.
+Surface-specific signals:
 
-Pattern signals:
-
-- one command boots or selects the target surface
-- one command checks auth/profile readiness through global `putio`
-- account authorization runs through process-scoped browser automation against
-  the official login page; the harness receives only the resulting OAuth profile
+- one command checks auth/profile readiness through global `putio`; device-code
+  and link approval flows use the configured test profile without exposing
+  account credentials to the CLI or harness
 - scenario commands open common product flows through deeplinks, routes, launch arguments, or debug hooks
-- device-code and link approval flows use the configured test profile without
-  exposing account credentials to the CLI or harness
 - assertions read UI state, accessibility state, app logs, network-visible state, or screenshots
-- artifacts explain failures without relying on a human watching the run
-
-Good boundaries:
-
-- keep fixture IDs and account-specific state behind local config, scenario files, or approved dev-account helpers
-- keep platform control separate from product scenarios
-- make missing simulator, emulator, browser, device, or auth profile errors fail early with exact setup needs
-
-## What to copy
-
-Copy the shape, not the exact implementation:
-
-- a small typed CLI or script API
-- repo-local commands for common flows
-- clean local config and env boundaries
-- platform communication wrapped behind narrow functions
-- auth/session setup through global `putio` profile checks
-- browser authorization on the official login page plus autonomous OAuth
-  profile and device-link flows
-- meaningful waits and assertions
-- proof artifacts written to predictable paths
-- concise failure messages that point to the failing platform step
+- fixture IDs and account-specific state stay behind local config, scenario files, or approved dev-account helpers
+- missing simulator, emulator, browser, device, or auth profile errors fail early with exact setup needs
 
 ## What not to copy
 

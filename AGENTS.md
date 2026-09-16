@@ -7,6 +7,8 @@ Contributor guidance for this public put.io skill catalog.
 - Skill frontmatter has `name` and `description` only. Descriptions must name
   the put.io target, the requests that activate the skill, and the nearest
   work that does not belong to it.
+- Put routing and shared constraints in `SKILL.md` and conditional procedures
+  in focused references.
 - Keep each skill package standalone. Do not require or sequence against a
   sibling package. State prerequisites and boundaries as capabilities.
 - Keep public skills free of private repository content, workspace inventory,
@@ -15,7 +17,8 @@ Contributor guidance for this public put.io skill catalog.
   that owns them. Link public upstream sources when a stable pointer is useful.
 - Keep `agents/openai.yaml` picker metadata aligned with `SKILL.md`.
 - Keep eval scenarios under `skills/<name>/evals/<scenario>/` as `task.md`
-  plus `criteria.json`.
+  plus `criteria.json`. Update an eval only when its scenario or acceptance
+  criteria changed.
 - Run `pnpm run verify` before handoff. CI runs the same keyless workflow and
   skill lint gate.
 - Verify every finding. Fix valid findings, reply with the proving commit or

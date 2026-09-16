@@ -1,21 +1,8 @@
 # Application repo defaults
 
-Use this when the repo is an application rather than a published package.
-
-## Core model
-
-- Keep the same `VERIFY` first rule as package repos.
-- Treat deploys as the app equivalent of package publishing.
-- Prefer one repo-local deploy command per delivery target, such as `deploy-preview`, `deploy-beta`, or `deploy-production`
-- Run deploy jobs from GitHub Actions after `VERIFY` passes.
-
-## Expected shape
-
-- one repo-local `verify` entrypoint
-- one CI verify job that runs it on pull requests and `main` pushes
-- one or more deploy jobs gated on `verify`
-- a deterministic promotion signal, usually pushes or tags on `main`
-- no manual checklist-driven deploy flow unless the platform truly requires it
+Use this when the repo is an application rather than a published package. The
+verify-first shape in the [delivery model](./delivery-model.md) applies
+unchanged; deploys are the app equivalent of package publishing.
 
 ## Delivery targets
 
@@ -25,7 +12,7 @@ Use this when the repo is an application rather than a published package.
 
 ## Guardrails
 
-- Keep deploy logic behind local commands so workflow YAML stays thin.
+- Prefer one repo-local deploy command per delivery target, such as `deploy-preview`, `deploy-beta`, or `deploy-production`, so workflow YAML stays thin. Do not overload one generic `deploy`
+- Run deploy jobs from GitHub Actions after `VERIFY` passes, on a deterministic promotion signal, usually pushes or tags on `main`
 - Use the smallest set of secrets and permissions required for each deploy target.
-- Prefer continuous beta or preview delivery by default, with stricter promotion gates only where the product or platform requires them.
-- If the repo has multiple delivery targets, keep their commands explicit instead of overloading one generic `deploy`
+- Prefer continuous beta or preview delivery by default, with stricter promotion gates only where the product or platform requires them. No manual checklist-driven deploy flow unless the platform truly requires it.

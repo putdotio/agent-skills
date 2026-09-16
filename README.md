@@ -32,19 +32,11 @@ pnpm dlx skills add putdotio/agent-skills -g -y -a codex -a claude-code -s putio
 Replace `putio-frontend-dev` with another catalog name. Omit `-g` for a
 repository-local installation.
 
-## Contributing
+## Docs
 
-```bash
-corepack enable pnpm
-pnpm install --frozen-lockfile
-pnpm run verify
-```
-
-CI runs the same keyless gate: workflow lint plus
-[`@uinaf/skillcheck`](https://github.com/uinaf/skillcheck) structural lint.
-
-See [Distribution](docs/distribution.md) for consumer ownership and
-[Skill fleet](docs/skill-fleet.md) for the put.io skill inventory.
+- [Contributing](CONTRIBUTING.md): setup, skill layout rules, and the verify gate
+- [Distribution](docs/distribution.md): consumer ownership and the quality gate
+- [Skill fleet](docs/skill-fleet.md): the put.io skill inventory
 
 ## Security
 

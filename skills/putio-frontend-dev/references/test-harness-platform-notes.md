@@ -155,15 +155,9 @@ Good proof:
 
 Keep signing identities, provisioning profiles, device identifiers, and account facts outside git.
 
-## Future weird platforms
+## Other platforms
 
-For webOS, game consoles, set-top boxes, browser-kiosk environments, or vendor clouds, start from the same architecture:
-
-- platform adapter wraps the vendor control surface
-- CLI/API exposes narrow typed commands
-- runtime driver performs launch, input, state, and artifact collection
-- assertions target stable user-visible behavior
-- proof artifacts make the run reviewable
-- repo integration makes setup and smoke checks repeatable
-
-If the platform cannot expose runtime state, say so plainly and design around stronger visual, log, or transcript evidence.
+For webOS, game consoles, set-top boxes, browser-kiosk environments, or vendor
+clouds, start from the same [harness pattern](./test-harness-pattern.md)
+layers. If the platform cannot expose runtime state, say so plainly and design
+around stronger visual, log, or transcript evidence.

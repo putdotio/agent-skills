@@ -43,12 +43,10 @@ load.
 - Inspect the discovered auth status command with structured output before
   touching the target surface.
 - If the profile lacks a usable OAuth session, get the shared test-account
-  credentials from the owning workspace's authorized private credential vault.
-  Keep the long-lived TOTP seed there and generate only the current code for
-  process-scoped browser automation.
-- Enter account credentials only on the configured official put.io website.
-  Complete the discovered OAuth or device-link login for the profile and let
-  the CLI persist only the returned token.
+  credentials from the owning workspace's authorized private credential vault
+  and complete the discovered OAuth or device-link login under the
+  [credential boundary](./test-harness-pattern.md#3-auth-and-session-setup).
+  The CLI persists only the returned token.
 - Keep the profile name neutral in public examples, such as `<test-profile>`.
 
 ## Bound reads

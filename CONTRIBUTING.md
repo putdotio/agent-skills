@@ -9,11 +9,9 @@ pnpm install --frozen-lockfile
 
 ## Change a skill
 
-- Keep each skill under `skills/<name>/`.
-- Put routing and shared constraints in `SKILL.md`.
-- Put conditional procedures in focused references.
-- Keep frontmatter and `agents/openai.yaml` aligned.
-- Update an eval only when its scenario or acceptance criteria changed.
+Skill layout, frontmatter, picker metadata, and eval rules live in
+[AGENTS.md](AGENTS.md). Pull requests state the affected skills and any
+activation or boundary change.
 
 ## Validate
 
@@ -21,5 +19,6 @@ pnpm install --frozen-lockfile
 pnpm run verify
 ```
 
-The gate checks workflow syntax and every skill package. Pull requests should
-state the affected skills and any activation or boundary change.
+The gate lints the workflow files and runs
+[`@uinaf/skillcheck`](https://github.com/uinaf/skillcheck) structural lint on
+every skill package. CI runs the same keyless gate.

@@ -8,21 +8,11 @@ This document exists so the SDK repos do not drift into three different philosop
 
 ## Core position
 
-- `putio-sdk-typescript` is the canonical full put.io API client in the workspace and should mirror the backend surface one to one
-- The Swift and Kotlin SDKs do not need feature-for-feature parity with TypeScript
+- `putio-sdk-typescript` is the canonical full put.io API client and should mirror the backend surface one to one
+- The Swift and Kotlin SDKs do not need feature-for-feature parity with TypeScript; they stay focused on consumer, streaming, and core account-management flows for now
 - Swift and Kotlin still need the same quality bar: native APIs, typed boundaries, typed errors, safe live verification, and public-package discipline
-- The SDKs are public products, not thin internal shims
-
-## Product intent
-
-The SDK family should make put.io feel trustworthy, native, and pleasant to build on.
-
-That means:
-
-- the TypeScript SDK should grow into a fully fledged put.io API client that mirrors backend capability one to one
-- the Swift and Kotlin SDKs can stay more focused on consumer, streaming, and core account-management flows for now
-- no SDK should expose a sloppy or weakly typed surface just because its scope is smaller
-- differences in scope must be deliberate and documented, not accidental drift
+- The SDKs are public products, not thin internal shims; no SDK exposes a weakly typed surface because its scope is smaller
+- Differences in scope must be deliberate and documented, not accidental drift
 
 ## First-party consumers
 
@@ -86,67 +76,7 @@ still includes core account and security capabilities.
 
 ## Language doctrine
 
-### TypeScript
-
-`putio-sdk-typescript` is the canonical full put.io API client for the family.
-
-- Stay Effect-first
-- Keep `Schema` at boundaries for request, response, config, and error shapes
-- Keep Promise and Effect client surfaces aligned when both are public
-- Prefer discriminated unions, explicit exports, and parameter-aware return types over loose optional bags
-- Preserve the contract with typed boundaries, structured parsing, and explicit runtime assumptions
-- Mirror backend capability one to one unless an endpoint is intentionally excluded for a documented reason such as safety, transport mismatch, or an unfinished backend contract
-- If a backend surface is still unstable, under-specified, or not safely verifiable, document the temporary gap plainly
-- Use conditional and parameter-aware return types where query parameters, pagination options, or field selections materially change the response shape
-- Expose helper utilities around typed errors when they improve client ergonomics without hiding the underlying error taxonomy
-
-TypeScript should usually lead on:
-
-- richer endpoint coverage
-- capability modeling
-- difficult contract interpretation
-- reusable error-taxonomy ideas
-- full API surface completeness
-
-### Swift
-
-The Swift SDK should be unapologetically native.
-
-- Prefer `async throws`
-- Prefer `URLSession`
-- Use `Decodable` and `Encodable` at the boundary
-- Use typed value wrappers and enums where they help model backend state
-- Use `LocalizedError` for user-facing recovery semantics
-- Keep the package and CocoaPods surfaces healthy
-- Verify integration behavior through the example app or formal live harness
-- Use typed request inputs, explicit pagination structs, and overloads or generic wrappers where query parameters materially affect result shape
-- Provide small helper APIs around typed errors when they improve app integration, such as recovery suggestions or user-facing messaging adapters
-
-Swift should not regress into:
-
-- callback-first public APIs
-- raw JSON public results
-- JavaScript-style compatibility layers
-- cross-language abstraction leakage
-
-### Kotlin
-
-The Kotlin SDK should be coroutine-first and Android-friendly without becoming Android-only.
-
-- Prefer `suspend` APIs
-- Prefer `OkHttp` plus `kotlinx.serialization`
-- Keep models serializer-friendly
-- Use sealed hierarchies, value classes, and typed exceptions where they clarify the contract
-- Keep localized or recovery-oriented error guidance separate from transport plumbing
-- Preserve forward-compatible backend values when the server can evolve faster than the client
-- Use typed request models, explicit pagination models, and generic or sealed result shapes when query parameters materially affect the response contract
-- Provide helper utilities around typed exceptions when they improve ergonomics, such as classification helpers or user-facing recovery hints
-
-Kotlin should not drift into:
-
-- stringly typed error handling
-- raw response bags
-- synchronous wrapper APIs as the main public surface
+Per-language rules live in [language notes](./language-notes.md).
 
 ## Scope policy
 
@@ -195,12 +125,6 @@ Use this as the default scope bias for native SDKs and as a completeness reminde
 - `justify explicitly` means add only with clear evidence and a maintenance plan
 - `include when the backend still meaningfully exposes them` means the TypeScript SDK should not erase backend capability just because the surface is niche or old
 
-The current bias is:
-
-- TypeScript should mirror the backend as the fully fledged put.io API client
-- Swift and Kotlin should stay excellent at the native consumer lane first: auth, account basics, settings, two-factor and related security flows, files, transfers, search, history, trash, subtitles, and other playback-adjacent helpers
-- Native SDKs may grow beyond that, but endpoint breadth must be earned by product need, not by parity pressure
-
 ## Verification policy
 
 Healthy put.io SDK repos should provide:
@@ -210,9 +134,11 @@ Healthy put.io SDK repos should provide:
 
 The current workspace direction is:
 
-- TypeScript: repo-native verify and live-test flows
+- TypeScript: repo-native verify and live-test flows such as `vp run verify` and `vp run test:live`
 - Swift: `make verify` plus a safe live-test entrypoint
 - Kotlin: `./gradlew verify` plus `./gradlew liveTest`
+
+If a repo only has one layer today, document the gap and prefer adding the missing layer over widening claims about verification quality.
 
 Coverage is a guardrail, not the product. Still, SDK repos should carry a meaningful minimum line-coverage floor so public contracts cannot quietly rot.
 
@@ -223,15 +149,3 @@ Coverage is a guardrail, not the product. Still, SDK repos should carry a meanin
 - generic generated clients that mirror the API without product judgment
 - raw JSON compatibility layers as a long-term surface
 - adding endpoints with weak typing just to increase apparent coverage
-
-## What good looks like
-
-A healthy put.io SDK family looks like this:
-
-- TypeScript is the canonical full backend-mirroring client
-- Swift is async-first, typed, and Apple-native
-- Kotlin is suspend-first, typed, and Android-native
-- all three parse at the boundary
-- all three treat errors as public contracts
-- all three have deterministic verification plus safe live validation
-- scope differences are intentional and documented

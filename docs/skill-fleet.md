@@ -14,5 +14,4 @@ editing installed copies.
 ## Cadence
 
 - Pull requests and `main` pushes run the owner repository's verify gate.
-- This catalog repeats skill lint monthly.
 - Eval sweeps need model credentials and remain operator-run.

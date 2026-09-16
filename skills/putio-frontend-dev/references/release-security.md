@@ -34,8 +34,7 @@ Use this when touching GitHub Actions workflows that publish packages, upload ap
 
 ## Inputs
 
-- Pass `workflow_dispatch` inputs through `env` and sanitized step outputs before shell use
-- Pass inputs through `env`, validate format and length, then use shell variables such as `$TAG_NAME` or `$env:TAG_NAME`. For later action inputs, emit sanitized step outputs rather than reusing raw `${{ inputs.* }}`
+- Pass `workflow_dispatch` inputs through `env`, validate format and length, then use shell variables such as `$TAG_NAME` or `$env:TAG_NAME`. For later action inputs, emit sanitized step outputs rather than reusing raw `${{ inputs.* }}`
 - Keep multiline untrusted input out of `$GITHUB_ENV`; sanitize it first or use heredoc-safe patterns that cannot be broken by attacker-controlled delimiters
 - Move non-secret metadata prep before any secret-loading step whenever possible
 
@@ -67,7 +66,7 @@ Use this when touching GitHub Actions workflows that publish packages, upload ap
 
 ## Caches and generated trees
 
-- Verify jobs may use dependency caches, but secret-bearing release, publish, signing, and deploy jobs do fresh dependency installs by default. Do not share package-manager caches between `pull_request` and privileged `push: main`, `workflow_dispatch`, or tag-driven jobs
+- Verify jobs may use dependency caches, but secret-bearing release, publish, signing, and deploy jobs do fresh dependency installs by default. Do not share package-manager caches between `pull_request` and privileged `push: main`, `workflow_dispatch`, or tag-driven jobs; include `${{ github.event_name }}` in cache keys so PR jobs cannot poison caches consumed by secret-bearing jobs
 - Regenerate or verify generated dependency trees inside signed or release jobs. Examples include full CocoaPods `Pods` trees and other generated vendor directories
 - Cache download artifacts where possible, then regenerate and verify generated trees before signing or publishing
 - If a generated-tree or tool cache is unavoidable in a privileged job, namespace it by workflow, event, trust level, platform, and lockfile. Privileged jobs consume only caches written by the same trusted event class, and they still regenerate or verify generated trees before signing, publishing, or promotion

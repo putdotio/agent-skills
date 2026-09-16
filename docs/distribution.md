@@ -1,17 +1,14 @@
 # Distribution
 
 This repository is the source of truth for its two skills. Consumers install
-them directly from the `skills/` tree. There is no publish pipeline.
+them directly from the `skills/` tree with the `skills` CLI. There is no
+publish pipeline.
 
-## Consumer ownership
-
-- `putio-frontend-dev` and `putio-sdk-dev` are maintained here.
-- `putio-cli` is maintained in
-  [putdotio/putio-cli](https://github.com/putdotio/putio-cli).
-- Global consumers install the owner copy with the `skills` CLI.
-- Harness-local and repository-local copies are not sources of truth.
+Harness-local and repository-local copies are not sources of truth; re-sync
+them instead of editing them. The full owner map, including `putio-cli`, is
+the [skill fleet inventory](skill-fleet.md#inventory).
 
 ## Quality gate
 
-Every pull request and push to `main` runs `pnpm run verify`. A scheduled
-workflow repeats the same keyless gate monthly.
+Every pull request and push to `main` runs `pnpm run verify`
+([workflow](../.github/workflows/verify.yml)).

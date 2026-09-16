@@ -1,6 +1,6 @@
 ---
 name: putio-frontend-dev
-description: "Develop or review end-user applications and shared frontend packages owned by put.io, including UI, state, tests, docs, test harnesses, and delivery. Use only for work in a put.io frontend repository or explicit requests for put.io frontend conventions. Do not use for unrelated frontend work, browser-only put.io inspection, SDK or API client work, or standalone putio CLI consumer operations; frontend test-harness auth setup remains in scope."
+description: "Develop or review put.io end-user apps and shared frontend packages: UI, state, tests, docs, test harnesses, and delivery. Use in a put.io frontend repository or for put.io frontend conventions. Not for unrelated frontend work, browser-only put.io inspection, SDK or API client work, or putio CLI consumer operations; frontend test-harness auth setup stays in scope."
 ---
 
 # put.io frontend development

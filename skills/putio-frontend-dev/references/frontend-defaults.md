@@ -252,7 +252,7 @@ Rules:
 - **Use `useQuery` for server reads.** It provides loading, error, dedup, abort, retry, and stale-while-revalidate behavior in one place.
 - **Query keys are arrays, namespaced per feature**, with the input as a structured payload, not a stringified blob. `["transfers", filter]` not `` `transfers-${JSON.stringify(filter)}` ``. Cache invalidation works on prefix.
 - **Mutations invalidate the cache, not local state**. `onSuccess: invalidateQueries({ queryKey: ["transfers"] })`. Optimistic flows use `onMutate` to set + return a snapshot, `onError` to roll it back.
-- **TanStack Query for server reads, `useActionEffect` (or `useMutation`) for writes**: pick `useMutation` when there is a cache to invalidate; `useActionEffect` when the action is a one-off RPC with no cached read.
+- **Writes**: `useMutation` when there is a cache to invalidate; `useActionEffect` for one-off RPCs with no cached read. See *Forms* below.
 - **Polling lives next to the query key**, not next to the component. `refetchInterval: 5_000` on the query, not `setInterval` in a `useEffect`
 
 ## Forms
@@ -335,6 +335,3 @@ Pick the repo's existing stack. If the repo is silent, default to Tailwind v4 fo
 - Type-check, lint, unit tests pass: necessary, not sufficient for UI work.
 - Exercise the feature in a browser or device. Click the golden path. Try one edge case. Watch the network tab and console.
 - If the UI cannot be exercised (no dev server, no preview), say so explicitly in the PR and list type checks as partial evidence.
-- Use the target repository's affected/dependent checks, retaining mandated
-  full gates and separate runtime proof. Reuse valid results until changes,
-  failures or a concrete concern invalidate them.

@@ -166,19 +166,5 @@ public struct ListFilesQuery: Sendable, Equatable {
 
 ## Verification layers
 
-Healthy SDK repos should keep two layers distinct:
-
-- Unit or contract tests for request shaping, parsing, error mapping, and multi-client alignment
-- Safe live tests for real API behavior, conditional backend fields, and reversible mutations
-
-Representative shapes in this workspace:
-
-```bash
-vp run verify
-vp run test:live
-./gradlew verify
-./gradlew liveTest
-make verify
-```
-
-If a repo only has one layer today, document the gap and prefer adding the missing layer over widening claims about verification quality.
+Keep deterministic unit or contract tests and safe live tests as two distinct
+layers per the [verification policy](./sdk-vision.md#verification-policy).
