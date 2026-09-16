@@ -66,7 +66,7 @@ Semantic-release example:
 Keep review and triage prompts close to the repo instead of relying on maintainers to remember them.
 
 - Pull request templates should ask for the most useful evidence for the kind of change:
-  - screenshots or screen recordings for UI, layout, onboarding, animation, or copy changes
+  - screenshots or screen recordings for UI, layout, onboarding, animation, or copy changes, with the upload route named: `gh pr create --attach ./file.png` or `gh pr comment <n> --attach ./file.mp4` (gh 2.99+); a template that omits the route gets media committed to the branch
   - sanity checks for risky or user-visible flows
   - before and after benchmark numbers for performance-sensitive changes
   - rollout, risk, or follow-up notes when the change touches auth, persistence, release flow, or external integrations
