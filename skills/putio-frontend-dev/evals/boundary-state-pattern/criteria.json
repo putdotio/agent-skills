@@ -19,7 +19,7 @@
     },
     {
       "name": "uses_repo_local_patterns_first",
-      "description": "Says to inspect AGENTS.md, README.md, and existing `.patterns/` or code precedent before applying default put.io patterns.",
+      "description": "Says to inspect AGENTS.md, README.md, and existing code precedent before applying default put.io patterns.",
       "max_score": 1
     },
     {

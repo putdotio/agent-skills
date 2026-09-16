@@ -16,8 +16,7 @@ own guidance and code precedent.
 2. Discover tracked project-local `SKILL.md` files under `.agents/skills/`,
    `.claude/skills/`, or `skills/`. Read the frontmatter and apply only the
    task-matching skills; ignore dependency and vendored trees.
-3. Read the `README.md` sections, docs, and `.patterns/` entries that cover
-   the area being changed. Target-repo guidance and skills override this shared
+3. Read the `README.md` sections and docs that cover the area being changed. Target-repo guidance and skills override this shared
    skill.
 4. Identify the repo kind, stack, verify entrypoint, delivery target, and
    runtime proof surface.
@@ -27,8 +26,6 @@ own guidance and code precedent.
 
 - Feature code, parsing, state, errors, components, and testing:
   [frontend defaults](./references/frontend-defaults.md)
-- Capturing a non-obvious repo convention:
-  [pattern template](./references/pattern-template.md)
 - README, CONTRIBUTING, SECURITY, and agent-facing docs:
   [top-level docs](./references/docs.md)
 - CI, verify, publishing, deployment, and release shape:
@@ -49,8 +46,8 @@ own guidance and code precedent.
   [CLI harness contract](./references/test-harness-cli.md)
 
 Markdown links navigate this skill bundle. Other paths shown in the references,
-such as `.patterns/state-machines.md` or `.github/pull_request_template.md`,
-name files to create or inspect in the target repository.
+such as `.github/pull_request_template.md`, name files to create or inspect in
+the target repository.
 
 ## Shared defaults
 
@@ -67,7 +64,7 @@ name files to create or inspect in the target repository.
   harness, and other clients must delegate account authorization to the website
   through OAuth or device-link flows and handle only the resulting codes or
   tokens.
-- Let repo-local `.patterns/` and established code override shared defaults.
+- Let repo-local guidance and established code override shared defaults.
 - Keep verification logic in repo-owned commands that CI calls. Preserve an
   established task graph; use one `verify` entrypoint when creating a new lane.
 - Deliver from trusted `main` or validated release refs only after verification.
@@ -87,7 +84,7 @@ name files to create or inspect in the target repository.
    surface before proposing a shape.
 2. Apply the smallest relevant shared defaults and preserve working repo
    conventions unless evidence shows they are wrong.
-3. Record non-obvious code conventions in `.patterns/<topic>.md`; keep user,
+3. Record non-obvious code conventions in the nearest `AGENTS.md`; keep user,
    contributor, distribution, and security documentation in their canonical
    homes.
 4. Keep workflow orchestration thin and put repeatable build, verify, deploy,

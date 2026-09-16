@@ -112,7 +112,7 @@ Use `useState` for trivial toggles, single-screen forms, or anywhere "did we for
   });
   ```
 
-  Effect owns services, DI, and error propagation. XState owns UX flow. They meet at `RuntimeClient.runPromise` inside `fromPromise`: no service refs in machine context, no closures over the runtime. A repo may pick another lib (Effect's `Machine`, a typed reducer); encode the choice in `.patterns/state-machines.md`
+  Effect owns services, DI, and error propagation. XState owns UX flow. They meet at `RuntimeClient.runPromise` inside `fromPromise`: no service refs in machine context, no closures over the runtime. A repo may pick another lib (Effect's `Machine`, a typed reducer); record the choice in its `AGENTS.md`
 
 - **In Swift or Kotlin**, use enums with associated values and drive transitions
   through the repository's existing event or delegate boundary.
@@ -318,7 +318,7 @@ put.io has multiple valid styling stacks depending on constraints:
 - Plain CSS modules + TS theme tokens where bundle size or old-browser support matters.
 - Emotion + Theme-UI in legacy bundles: maintain existing code while moving new work to current patterns.
 
-Pick the repo's existing stack. If the repo is silent, default to Tailwind v4 for new web work. Encode the choice in `.patterns/styling.md`
+Pick the repo's existing stack. If the repo is silent, default to Tailwind v4 for new web work. Record the choice in the repo's `AGENTS.md`
 
 ## Testing shape
 
