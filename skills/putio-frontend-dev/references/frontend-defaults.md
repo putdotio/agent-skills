@@ -155,6 +155,13 @@ A related shape: **long-running ops emit `{ current, total, label }` progress ev
 - Declare operation-specific errors up front from known status codes and error
   types. Preserve unknown errors in the base union and full context on known
   errors.
+- Let SDK errors propagate unchanged through browser adapters; app-local wrapper
+  classes discard operation context. Localize at the route or feature boundary.
+- Server functions are a serialization boundary: map SDK errors to a typed
+  result (`{ status: "error", reason }`) before returning instead of throwing
+  an `Error` instance across it. Document security-preserving mappings, such as
+  enumeration-safe password reset, at the mapper.
+- Never render `error.message` to users; API text is not localized copy.
 - UI surfaces errors through localizers, not raw error switches in components.
   A localizer matches a status, API error type, or predicate and returns
   `{ message, recoverySuggestion }`
@@ -300,11 +307,29 @@ Read keys explicitly via `formData.get(name)` (or `formData.getAll(name)` for mu
 
 A TanStack Query mutation that invalidates the relevant query keys does not need to update local state: the next read picks up the change. Skip optimistic updates unless the user-perceived latency actually warrants them.
 
+Where a repo uses TanStack Form instead:
+
+- A Standard Schema (Valibot in put.io web) at the form boundary owns the value type; derive it with the schema's output inference rather than a hand-written type.
+- Register the schema only as `validators.onSubmit` with `canSubmitWhenInvalid: true`. Blur and change validators need a reviewed interaction reason.
+- Bind inputs through `form.Field`; `onChange` updates values, `onBlur` records touched state, neither validates.
+- Surface issues through the field component's invalid state (`data-invalid` on the field, `aria-invalid` on the control) and turn native constraint validation off so schema issues are the ones rendered.
+- Submit typed values to a route-owned mutation or server function. Password strings flow exactly as typed; trim only identifiers and emails.
+
+## React effects
+
+Components in put.io React apps do not import or call `useEffect` directly.
+
+- Derive render output from props, form state, query state, and route state during render. `const state = mutation.isPending ? "loading" : mutation.error ? "error" : "default"`, not an effect that copies it into `useState`.
+- Put user-action side effects in event handlers, form submits, mutations, or route callbacks. Routes own navigation after a mutation; screens do not redirect.
+- Read external systems (storage, media queries, network status) through `useSyncExternalStore` or a plain read function called during render.
+- Attach to systems React does not own (window listeners, media engines, timers, focus engines) through one reviewed, named wrapper hook the repo exposes, with cleanup in the returned function. Nothing else in product code touches `useEffect`.
+- Copying props or query state into local state creates stale mirrors; fetching in effects belongs in TanStack Query.
+
 ## Component and state placement
 
 - Components are deep modules: small surface (props), meaningful interior. A wrapper that forwards every prop unchanged is not pulling its weight.
 - Keep state local until a second consumer needs it.
-- Effects (data fetching, subscriptions, storage, telemetry) live at leaves and adapters. Pages compose; leaves do.
+- Subscriptions, storage, and telemetry live in adapters and reviewed hooks, not in page components. See *React effects* above.
 - Keep server-state in server-state tools and UI-state in UI-state tools. See *Server State* above.
 - Pure render trees: a component that takes typed props and returns JSX with no side effects is the easiest thing to test, animate, and refactor.
 
