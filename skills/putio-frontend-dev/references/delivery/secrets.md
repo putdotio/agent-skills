@@ -133,9 +133,6 @@ PUTIO_WEB_SOPS_FILE=/path/to/web.sops.env \
 Keep `secrets-setup` out of `prepare`, `postinstall`, and `prebuild` hooks.
 Those run on install and would route every contributor through secret bootstrap.
 
-`.env.local` is materialized per worktree; worktrees never share state. Run
-`secrets-clean` before `git worktree remove`.
-
 ## Verify
 
 Use this as change-acceptance evidence for the setup boundary, not as a
@@ -177,7 +174,7 @@ live and how a job receives them.
 
 ### Where secrets live
 
-- Workflow runtime values live as GitHub Environment secrets, npm/GitHub trusted-publishing configuration, or OIDC-backed provider configuration. Put.io-specific settings live in the team knowledge base.
+- Workflow runtime values live as GitHub Environment secrets, npm/GitHub trusted-publishing configuration, or OIDC-backed provider configuration. put.io-specific settings live in the team knowledge base.
 - CI must not call `op`, `1Password/load-secrets-action`, or use `OP_SERVICE_ACCOUNT_TOKEN` to fetch secrets at runtime
 - Top-level `permissions: {}` (deny by default); each job opts into the minimum it needs and reads Environment secrets directly or assumes provider roles through OIDC
 - Every workflow mapping a sensitive secret uses a deployment Environment: continuous release environments scope secrets without approval gates; production deploy, signing, promotion, or store-submission environments add reviewers only when a human gate is intended

@@ -22,7 +22,7 @@ Use this when touching GitHub Actions workflows that publish packages, upload ap
 - Workflows that create GitHub Releases, upload release assets, or move `v*` tags use a `putio-releaser` installation token
 - Keep the release path pinned, least-privilege, ref-validated, and provenance-checked before publishing or promoting
 - Do not add CODEOWNERS as a blanket default for small frontend repos. Use owner-gated workflow or release-file review only when maintainers explicitly want that extra process.
-- Put.io-specific settings live in the team knowledge base.
+- put.io-specific settings live in the team knowledge base.
 
 ## Inputs
 
@@ -52,7 +52,7 @@ Use this when touching GitHub Actions workflows that publish packages, upload ap
 - Bind GitHub OIDC deploy roles to the repo and protected Environment that owns the deploy, and keep AWS account IDs, Route 53 zone IDs, certificate ARNs, and role ARNs in repo variables
 - For first SST deploys, start with enough AWS access for SST bootstrap plus the app's components, then trim after a successful deploy with CloudTrail or IAM Access Analyzer evidence
 - Record the steady-state policy in the repo's release or infra docs, including the component-specific actions observed during deploy
-- Put.io-specific settings live in the team knowledge base.
+- put.io-specific settings live in the team knowledge base.
 
 ## Caches and generated trees
 
@@ -79,7 +79,7 @@ Use this when touching GitHub Actions workflows that publish packages, upload ap
 
 ## Live settings to check
 
-Before a severity, remediation, or status claim, verify branch, tag, Environment, credential, and release state through live provider settings, not repo docs or workflow files. Put.io-specific settings live in the team knowledge base.
+Before a severity, remediation, or status claim, verify branch, tag, Environment, credential, and release state through live provider settings, not repo docs or workflow files. put.io-specific settings live in the team knowledge base.
 
 ## Docs to update
 
