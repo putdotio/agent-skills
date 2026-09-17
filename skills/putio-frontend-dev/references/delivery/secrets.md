@@ -226,3 +226,11 @@ Use `deployment: false` for package/library/CLI/skill release jobs whose Environ
   username, password, or TOTP seed.
 - Unattended runs use dedicated machine identities with only the fixture and
   browser-login capabilities they need.
+
+## Untrusted code
+
+Untrusted means anything you did not author: fork code, internal PR code, and
+dependencies. Code that runs beside a rendered `.env.local` or a machine's
+decryption identity can read and exfiltrate them; `secrets-clean` before
+worktree removal does not undo that. Run untrusted code in a separate sandbox
+without the decryption identity or rendered secrets.

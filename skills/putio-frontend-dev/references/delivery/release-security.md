@@ -69,6 +69,14 @@ Use this when touching GitHub Actions workflows that publish packages, upload ap
 - For simple static surfaces where build, e2e, and deploy can safely share one trusted environment-scoped job, deploy the tested output from the runner filesystem and keep post-deploy smoke in a separate read-only job.
 - For versioned releases, deploy from the durable published boundary: GitHub Release asset, package registry version, container image digest, app-store/TestFlight build, or provider-native package. Verify the downloaded or promoted payload before loading deploy credentials where practical.
 
+## Supply-chain incident checks
+
+Worked example: [TanStack npm supply-chain compromise postmortem](https://tanstack.com/blog/npm-supply-chain-compromise-postmortem) and [GHSA-g7cv-rxg3-hmpx](https://github.com/advisories/GHSA-g7cv-rxg3-hmpx)
+
+- When an active advisory publishes indicators of compromise, scan manifests and lockfiles for them before running installs: unexpected `optionalDependencies` or git-pinned entries, unexpected lifecycle scripts or init files, and the affected package versions
+- If an affected version was installed on a developer machine or CI runner, treat that host as compromised: quarantine it and rotate registry, GitHub, cloud, SSH, and package-manager credentials reachable from it before publishing again
+- OIDC removes long-lived token theft, and provenance proves where a package was built, not that the runner was clean. Neither replaces trusted refs, fresh release installs, and no shared release caches
+
 ## Provenance
 
 - Release workflows should build and upload the release artifact from the release tag
@@ -79,7 +87,13 @@ Use this when touching GitHub Actions workflows that publish packages, upload ap
 
 ## Live settings to check
 
-Before a severity, remediation, or status claim, verify branch, tag, Environment, credential, and release state through live provider settings, not repo docs or workflow files. put.io-specific settings live in the team knowledge base.
+Before a severity, remediation, or status claim, verify live provider settings, not repo docs or workflow files:
+
+- branch, tag, Environment, credential, and release state
+- Actions cache contents and cache write/read boundaries
+- Actions permission policy and job-level `permissions`
+
+put.io-specific settings live in the team knowledge base.
 
 ## Docs to update
 
