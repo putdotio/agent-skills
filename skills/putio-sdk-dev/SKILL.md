@@ -38,7 +38,7 @@ Read only what you need:
   files under `.agents/skills/`, `.claude/skills/`, or `skills/`; ignore
   dependency and vendored trees
 - the canonical verify and live-test commands from `README.md`, `AGENTS.md`, or `docs/*`
-- [SDK vision](./references/sdk-vision.md) for scope, parity, and endpoint-family decisions
+- [SDK vision](./references/sdk-vision.md) for scope rules, shared engineering principles, and the verification policy; product direction lives in the team knowledge base
 - [patterns](./references/patterns.md) for typed boundaries, error mapping, pagination, and live-test layering
 - [language notes](./references/language-notes.md) for TypeScript, Swift, or Kotlin-specific guidance
 - [release security](./references/release-security.md) when publishing,
