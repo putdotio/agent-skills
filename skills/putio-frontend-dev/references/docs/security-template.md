@@ -35,5 +35,5 @@ Describe the repo's support policy. If there is none, say so.
 
 ## Disclosure
 
-Allow time to investigate and fix the issue before sharing details publicly. Valid reports get a fix and coordinated disclosure.
+Allow time to investigate and fix the issue before sharing details publicly. For valid reports we work on a fix and coordinate disclosure as appropriate.
 ```

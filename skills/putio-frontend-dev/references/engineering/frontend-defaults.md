@@ -75,7 +75,7 @@ The render tree should not need defensive checks.
 
 ## State machines for bug-sensitive flows
 
-Model auth, payment, video conversion, video playback, upload, and transfer lifecycle explicitly. Bugs in these flows cost trust.
+Model auth, payment, video conversion, video playback, upload, and transfer lifecycle explicitly when transitions matter. Bugs in these flows cost trust.
 
 Use `useState` for trivial toggles and single-screen forms. Add a state machine when a forgotten state is a real failure mode.
 
