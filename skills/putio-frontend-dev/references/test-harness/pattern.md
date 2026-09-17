@@ -84,7 +84,7 @@ The credential boundary is strict:
   refresh remains supported.
 
 When a harness calls the globally installed `putio` binary, follow the
-[CLI harness contract](./test-harness-cli.md). It owns runtime discovery,
+[CLI harness contract](./cli.md). It owns runtime discovery,
 structured output, profile auth, paging, dry-runs, and write safety without
 requiring the separate consumer CLI skill.
 

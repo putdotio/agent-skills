@@ -15,8 +15,8 @@ Shape put.io frontend repo docs around a clear split between user-facing docs an
 
 1. Inspect the repository before drafting.
 2. Identify the project type, user install and usage flow, contributor setup flow, any GitHub collaboration templates already in use, and the best existing docs to link.
-3. Read the [README guideline](./docs-readme-guideline.md) before picking a final shape. It owns the file split, section order, hero and badge rules, link labels, and the `devs@put.io` security contact.
-4. Start from the [contributing template](./docs-contributing-template.md) when creating or reshaping `CONTRIBUTING.md` and the [security template](./docs-security-template.md) for `SECURITY.md`
+3. Read the [README guideline](./readme-guideline.md) before picking a final shape. It owns the file split, section order, hero and badge rules, link labels, and the `devs@put.io` security contact.
+4. Start from the [contributing template](./contributing-template.md) when creating or reshaping `CONTRIBUTING.md` and the [security template](./security-template.md) for `SECURITY.md`
 5. Ensure the repo has `CONTRIBUTING.md`, `LICENSE`, and `SECURITY.md`
 6. Push deep implementation detail into linked docs when it starts to bloat top-level docs.
 7. When a repo uses `AGENTS.md`, keep `CLAUDE.md` beside it as a symlink to `AGENTS.md` instead of maintaining a second authored guidance file.

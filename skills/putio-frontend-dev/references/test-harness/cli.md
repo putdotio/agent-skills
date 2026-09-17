@@ -45,7 +45,7 @@ load.
 - If the profile lacks a usable OAuth session, get the shared test-account
   credentials from the owning workspace's authorized private credential vault
   and complete the discovered OAuth or device-link login under the
-  [credential boundary](./test-harness-pattern.md#3-auth-and-session-setup).
+  [credential boundary](./pattern.md#3-auth-and-session-setup).
   The CLI persists only the returned token.
 - Keep the profile name neutral in public examples, such as `<test-profile>`.
 

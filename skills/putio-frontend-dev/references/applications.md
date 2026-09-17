@@ -1,7 +1,7 @@
 # Application repo defaults
 
 Use this when the repo is an application rather than a published package. The
-verify-first shape in the [delivery model](./delivery-model.md) applies
+verify-first shape in the [delivery model](./delivery/model.md) applies
 unchanged; deploys are the app equivalent of package publishing.
 
 ## Delivery targets

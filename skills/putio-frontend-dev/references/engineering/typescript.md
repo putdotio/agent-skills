@@ -11,14 +11,14 @@ Use the `putio-sdk-typescript` layout as the default TypeScript package referenc
 - If the repo uses semantic-release for npm publishing and release notes, run it from the release workflow by default.
 - Keep CI/CD-only semantic-release plugins in the workflow `extra_plugins` list with exact versions. Add them to repo `devDependencies` only when the repo intentionally supports local release execution.
 - When using semantic-release, configure both the commit analyzer and release notes generator with the `conventionalcommits` preset and include `conventional-changelog-conventionalcommits` in the workflow plugin list.
-- When `@semantic-release/git` writes a release commit, tag, GitHub Release, or asset, use the `putio-releaser` identity rules in the [delivery model checklist](./delivery-model.md#checklist).
+- When `@semantic-release/git` writes a release commit, tag, GitHub Release, or asset, use the `putio-releaser` identity rules in the [delivery model checklist](../delivery/model.md#checklist).
 
 ## Expected shape
 
 - local commands for `check`, `build`, `test`, and `verify`
 - CI setup with full-SHA-pinned `voidzero-dev/setup-vp` for repos that use Vite+ (`vp`), including release jobs
 - `vp install` before verification or release
-- Secret-bearing npm release and publish jobs follow the cache and pinning rules in [release security](./release-security.md#actions-and-toolchains)
+- Secret-bearing npm release and publish jobs follow the cache and pinning rules in [release security](../delivery/release-security.md#actions-and-toolchains)
 - `verify` on pull requests and `main` pushes
 - a GitHub Actions delivery job on `main` after `verify` passes
 

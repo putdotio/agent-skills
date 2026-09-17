@@ -48,7 +48,7 @@ Good boundaries:
 ## Frontend-owned web and native apps
 
 Web, browser extension, iOS, Android, and tvOS surfaces use the same
-[harness pattern](./test-harness-pattern.md); only the wrapped tools change.
+[harness pattern](./pattern.md); only the wrapped tools change.
 Surface-specific signals:
 
 - one command checks auth/profile readiness through global `putio`; device-code

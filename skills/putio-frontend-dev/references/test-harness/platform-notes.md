@@ -158,6 +158,6 @@ Keep signing identities, provisioning profiles, device identifiers, and account 
 ## Other platforms
 
 For webOS, game consoles, set-top boxes, browser-kiosk environments, or vendor
-clouds, start from the same [harness pattern](./test-harness-pattern.md)
+clouds, start from the same [harness pattern](./pattern.md)
 layers. If the platform cannot expose runtime state, say so plainly and design
 around stronger visual, log, or transcript evidence.
