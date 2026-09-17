@@ -16,8 +16,8 @@ own guidance and code precedent.
 2. Discover tracked project-local `SKILL.md` files under `.agents/skills/`,
    `.claude/skills/`, or `skills/`. Read the frontmatter and apply only the
    task-matching skills; ignore dependency and vendored trees.
-3. Read the `README.md` sections and docs that cover the area being changed. Target-repo guidance and skills override this shared
-   skill.
+3. Read the `README.md` sections and docs that cover the area being changed.
+   Target-repo guidance and skills override this shared skill.
 4. Identify the repo kind, stack, verify entrypoint, delivery target, and
    runtime proof surface.
 5. Select only the references required for the task.
@@ -25,25 +25,25 @@ own guidance and code precedent.
 ## Reference map
 
 - Feature code, parsing, state, errors, components, and testing:
-  [frontend defaults](./references/frontend-defaults.md)
+  [frontend defaults](./references/engineering/frontend-defaults.md)
 - README, CONTRIBUTING, SECURITY, and agent-facing docs:
-  [top-level docs](./references/docs.md)
+  [top-level docs](./references/docs/style.md)
 - CI, verify, publishing, deployment, and release shape:
-  [delivery model](./references/delivery-model.md)
+  [delivery model](./references/delivery/model.md)
 - Application-specific delivery:
   [application defaults](./references/applications.md)
 - TypeScript package and app setup:
-  [TypeScript defaults](./references/typescript.md)
+  [TypeScript defaults](./references/engineering/typescript.md)
 - Local development secrets and CI credential boundaries:
-  [environment setup](./references/secrets.md)
+  [environment setup](./references/delivery/secrets.md)
 - Secret-bearing release, signing, publishing, and deployment:
-  [release security](./references/release-security.md)
+  [release security](./references/delivery/release-security.md)
 - Browser, native, TV, emulator, simulator, and device proof:
-  [test harness](./references/test-harness.md)
+  [test harness](./references/test-harness/overview.md)
 - Shared test-account browser authorization:
-  [test harness pattern](./references/test-harness-pattern.md)
+  [test harness pattern](./references/test-harness/pattern.md)
 - CLI-backed harness discovery, auth, reads, and writes:
-  [CLI harness contract](./references/test-harness-cli.md)
+  [CLI harness contract](./references/test-harness/cli.md)
 
 Markdown links navigate this skill bundle. Other paths shown in the references,
 such as `.github/pull_request_template.md`, name files to create or inspect in
@@ -92,10 +92,10 @@ the target repository.
 5. Select the owner's documented checks for the affected behavior and its
    dependents. Run the full canonical gate when owner policy requires it,
    shared inputs changed, or focused coverage is uncertain. Preserve separate
-   installed-package, downstream-consumer, browser and device proof where
-   those boundaries matter; command discovery does not authorize live actions.
+   installed-package, downstream-consumer, browser, and device proof where
+   those boundaries matter. Command discovery does not authorize live actions.
    Fix failures and refresh affected proof. Reuse passing proof while its
-   source, inputs and environment remain valid; a new turn or handoff alone
+   source, inputs, and environment remain valid; a new turn or handoff alone
    does not require another run. Name unavailable proof and its exact blocker.
 6. Report changed behavior, verification, proof artifacts, risks, and remaining
    gaps.
@@ -107,7 +107,7 @@ the target repository.
 - Operating the `putio` CLI as a files, downloads, transfers, auth, or storage
   consumer belongs to the CLI's consumer guidance. Frontend harnesses use the
   installed CLI through the
-  [CLI harness contract](./references/test-harness-cli.md).
+  [CLI harness contract](./references/test-harness/cli.md).
 - Repository policy, generic GitHub Actions hardening, build-tool migrations,
   bootability repair, and independent code review are outside this skill; it
   supplies put.io frontend domain guidance to whichever workflow does that work.

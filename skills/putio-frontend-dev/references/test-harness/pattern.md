@@ -28,8 +28,7 @@ The adapter owns device communication and platform mechanics:
 - send key, button, text, or remote events
 - normalize platform errors into typed, contextful failures
 
-Keep the adapter thin. Make the platform predictable without hiding its
-constraints.
+Keep the adapter thin. Do not hide platform constraints.
 
 ## 2. Harness CLI/API
 
@@ -54,7 +53,7 @@ artifact=artifacts/live/screenshot.png
 ```
 
 Use JSON only when downstream tools need it. Human commands may print a short
-summary. Proof commands should leave files behind.
+summary. Proof commands leave files behind.
 
 Do not put product logic in generic platform commands. Keep platform verbs such
 as `install`, `launch`, `keypress`, `screenshot`, `logs`, and `state` separate
@@ -84,7 +83,7 @@ The credential boundary is strict:
   refresh remains supported.
 
 When a harness calls the globally installed `putio` binary, follow the
-[CLI harness contract](./test-harness-cli.md). It owns runtime discovery,
+[CLI harness contract](./cli.md). It owns runtime discovery,
 structured output, profile auth, paging, dry-runs, and write safety without
 requiring the separate consumer CLI skill.
 
@@ -125,7 +124,7 @@ that explains the constraint.
 
 ## 5. Assertion layer
 
-Assertions should describe user-visible or runtime-meaningful behavior.
+Assertions describe user-visible or runtime-meaningful behavior.
 
 Useful assertions:
 
@@ -149,7 +148,7 @@ network timing, or device chrome unless that is the behavior under test.
 
 ## 6. Proof artifacts
 
-The harness should leave reviewable evidence.
+The harness leaves reviewable evidence.
 
 Common artifacts:
 
@@ -208,8 +207,8 @@ Use these mechanical proof expectations:
 - Observe: logs, state dumps, screenshots, traces, or health probes explain failures
 - Isolate: worktrees, config paths, simulators, devices, or profiles do not collide across runs
 
-Each layer should work on its own. Stop when the target flow is verifiable. A
-small smoke check and useful artifacts often answer the risk.
+Each layer works on its own. Stop when the target flow is verifiable; a small
+smoke check and useful artifacts often cover the risk.
 
 ## 9. Boundary rules
 

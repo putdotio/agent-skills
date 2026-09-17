@@ -1,33 +1,16 @@
 # SDK vision
 
-## Purpose
+Engineering doctrine for put.io SDKs across TypeScript, Swift, and Kotlin.
+Product direction, including why each SDK exists and the capability roadmap,
+lives in the team knowledge base.
 
-Define the shared product and engineering doctrine for put.io SDKs across TypeScript, Swift, and Kotlin.
+## Scope rules
 
-This document exists so the SDK repos do not drift into three different philosophies. It is not a promise that every SDK exposes every endpoint or every abstraction in the same way. It is the contract for how we want put.io SDKs to feel, evolve, and prove correctness.
-
-## Core position
-
-- `putio-sdk-typescript` is the canonical full put.io API client and should mirror the backend surface one to one
-- The Swift and Kotlin SDKs do not need feature-for-feature parity with TypeScript; they stay focused on consumer, streaming, and core account-management flows for now
-- Swift and Kotlin still need the same quality bar: native APIs, typed boundaries, typed errors, safe live verification, and public-package discipline
-- The SDKs are public products, not thin internal shims; no SDK exposes a weakly typed surface because its scope is smaller
+- `putio-sdk-typescript` is the canonical full put.io API client and mirrors the backend surface one to one
+- The Swift and Kotlin SDKs stay focused on consumer, streaming, and core account-management flows, including account and security capabilities; they do not need feature-for-feature parity with TypeScript
+- Swift and Kotlin still meet the same quality bar: native APIs, typed boundaries, typed errors, safe live verification, and public-package discipline
+- No SDK exposes a weakly typed surface because its scope is smaller
 - Differences in scope must be deliberate and documented, not accidental drift
-
-## First-party consumers
-
-Scope decisions should be grounded in real first-party consumers, not symmetry for its own sake.
-
-Use capability categories instead of a private repository inventory:
-
-- broad TypeScript clients that cover product and management surfaces
-- typed command-line automation across auth, account, files, events, transfers,
-  and downloads
-- Swift and Kotlin consumer apps that cover playback and account management
-
-TypeScript remains the full-surface contract because web management and typed
-automation both need it. Swift and Kotlin remain narrower, but their baseline
-still includes core account and security capabilities.
 
 ## Shared principles
 
@@ -80,50 +63,16 @@ Per-language rules live in [language notes](./language-notes.md).
 
 ## Scope policy
 
-Scope parity is not the goal for every SDK. Quality parity is.
+Scope parity is not the goal for every SDK. Quality parity is. Expand Swift or
+Kotlin coverage only when backend behavior is verified and first-party usage
+justifies it.
 
-Use this bias:
-
-- TypeScript should be the fully fledged one-to-one backend client because the web app, CLI, and external users need it
-- Swift and Kotlin should prioritize the surfaces first-party native apps actually need
-- Expand Swift or Kotlin coverage when backend behavior is verified and first-party usage or clear product intent justifies it
-- Add namespaces when backend behavior and real consumer use justify them
-
-When deciding whether a namespace belongs in Swift or Kotlin, check:
+Before adding a namespace to Swift or Kotlin, check:
 
 1. current first-party app usage
 2. backend behavior and backend tests
 3. whether the feature belongs in a consumer or playback-oriented native app
 4. whether the extra surface would be maintained to the same quality bar
-
-## Capability matrix
-
-Use this as the default scope bias for native SDKs and as a completeness reminder for TypeScript. It is a product-direction tool, not a hard ban on future expansion.
-
-| Capability family | First-party drivers today | TypeScript expectation | Swift/Kotlin expectation |
-| --- | --- | --- | --- |
-| Auth and OAuth device flows | web, cli, native apps | required | required |
-| Account basics, profile, settings, and security flows such as two-factor auth | web, cli, native apps | required | required |
-| Files browse and detail | web, cli, native apps | required | required |
-| Search | web, cli, native apps | required | required |
-| Transfers | web, cli, native apps | required | required |
-| Playback-adjacent links, stream selection, subtitles, and media helpers | web, native apps, cli for link workflows | required | required |
-| History and events | web, cli, native apps | required | required |
-| Trash | web, native apps | required | required |
-| Download links and export-style link workflows | web, cli | required | optional until native product need is clear |
-| Sharing, friends, friend invites, family | web | required in the full client | optional |
-| Payments, supporting, subscriptions | web | required in the full client | optional |
-| RSS, zips, tunnel, deeper utility or admin-style flows | web, cli where justified | required in the full client | defer unless first-party native usage appears |
-| IFTTT, grants, routes, other legacy or niche surfaces | historical or narrow use | include when the backend still meaningfully exposes them | justify explicitly |
-
-### Reading the matrix
-
-- `required` means a healthy SDK in that lane should actively support the family
-- `required in the full client` means the TypeScript SDK should cover it as part of the one-to-one backend client mission
-- `optional` means add it when real consumer need appears
-- `defer` means wait for first-party usage or an explicit product decision
-- `justify explicitly` means add only with clear evidence and a maintenance plan
-- `include when the backend still meaningfully exposes them` means the TypeScript SDK should not erase backend capability just because the surface is niche or old
 
 ## Verification policy
 

@@ -1,6 +1,6 @@
 # Frontend `CONTRIBUTING.md` template
 
-Use this as a starting point for frontend repos. Adapt the commands, toolchain, and development notes to the repo, but keep the file focused on contributor setup and validation.
+Adapt the commands, toolchain, and development notes to the repo. Keep the file focused on contributor setup and validation.
 
 ````md
 # Contributing
@@ -33,13 +33,13 @@ Run the full project checks before opening or updating a pull request:
 <build-command>
 ```
 
-Add or remove commands based on the repo. Keep only the checks contributors are actually expected to run.
+Keep only the checks contributors are expected to run.
 
 ## Development notes
 
-- Add only repo-specific notes that materially help contributors.
+- Add only repo-specific notes that help contributors.
 - Explain required environment variables, local services, or architecture constraints only when they affect day-to-day development.
-- Link to deeper docs if the notes start getting long.
+- Link to deeper docs if the notes get long.
 
 ## Pull requests
 
