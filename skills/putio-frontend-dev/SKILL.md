@@ -16,8 +16,8 @@ own guidance and code precedent.
 2. Discover tracked project-local `SKILL.md` files under `.agents/skills/`,
    `.claude/skills/`, or `skills/`. Read the frontmatter and apply only the
    task-matching skills; ignore dependency and vendored trees.
-3. Read the `README.md` sections and docs that cover the area being changed. Target-repo guidance and skills override this shared
-   skill.
+3. Read the `README.md` sections and docs that cover the area being changed.
+   Target-repo guidance and skills override this shared skill.
 4. Identify the repo kind, stack, verify entrypoint, delivery target, and
    runtime proof surface.
 5. Select only the references required for the task.
@@ -92,10 +92,10 @@ the target repository.
 5. Select the owner's documented checks for the affected behavior and its
    dependents. Run the full canonical gate when owner policy requires it,
    shared inputs changed, or focused coverage is uncertain. Preserve separate
-   installed-package, downstream-consumer, browser and device proof where
-   those boundaries matter; command discovery does not authorize live actions.
+   installed-package, downstream-consumer, browser, and device proof where
+   those boundaries matter. Command discovery does not authorize live actions.
    Fix failures and refresh affected proof. Reuse passing proof while its
-   source, inputs and environment remain valid; a new turn or handoff alone
+   source, inputs, and environment remain valid; a new turn or handoff alone
    does not require another run. Name unavailable proof and its exact blocker.
 6. Report changed behavior, verification, proof artifacts, risks, and remaining
    gaps.

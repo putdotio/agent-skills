@@ -22,9 +22,8 @@ then keep command selection capability-based.
 4. Stop with the missing command or capability when the live contract cannot
    support the harness flow. Do not substitute an undocumented API call.
 
-The separate `putio-cli` consumer skill may help with ad hoc CLI use when it is
-installed. It is not a harness prerequisite or a source the frontend skill must
-load.
+The separate `putio-cli` consumer skill may help with ad hoc CLI use when
+installed. It is not a harness prerequisite.
 
 ## Use structured output
 

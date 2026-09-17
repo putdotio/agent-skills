@@ -1,23 +1,21 @@
 # Frontend `SECURITY.md` template
 
-Use this as a starting point for frontend repos. Adapt the scope and supported-version wording to the repo, but keep the document short and private-first.
+Adapt the scope and supported-version wording to the repo. Keep the document short and private-first.
 
 ```md
 # Security
 
-If you believe you have found a security or privacy issue in this project, please report it privately.
+If you believe you have found a security or privacy issue in this project, report it privately.
 
 ## Contact
 
 - email: devs@put.io
 
-Private reports are preferred for security and privacy issues.
-
 If you are unsure whether something is sensitive, email first instead of opening a public issue.
 
 ## Scope
 
-Useful reports usually include issues involving:
+Reports in scope:
 
 - authentication, authorization, or session handling
 - token, secret, or credential exposure
@@ -33,11 +31,9 @@ Useful reports usually include issues involving:
 
 ## Supported versions
 
-Describe the repo's actual support policy here. If the repo has no formal version-support policy, say so plainly.
+Describe the repo's support policy. If there is none, say so.
 
 ## Disclosure
 
-Please allow a reasonable amount of time to investigate and fix the issue before sharing details publicly.
-
-If the report is valid, we will work on a fix and coordinate disclosure as appropriate.
+Allow time to investigate and fix the issue before sharing details publicly. Valid reports get a fix and coordinated disclosure.
 ```

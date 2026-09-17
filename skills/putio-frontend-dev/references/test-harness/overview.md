@@ -4,11 +4,11 @@ Use this reference when `putio-frontend-dev` work touches proof loops for put.io
 frontend-owned web, browser extension, TV, native, emulator, simulator, or
 device surfaces.
 
-A useful harness wraps platform tools, exposes a typed command surface, prepares auth/session state, drives real product flows, asserts meaningful state, and leaves proof artifacts.
+A harness wraps platform tools, exposes a typed command surface, prepares auth/session state, drives real product flows, asserts meaningful state, and leaves proof artifacts.
 
 ## Workflow
 
-1. Read [harness pattern](./pattern.md) before shaping architecture, [platform notes](./platform-notes.md) before picking tools, and [examples](./examples.md) when you need concrete precedent.
+1. Read [harness pattern](./pattern.md) before shaping architecture, [platform notes](./platform-notes.md) before picking tools, and [examples](./examples.md) when you need precedent.
 2. Inspect the target surface, wrapped platform tools, existing repo commands, local docs, and auth/session entrypoints before designing anything new.
 3. Design the harness layers explicitly: adapter, CLI/API, auth/session, flow driver, assertions, proof artifacts, repo integration, observability, isolation, and boundaries.
 4. Keep the generic harness core focused on the test surface. Put product journeys, fixture names, content IDs, profile names, and expectations in the owning app repo or scenario files. Account credentials stay in the authorized secret provider.
@@ -32,7 +32,7 @@ harness seed-account --profile <profile-name> --scenario <scenario-name>
 harness assert-screen --name player --artifact artifacts/live/player.png
 ```
 
-The exact command names should follow the target repo, but the shape should stay narrow, typed, and proof-producing.
+Command names follow the target repo; the shape stays narrow, typed, and proof-producing.
 
 Minimal TypeScript shape:
 

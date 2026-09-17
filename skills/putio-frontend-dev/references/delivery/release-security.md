@@ -12,7 +12,7 @@ Use this when touching GitHub Actions workflows that publish packages, upload ap
 
 ## Repo settings model
 
-- Public frontend-owned repos use five defaults: `main` push allowlist, resolved pull-request conversations, protected `v*` tags, approval-free continuous release Environments, and `putio-releaser` for automated GitHub writes
+- Public frontend-owned repos default to: `main` push allowlist, resolved pull-request conversations, protected `v*` tags, approval-free continuous release Environments, and `putio-releaser` for automated GitHub writes
 - Private repos without paid GitHub protection document the limitation and compensate with Environment gates, fixed checkout refs, action pinning, validated manual inputs, and least-privilege credentials
 - Reviewer-gated Environments are separate production deploy, signing, promotion, or store-submission gates when a repo explicitly needs them
 - Package/library/CLI/skill release jobs use the approval-free `release` Environment as a secret boundary with `deployment: false`; app deploy, beta, signing, promotion, and store-submission jobs keep deployment records when they represent real deployments
@@ -36,7 +36,7 @@ Use this when touching GitHub Actions workflows that publish packages, upload ap
 
 - Pass `workflow_dispatch` inputs through `env`, validate format and length, then use shell variables such as `$TAG_NAME` or `$env:TAG_NAME`. For later action inputs, emit sanitized step outputs rather than reusing raw `${{ inputs.* }}`
 - Keep multiline untrusted input out of `$GITHUB_ENV`; sanitize it first or use heredoc-safe patterns that cannot be broken by attacker-controlled delimiters
-- Move non-secret metadata prep before any secret-loading step whenever possible
+- Move non-secret metadata prep before any secret-loading step where possible
 
 ## Actions and toolchains
 
@@ -74,7 +74,7 @@ Use this when touching GitHub Actions workflows that publish packages, upload ap
 
 ## Release and deploy handoffs
 
-- Treat GitHub Actions artifacts as temporary CI scratch storage, not as a release or deployment registry. They are quota- and retention-coupled and can block deploys after build, test, or release has already succeeded.
+- Treat GitHub Actions artifacts as temporary CI scratch storage, not a release or deployment registry. Quota and retention limits can block deploys after build, test, or release already succeeded.
 - Use Actions artifacts only for same-run handoff when quota, retention, and provenance are acceptable and no better immutable payload store exists.
 - For simple static surfaces where build, e2e, and deploy can safely share one trusted environment-scoped job, deploy the tested output from the runner filesystem and keep post-deploy smoke in a separate read-only job.
 - For versioned releases, deploy from the durable published boundary: GitHub Release asset, package registry version, container image digest, app-store/TestFlight build, or provider-native package. Verify the downloaded or promoted payload before loading deploy credentials where practical.

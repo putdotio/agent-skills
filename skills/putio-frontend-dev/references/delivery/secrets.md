@@ -2,8 +2,8 @@
 
 Use this reference when a put.io frontend-owned repo has local/dev secrets,
 live-test env files, SOPS ciphertext inputs, or secret-bearing build, signing,
-release, or deploy workflows. It defines the public repo-side mechanics without
-requiring access to private operator docs.
+release, or deploy workflows. It defines the public repo-side mechanics; private
+operator docs are not required.
 
 **Out of scope**: repos with native non-task-runner build systems (e.g. Xcode +
 Fastlane), repos that *hold* signing material consumed by tools like `match`,
@@ -65,7 +65,7 @@ paths, recipients, recovery locations, or provider coordinates in a public
 command. After setup, normal repo commands read `.env.local` and do not decrypt
 again. `secrets-clean` removes the materialized file before worktree removal.
 
-Naming convention follows the runner: hyphen for Make / just / shell, colon for npm-style. Behaviour is identical.
+Name by runner: hyphen for Make, just, and shell; colon for npm-style scripts.
 
 ```makefile
 # Makefile
@@ -111,7 +111,7 @@ request rather than the default verification gate.
 !.env.example
 ```
 
-The `!.env.example` exception is **required**: without it, the blanket `.env.*` rule silently un-tracks the template. Verify with `git check-ignore -v .env.example` (it must report no match).
+The `!.env.example` exception is required: without it, the blanket `.env.*` rule un-tracks the template. Verify with `git check-ignore -v .env.example`; it must report no match.
 
 ## Targets that need secrets
 
@@ -204,8 +204,8 @@ gh secret set SENTRY_AUTH_TOKEN --env release --repo <owner>/<repo>
 gh variable set PUTIO_RELEASE_BOT_CLIENT_ID --env release --repo <owner>/<repo>
 gh secret set PUTIO_RELEASE_BOT_PRIVATE_KEY --env release --repo <owner>/<repo>
 
-# Configure deployment-branch policy; add reviewers only for intentionally approval-gated environments
-# in settings → environments → release (UI; gh api supports it but the body shape is awkward)
+# Configure deployment-branch policy in settings → environments → release (UI; the gh api body shape is awkward).
+# Add reviewers only for intentionally approval-gated environments.
 ```
 
 Workflow YAML for a deploy / release / live-test job:
@@ -262,7 +262,7 @@ cd ../<repo>.<topic>
 <runner> secrets-clean          # before `git worktree remove` (or `<runner> secrets:clean`)
 ```
 
-`.env.local` is materialised per-worktree; worktrees never share state.
+`.env.local` is materialized per worktree; worktrees never share state.
 
 ### Harness ergonomics
 
@@ -277,7 +277,7 @@ cd ../<repo>.<topic>
 
 ### Untrusted code
 
-The line is **"anything you did not author personally"**, not "anything from a fork." Compromised internal accounts and malicious dependencies are real vectors. Mitigations per context:
+Untrusted means anything you did not author, not only fork code. Compromised internal accounts and malicious dependencies are vectors too. Mitigations per context:
 
 - **Local laptop**: an authorized age identity may decrypt every payload granted to that recipient; personal passwords and SSH/signing material remain separate
 - **Devbox / Cloud**: an age identity or rendered `.env.local` can be exfiltrated. Run untrusted code, including internal PR code you did not author, in a separate sandbox without those capabilities

@@ -14,7 +14,7 @@ The contract lives in a schema. Types are derived from the schema. Code keeps ea
   on a strict hierarchy such as `FileBaseSchema`, `FileBroadSchema`, and
   `FilesListEnvelopeSchema`
 - Type extraction follows the schema: `export type FileType = Schema.Schema.Type<typeof FileTypeSchema>`. Keep parallel hand-written `type X = { ... }` declarations out of schema-owned contracts.
-- Brand entity IDs so unrelated numeric or string IDs cannot cross. A small helper goes a long way:
+- Brand entity IDs so unrelated numeric or string IDs cannot cross:
 
   ```ts
   const makeEntityId = <Brand extends string>(brand: Brand) =>
@@ -25,7 +25,7 @@ The contract lives in a schema. Types are derived from the schema. Code keeps ea
   ```
 
 - Schemas live next to the boundary they describe: API responses next to the API client, form values next to the form, URL params next to the route.
-- For multi-consumer repos (server + web, app + SDK, monorepo with shared types), keep schemas in a *no-runtime* package: schema definitions only, no services, no helpers. The boundary between contract and implementation stays clean.
+- For multi-consumer repos (server + web, app + SDK, monorepo with shared types), keep schemas in a *no-runtime* package: schema definitions only, no services, no helpers.
 - Where Effect Schema is too heavy for the target runtime, use small typed-narrowing helpers (`getRecord`, `getString`, `getNumber`) plus per-field type guards. The bar is the same: nothing leaves the boundary as `unknown`
 - Where native typing exists, use Swift `Codable` or Kotlin serialization and
   still parse at the boundary.
@@ -35,7 +35,7 @@ The contract lives in a schema. Types are derived from the schema. Code keeps ea
 External input becomes a typed value at the boundary, or it does not enter the program.
 
 - Network responses, URL params, `localStorage`, `postMessage`, file contents, query strings, environment variables: all parsed at the edge.
-- A "validated" value still typed as `unknown`, `any`, `Record<string, unknown>`, or "the same shape but with `// trust me`" is **not parsed**. Keep going until the value is fully typed.
+- A "validated" value still typed as `unknown`, `any`, or `Record<string, unknown>` is not parsed. Keep going until the value is fully typed.
 - Parse failures are typed errors, not thrown strings. Keep success and HTTP
   failure decoding separate while returning the repository's shared error type.
 - Apply the same rule to environment variables, files, storage, and route
@@ -75,9 +75,9 @@ The render tree should not need defensive checks.
 
 ## State machines for bug-sensitive flows
 
-Auth, payment, video conversion, video playback, upload, transfer lifecycle: model them explicitly when transitions actually matter. Bugs in these flows cost trust.
+Model auth, payment, video conversion, video playback, upload, and transfer lifecycle explicitly. Bugs in these flows cost trust.
 
-Use `useState` for trivial toggles, single-screen forms, or anywhere "did we forget a state" is not a real failure mode. Add a state machine when forgotten states are a real failure mode.
+Use `useState` for trivial toggles and single-screen forms. Add a state machine when a forgotten state is a real failure mode.
 
 - The shape varies by repo. The principle does not: enumerate states, name transitions, attach effects to states (not to event handlers).
 - **In Effect TypeScript**, model loops with `Effect.gen`, explicit state,
@@ -120,7 +120,7 @@ Use `useState` for trivial toggles, single-screen forms, or anywhere "did we for
 - Side effects (network, storage, navigation) live as `entry`, `exit`, or invoked services on states: never inline in event handlers.
 - Test the machine separately from the UI. Send events, assert state transitions, assert side effects fired.
 
-A specifically valuable shape: **reconnect / retry as explicit state**. For anything that polls or reconnects (transfer status stream, video player segment fetch, websocket session), keep the retry state as a plain struct with a `phase` discriminator and a *computed* `nextRetryAt` ISO timestamp: not a hidden `setTimeout`:
+Model reconnect and retry as explicit state. For anything that polls or reconnects (transfer status stream, video player segment fetch, websocket session), keep a plain struct with a `phase` discriminator and a computed `nextRetryAt` ISO timestamp instead of a hidden `setTimeout`:
 
 ```ts
 type ReconnectStatus = {
@@ -139,7 +139,7 @@ const nextDelayMs = (attempt: number, max = 7) =>
 
 Tests can assert exact retry timing instead of waiting on real timers. UI can render `nextRetryAt` directly without owning the timer.
 
-A related shape: **long-running ops emit `{ current, total, label }` progress events; the UI plugs in.** Keep migration, bulk file move, large upload, conversion-job code headless: it accepts a `progress?: (p: { current: number; total: number; label: string }) => void` callback. The CLI renders a TTY bar, the web app renders a modal, the native app renders a progress sheet. None of those concerns leak into the operation itself, and tests assert progress event sequence instead of UI output.
+Long-running operations emit `{ current, total, label }` progress events. Keep migration, bulk file move, large upload, and conversion-job code headless: it accepts a `progress?: (p: { current: number; total: number; label: string }) => void` callback. The CLI renders a TTY bar, the web app a modal, the native app a progress sheet. Tests assert the progress event sequence instead of UI output.
 
 ## Errors
 
@@ -170,7 +170,7 @@ A related shape: **long-running ops emit `{ current, total, label }` progress ev
   - **Known unknown**: the value is a recognized API error shape, but no feature-specific localizer exists. Capture a telemetry event such as `UnlocalizedAPIError`, show a generic API error, and keep a support-ready trace id in metadata.
   - **Unknown unknown**: the value is not recognized. Capture the exception, show a generic fallback, and keep the captured error id in metadata.
 - The localizer is also the redaction chokepoint: raw `PutioApiError.body`, request URLs with query strings, and stack traces go through it before reaching UI text, telemetry, or third-party SDKs (Sentry, analytics).
-- Error boundaries exist at the app, route, lazy-load, or feature-island level, not wrapped around every component. The goal is to keep the shell alive and isolate the broken surface, not to hide programmer errors everywhere.
+- Error boundaries exist at the app, route, lazy-load, or feature-island level, not around every component. They keep the shell alive and isolate the broken surface; they do not hide programmer errors.
 - Distinguish *expected error the user can act on* (typed, rendered inline) from *unexpected crash* (caught by the boundary, logged, generic fallback).
 - Lazy-loaded route failures are recoverable states. Match chunk-load failures and load timeouts, then offer a reload action instead of surfacing an opaque module-loading error.
 - Support fallbacks are part of the error model. Route contact-support actions through the repo's support adapter so Intercom, email, or another configured channel can be swapped without changing feature error localizers.
@@ -231,7 +231,7 @@ deduplication, retry, refetch-on-focus, abort-on-unmount, and
 stale-while-revalidate. Hand-rolling those behaviors with `useEffect`,
 `useState`, and `fetch` creates avoidable bugs.
 
-The put.io default for HTTP-shaped server state is **TanStack Query**. New code in put.io web frontends should match this pattern.
+The put.io default for HTTP-shaped server state is TanStack Query.
 
 ```ts
 // queries/transfers.ts: keys are structured, namespaced, and typed.
@@ -256,17 +256,17 @@ export const useCancelTransfer = () => {
 
 Rules:
 
-- **Use `useQuery` for server reads.** It provides loading, error, dedup, abort, retry, and stale-while-revalidate behavior in one place.
-- **Query keys are arrays, namespaced per feature**, with the input as a structured payload, not a stringified blob. `["transfers", filter]` not `` `transfers-${JSON.stringify(filter)}` ``. Cache invalidation works on prefix.
-- **Mutations invalidate the cache, not local state**. `onSuccess: invalidateQueries({ queryKey: ["transfers"] })`. Optimistic flows use `onMutate` to set + return a snapshot, `onError` to roll it back.
-- **Writes**: `useMutation` when there is a cache to invalidate; `useActionEffect` for one-off RPCs with no cached read. See *Forms* below.
-- **Polling lives next to the query key**, not next to the component. `refetchInterval: 5_000` on the query, not `setInterval` in a `useEffect`
+- Use `useQuery` for server reads.
+- Query keys are arrays, namespaced per feature, with the input as a structured payload, not a stringified blob: `["transfers", filter]`, not `` `transfers-${JSON.stringify(filter)}` ``. Cache invalidation works on prefix.
+- Mutations invalidate the cache, not local state: `onSuccess: invalidateQueries({ queryKey: ["transfers"] })`. Optimistic flows use `onMutate` to set and return a snapshot, `onError` to roll it back.
+- Writes: `useMutation` when there is a cache to invalidate; `useActionEffect` for one-off RPCs with no cached read. See *Forms* below.
+- Polling lives next to the query key, not the component: `refetchInterval: 5_000` on the query, not `setInterval` in a `useEffect`
 
 ## Forms
 
 For form mutations in Effect-React code, the put.io default is a small `useActionEffect` bridge over React 19's `useActionState`. Keep the FormData → Schema → Effect flow as one typed pipeline.
 
-When the form mutates a server read that lives in a TanStack Query cache (rename in a file list, cancel in a transfer list, edit in a settings query), prefer `useMutation` from the *Server State* section above and call its `mutate` from the form's action handler: that way the cache invalidation lives next to the mutation. Reserve `useActionEffect` for one-off RPC actions with no cached read on the other side (login, OTP verification, fire-and-forget settings save).
+When the form mutates a server read held in a TanStack Query cache (rename in a file list, cancel in a transfer list, edit in a settings query), use `useMutation` from *Server State* and call its `mutate` from the form's action handler, so cache invalidation lives next to the mutation. Reserve `useActionEffect` for one-off RPC actions with no cached read (login, OTP verification, fire-and-forget settings save).
 
 ```ts
 export const useActionEffect = <Payload, A, E, R>(
@@ -305,7 +305,7 @@ const [error, action, pending] = useActionEffect(RuntimeClient, (formData: FormD
 
 Read keys explicitly via `formData.get(name)` (or `formData.getAll(name)` for multi-value fields like checkbox groups). This preserves repeated names and keeps attacker-controlled keys out of the schema decoder.
 
-A TanStack Query mutation that invalidates the relevant query keys does not need to update local state: the next read picks up the change. Skip optimistic updates unless the user-perceived latency actually warrants them.
+A TanStack Query mutation that invalidates the relevant query keys does not need to update local state: the next read picks up the change. Skip optimistic updates unless perceived latency warrants them.
 
 Where a repo uses TanStack Form instead:
 
@@ -327,17 +327,16 @@ Components in put.io React apps do not import or call `useEffect` directly.
 
 ## Component and state placement
 
-- Components are deep modules: small surface (props), meaningful interior. A wrapper that forwards every prop unchanged is not pulling its weight.
+- Components are deep modules: small surface (props), meaningful interior. A wrapper that forwards every prop unchanged adds nothing.
 - Keep state local until a second consumer needs it.
 - Subscriptions, storage, and telemetry live in adapters and reviewed hooks, not in page components. See *React effects* above.
 - Keep server-state in server-state tools and UI-state in UI-state tools. See *Server State* above.
-- Pure render trees: a component that takes typed props and returns JSX with no side effects is the easiest thing to test, animate, and refactor.
-
-Imitate: small composable primitives in your app's UI layer rather than monolithic screen templates.
+- Pure render trees: a component that takes typed props and returns JSX with no side effects is the easiest to test, animate, and refactor.
+- Prefer small composable primitives in the UI layer over monolithic screen templates.
 
 ## Styling
 
-put.io has multiple valid styling stacks depending on constraints:
+Valid styling stacks:
 
 - Tailwind v4 + design tokens for new general-purpose web work.
 - Plain CSS modules + TS theme tokens where bundle size or old-browser support matters.
@@ -357,6 +356,6 @@ Pick the repo's existing stack. If the repo is silent, default to Tailwind v4 fo
 
 ## Verification before "done"
 
-- Type-check, lint, unit tests pass: necessary, not sufficient for UI work.
+- Type-check, lint, and unit tests passing is necessary, not sufficient, for UI work.
 - Exercise the feature in a browser or device. Click the golden path. Try one edge case. Watch the network tab and console.
-- If the UI cannot be exercised (no dev server, no preview), say so explicitly in the PR and list type checks as partial evidence.
+- If the UI cannot be exercised (no dev server, no preview), say so in the PR and list type checks as partial evidence.

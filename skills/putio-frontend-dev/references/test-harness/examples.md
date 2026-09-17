@@ -1,6 +1,6 @@
 # Examples
 
-These examples are training references for the harness pattern. They are not the product this skill creates. Copy the shape, not the exact implementation.
+Copy the shape of these examples, not the implementation.
 
 ## `taizn`
 

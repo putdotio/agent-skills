@@ -14,7 +14,7 @@ into every default run. Retain full gates where the owner requires them.
 - GitHub Actions owns orchestration; the repo owns build, test, and publish-ready or deploy-ready commands.
 - The repo exposes one local `verify` entrypoint that CI calls directly.
 - Delivery is continuous: every merge to `main` is assumed publishable or deployable.
-- Keep one canonical owner per concern instead of duplicating the same rule across commands, workflows, and docs.
+- One canonical owner per concern; do not duplicate a rule across commands, workflows, and docs.
 
 ## Default shape
 
@@ -39,15 +39,14 @@ template gaps: missing .github/pull_request_template.md
 
 - `VERIFY` covers lint, typecheck, build, tests, and any package-specific guardrails.
 - Workflow logic stays thin; repo commands own the complexity.
-- Orchestration stays in GitHub Actions unless there is an established repo standard that says otherwise.
+- Orchestration stays in GitHub Actions unless an established repo standard says otherwise.
 - Repos hosted on GitHub include collaboration templates when they improve review or triage, especially `.github/pull_request_template.md` and `.github/ISSUE_TEMPLATE/*`
 - Package release jobs are safe to no-op when there are no releasable commits.
-- Delivery jobs use only the permissions and secrets they actually need.
+- Delivery jobs use only the permissions and secrets they need.
 - Secret-bearing release, deploy, signing, publish, beta, backfill, and binary-build jobs follow [release security](./release-security.md).
-- Release jobs that create follow-up commits, release tags, GitHub Releases, or release assets use a `putio-releaser` installation token, which protected `main` and `v*` allow, and set commit author/committer metadata to the app bot identity; `GITHUB_TOKEN` and a spoofed human/team mailbox do not qualify.
+- Release jobs that create follow-up commits, release tags, GitHub Releases, or release assets use a `putio-releaser` installation token, which protected `main` and `v*` allow. Set commit author and committer metadata to the app bot identity. `GITHUB_TOKEN` and a spoofed human or team mailbox do not qualify.
 - Release automation fetches full git history when versioning depends on commits or tags.
 - For Swift, Kotlin, and other ecosystems, keep this model and choose the smallest repo-native toolchain that CI can call unchanged.
-- Packages publish. Apps deploy. The verify-first model stays the same.
 
 Semantic-release example:
 
@@ -62,18 +61,18 @@ Semantic-release example:
 
 ## Collaboration templates
 
-Keep review and triage prompts close to the repo instead of relying on maintainers to remember them.
+Keep review and triage prompts in the repo.
 
-- Pull request templates should ask for the most useful evidence for the kind of change:
+- Pull request templates ask for the most useful evidence for the kind of change:
   - screenshots or screen recordings for UI, layout, onboarding, animation, or copy changes, with the upload route named: `gh pr create --attach ./file.png` or `gh pr comment <n> --attach ./file.mp4` (gh 2.99+); a template that omits the route gets media committed to the branch
   - sanity checks for risky or user-visible flows
   - before and after benchmark numbers for performance-sensitive changes
   - rollout, risk, or follow-up notes when the change touches auth, persistence, release flow, or external integrations
-- Issue templates should ask for reproducible signals:
+- Issue templates ask for reproducible signals:
   - steps to reproduce
   - expected versus actual behavior
   - logs, console output, screenshots, or videos when relevant
   - environment details when platform differences matter
-- Keep templates short enough that people fill them out honestly. Prefer `N/A` prompts over giant mandatory essays.
-- Treat templates as the detailed source of truth for review and triage prompts. `CONTRIBUTING.md` should summarize the expectation without copying the full checklist.
+- Keep templates short. Prefer `N/A` prompts over mandatory essays.
+- Templates are the detailed source of truth for review and triage prompts. `CONTRIBUTING.md` summarizes the expectation without copying the full checklist.
 - Release and publishing behavior belongs in `docs/DISTRIBUTION.md`: delivery model, publish target, protected Environment requirements, release bot identity, tag policy, and release-specific smoke checks. `CONTRIBUTING.md` links there as contributor navigation.
