@@ -14,6 +14,7 @@ into every default run. Retain full gates where the owner requires them.
 - GitHub Actions owns orchestration; the repo owns build, test, and publish-ready or deploy-ready commands.
 - The repo exposes one local `verify` entrypoint that CI calls directly.
 - Delivery is continuous: every merge to `main` is assumed publishable or deployable.
+- Delivery targets: a package registry for packages; preview or production hosting for web apps; TestFlight, beta tracks, or store delivery for native apps; staging or production environments for internal tools. Deploys are the app equivalent of package publishing.
 - One canonical owner per concern; do not duplicate a rule across commands, workflows, and docs.
 
 ## Default shape
@@ -43,8 +44,10 @@ template gaps: missing .github/pull_request_template.md
 - Repos hosted on GitHub include collaboration templates when they improve review or triage, especially `.github/pull_request_template.md` and `.github/ISSUE_TEMPLATE/*`
 - Package release jobs are safe to no-op when there are no releasable commits.
 - Delivery jobs use only the permissions and secrets they need.
+- App repos expose one repo-local deploy command per delivery target, such as `deploy-preview`, `deploy-beta`, or `deploy-production`, so workflow YAML stays thin. Do not overload one generic `deploy`.
+- Beta and preview builds ship continuously. Add stricter promotion gates only where the product or platform requires them.
 - Secret-bearing release, deploy, signing, publish, beta, backfill, and binary-build jobs follow [release security](./release-security.md).
-- Release jobs that create follow-up commits, release tags, GitHub Releases, or release assets use a `putio-releaser` installation token, which protected `main` and `v*` allow. Set commit author and committer metadata to the app bot identity. `GITHUB_TOKEN` and a spoofed human or team mailbox do not qualify.
+- Release jobs that create follow-up commits, release tags, GitHub Releases, or release assets use a `putio-releaser` installation token. Set commit author and committer metadata to the app bot identity. `GITHUB_TOKEN` and a spoofed human or team mailbox do not qualify.
 - Release automation fetches full git history when versioning depends on commits or tags.
 - For Swift, Kotlin, and other ecosystems, keep this model and choose the smallest repo-native toolchain that CI can call unchanged.
 

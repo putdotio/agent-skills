@@ -28,10 +28,8 @@ own guidance and code precedent.
   [frontend defaults](./references/engineering/frontend-defaults.md)
 - README, CONTRIBUTING, SECURITY, and agent-facing docs:
   [top-level docs](./references/docs/style.md)
-- CI, verify, publishing, deployment, and release shape:
+- CI, verify, publishing, deployment, and release shape for packages and apps:
   [delivery model](./references/delivery/model.md)
-- Application-specific delivery:
-  [application defaults](./references/applications.md)
 - TypeScript package and app setup:
   [TypeScript defaults](./references/engineering/typescript.md)
 - Local development secrets and CI credential boundaries:
@@ -48,6 +46,15 @@ own guidance and code precedent.
 Markdown links navigate this skill bundle. Other paths shown in the references,
 such as `.github/pull_request_template.md`, name files to create or inspect in
 the target repository.
+
+## Knowledge base
+
+- Lives in the put.io Notion workspace, Frontend hub; read it through the
+  Notion MCP.
+- Holds Products, Specs, Design, Engineering (Delivery model, Release
+  security, Secrets management, Third-party services inventory),
+  Architecture decisions, and Guides.
+- Read it before product, spec, release, or secrets decisions.
 
 ## Shared defaults
 

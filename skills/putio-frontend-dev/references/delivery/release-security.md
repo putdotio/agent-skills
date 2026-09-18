@@ -19,18 +19,10 @@ Use this when touching GitHub Actions workflows that publish packages, upload ap
 - Release workflows store `PUTIO_RELEASE_BOT_CLIENT_ID` as a protected Environment variable and `PUTIO_RELEASE_BOT_PRIVATE_KEY` as a protected Environment secret
 - Push-back jobs mint a `putio-releaser` installation token and set matching `GIT_AUTHOR_*` / `GIT_COMMITTER_*`. Commit metadata is not authorization: `GITHUB_TOKEN` writes as `github-actions[bot]`
 - If a third-party publish action creates commits internally, verify it accepts release-bot identity inputs or honors `GIT_AUTHOR_*` / `GIT_COMMITTER_*`
-- Do not add CODEOWNERS as a blanket default for small frontend repos. Use owner-gated workflow or release-file review only when maintainers explicitly want that extra process.
-
-### Allowing the put.io team to push
-
-- Branch protection: rule for `main`, "Require a pull request before merging" off, "Require conversation resolution before merging" on, administrator enforcement on, "Restrict who can push" on, allowed actors `put-io` and `putio-releaser`
-- Rulesets: prefer a no-bypass baseline rule for deletion/force-push protection plus a narrow update rule for allowed push actors
-
-### Release tags
-
-- Tag ruleset: protect `v*`; allow only `putio-releaser` and org-admin bypass for creation, update, and deletion
 - Workflows that create GitHub Releases, upload release assets, or move `v*` tags use a `putio-releaser` installation token
 - Keep the release path pinned, least-privilege, ref-validated, and provenance-checked before publishing or promoting
+- Do not add CODEOWNERS as a blanket default for small frontend repos. Use owner-gated workflow or release-file review only when maintainers explicitly want that extra process.
+- put.io-specific settings live in the Frontend hub in the put.io Notion workspace (page: Release security).
 
 ## Inputs
 
@@ -40,7 +32,7 @@ Use this when touching GitHub Actions workflows that publish packages, upload ap
 
 ## Actions and toolchains
 
-- Use GitHub-hosted runners everywhere: `ubuntu-24.04-arm` for routine Linux CI and release jobs, `ubuntu-24.04` for jobs that produce or depend on x86_64 artifacts, `windows-2025` for Windows, and `macos-latest` for macOS. Public repositories get unlimited free minutes; private repositories draw from the org's free tier. Revisit Blacksmith only if the private-repo free tier runs out, and never for public repositories, where it only adds cost
+- Use GitHub-hosted runners everywhere: `ubuntu-24.04-arm` for routine Linux CI and release jobs, `ubuntu-24.04` for jobs that produce or depend on x86_64 artifacts, `windows-2025` for Windows, and `macos-latest` for macOS. Do not introduce self-hosted or third-party runners without an explicit decision
 - Pin an OS image when it is part of the tested toolchain contract, and document that reason next to the workflow or in the repo release docs
 - Keep npm Trusted Publishing jobs on GitHub-hosted `ubuntu-latest` because npm rejects self-hosted runners. Do not replace OIDC with a long-lived `NPM_TOKEN` without an explicit secret-boundary decision
 - Pin release, publish, upload, signing, and deploy actions to full commit SHAs with a trailing comment for the human version tag
@@ -60,9 +52,7 @@ Use this when touching GitHub Actions workflows that publish packages, upload ap
 - Bind GitHub OIDC deploy roles to the repo and protected Environment that owns the deploy, and keep AWS account IDs, Route 53 zone IDs, certificate ARNs, and role ARNs in repo variables
 - For first SST deploys, start with enough AWS access for SST bootstrap plus the app's components, then trim after a successful deploy with CloudTrail or IAM Access Analyzer evidence
 - Record the steady-state policy in the repo's release or infra docs, including the component-specific actions observed during deploy
-- For `sst.aws.StaticSite`, include the SST state and asset buckets, the app bucket prefix, CloudFront, the hosted zone, read access to the existing ACM certificate, and the SSM `/sst/*` parameter path
-- For `StaticSite` assets and invalidations, include S3 bucket refresh reads used by the Pulumi AWS provider: ACL, CORS, policy, public-access-block, request-payment, tagging, website, versioning, logging, lifecycle, replication, encryption, and object-lock configuration
-- When SST creates CloudFront key-value store metadata for a static site, include `cloudfront-keyvaluestore:DescribeKeyValueStore` and `cloudfront-keyvaluestore:UpdateKeys` for the deploy role
+- put.io-specific settings live in the Frontend hub in the put.io Notion workspace (page: Release security).
 
 ## Caches and generated trees
 
@@ -79,14 +69,13 @@ Use this when touching GitHub Actions workflows that publish packages, upload ap
 - For simple static surfaces where build, e2e, and deploy can safely share one trusted environment-scoped job, deploy the tested output from the runner filesystem and keep post-deploy smoke in a separate read-only job.
 - For versioned releases, deploy from the durable published boundary: GitHub Release asset, package registry version, container image digest, app-store/TestFlight build, or provider-native package. Verify the downloaded or promoted payload before loading deploy credentials where practical.
 
-## npm supply-chain incident checks
+## Supply-chain incident checks
 
-Worked example: [TanStack npm supply-chain compromise postmortem](https://tanstack.com/blog/npm-supply-chain-compromise-postmortem) and [GitHub advisory GHSA-g7cv-rxg3-hmpx](https://github.com/advisories/GHSA-g7cv-rxg3-hmpx)
+Worked example: [TanStack npm supply-chain compromise postmortem](https://tanstack.com/blog/npm-supply-chain-compromise-postmortem) and [GHSA-g7cv-rxg3-hmpx](https://github.com/advisories/GHSA-g7cv-rxg3-hmpx)
 
 - When an active advisory publishes indicators of compromise, scan manifests and lockfiles for them before running installs: unexpected `optionalDependencies` or git-pinned entries, unexpected lifecycle scripts or init files, and the affected package versions
-- If any affected version was installed on a developer machine or CI runner, treat that host as compromised. Rotate registry, GitHub, cloud, SSH, Vault, and package-manager credentials reachable from the host before publishing again
-- OIDC removes the long-lived npm token theft path, but the workflow identity can still be abused if the release job runs compromised code. Keep trusted refs, fresh release installs, no shared release caches, and a narrow release credential boundary.
-- SLSA or npm provenance proves where a package was built, not that the runner was clean. Keep provenance checks, but do not use them as a substitute for trusted workflow boundaries, fresh release installs, and no shared release caches
+- If an affected version was installed on a developer machine or CI runner, treat that host as compromised: quarantine it and rotate registry, GitHub, cloud, SSH, and package-manager credentials reachable from it before publishing again
+- OIDC removes only the long-lived credential it replaces, such as an npm publish token; GitHub App keys, SSH material, and other Environment secrets stay reachable from a compromised job. Provenance proves where a package was built, not that the runner was clean. Neither replaces trusted refs, fresh release installs, and no shared release caches
 
 ## Provenance
 
@@ -98,14 +87,13 @@ Worked example: [TanStack npm supply-chain compromise postmortem](https://tansta
 
 ## Live settings to check
 
-Before final severity or remediation calls, inspect live GitHub state:
+Before a severity, remediation, or status claim, verify live provider settings, not repo docs or workflow files:
 
-- `main` branch push restrictions or documented private-repo fallback
-- release tag policy for `v*`: protected by `putio-releaser` plus org-admin bypass, or a documented private-repo fallback when GitHub plan limits apply
-- Environment approval posture, branch policy, and tag policy
+- branch, tag, Environment, credential, and release state
 - Actions cache contents and cache write/read boundaries
 - Actions permission policy and job-level `permissions`
-- where secrets live: repo, org, Environment, or external manager
+
+put.io-specific settings live in the Frontend hub in the put.io Notion workspace (page: Release security).
 
 ## Docs to update
 

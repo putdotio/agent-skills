@@ -44,7 +44,11 @@ wrapper that validates before launch.
 
 Development secrets must not keep a broad password-manager fallback. Keep
 personal credentials, signing material, recovery identities, and CI/CD source
-copies outside the development payload.
+copies outside the development payload. If decryption fails, report the
+required input or missing access instead of adding a fallback or opening an
+interactive login flow. Each person and unattended host uses its own age
+identity so one can be revoked alone; share only public recipients. Never
+commit a private age identity.
 
 ### Tracked `.env.example`
 
@@ -131,18 +135,6 @@ PUTIO_WEB_SOPS_FILE=/path/to/web.sops.env \
 Keep `secrets-setup` out of `prepare`, `postinstall`, and `prebuild` hooks.
 Those run on install and would route every contributor through secret bootstrap.
 
-## SOPS access
-
-Each person and unattended machine uses its own age identity. The private
-identity lives in owner-only machine storage with a private backup; only its
-public recipient is shared with a vault operator. Never commit a private age
-identity or distribute one identity across people or machines.
-
-Public implementation repos accept a generic ciphertext file path. They do not
-name the private vault, payload topology, recipients, or recovery system. If
-decryption fails, report the required input or missing access instead of adding
-a password-manager fallback or opening an interactive login flow.
-
 ## Verify
 
 Use this as change-acceptance evidence for the setup boundary, not as a
@@ -184,31 +176,16 @@ live and how a job receives them.
 
 ### Where secrets live
 
-- Important CI/CD source values live in 1Password CI or restricted owner vaults for human administration and rotation
-- Workflow runtime values live as GitHub Environment secrets, npm/GitHub trusted-publishing configuration, or OIDC-backed provider configuration
+- Workflow runtime values live as GitHub Environment secrets, npm/GitHub trusted-publishing configuration, or OIDC-backed provider configuration. put.io-specific settings live in the Frontend hub in the put.io Notion workspace (page: Secrets management).
 - CI must not call `op`, `1Password/load-secrets-action`, or use `OP_SERVICE_ACCOUNT_TOKEN` to fetch secrets at runtime
 - Top-level `permissions: {}` (deny by default); each job opts into the minimum it needs and reads Environment secrets directly or assumes provider roles through OIDC
 - Every workflow mapping a sensitive secret uses a deployment Environment: continuous release environments scope secrets without approval gates; production deploy, signing, promotion, or store-submission environments add reviewers only when a human gate is intended
 - Optional owner-gated review on `.github/workflows/**`, `.github/actions/**`, `.env.example`, the `secrets-setup`/`secrets-clean` target body, and lockfiles when maintainers want that process; signed commits where contributors can tolerate the friction
 
-### Setup recipe
+### Release job shape
 
-One-time per repo:
-
-```bash
-# Create the deployment environment (idempotent)
-gh api -X PUT repos/<owner>/<repo>/environments/release
-
-# Add runtime values copied from the 1Password CI/restricted source item
-gh secret set SENTRY_AUTH_TOKEN --env release --repo <owner>/<repo>
-gh variable set PUTIO_RELEASE_BOT_CLIENT_ID --env release --repo <owner>/<repo>
-gh secret set PUTIO_RELEASE_BOT_PRIVATE_KEY --env release --repo <owner>/<repo>
-
-# Configure deployment-branch policy in settings → environments → release (UI; the gh api body shape is awkward).
-# Add reviewers only for intentionally approval-gated environments.
-```
-
-Workflow YAML for a deploy / release / live-test job:
+Environment creation and secret provisioning are a one-time maintainer step
+outside the repo. Workflow YAML for a deploy / release / live-test job:
 
 ```yaml
 jobs:
@@ -241,30 +218,7 @@ action, then pass the resulting short-lived token to the narrow final write step
 
 Use `deployment: false` for package/library/CLI/skill release jobs whose Environment exists only to scope secrets. Keep deployment records for app deploys, signing, promotion, store submission, and any Environment with custom deployment protection rules.
 
-## Agent contexts
-
-The same generic ciphertext input and repo-owned setup target work across local
-and hosted contexts. Identity provisioning remains outside the implementation
-repo.
-
-| Context | Credential source | Setup |
-|---|---|---|
-| **Human local dev** | Individual age identity | Run the repo's setup target only when the task needs secrets |
-| **Local laptop agent** | The machine owner's authorized age identity | Decrypt only the supplied consumer payload |
-| **Shared devbox / Cloud agent** | Dedicated machine age identity | Grant only the required payload capability |
-
-### Per-worktree onboarding
-
-```bash
-git worktree add ../<repo>.<topic> <branch>
-cd ../<repo>.<topic>
-<runner> secrets-setup          # when the task chain needs .env.local (or `<runner> secrets:setup` for npm-style)
-<runner> secrets-clean          # before `git worktree remove` (or `<runner> secrets:clean`)
-```
-
-`.env.local` is materialized per worktree; worktrees never share state.
-
-### Harness ergonomics
+## Harness ergonomics
 
 - Render or inject only non-account test fixtures into the harness. Account
   credentials stay in the authorized secret provider and may be entered only by
@@ -275,9 +229,10 @@ cd ../<repo>.<topic>
 - Unattended runs use dedicated machine identities with only the fixture and
   browser-login capabilities they need.
 
-### Untrusted code
+## Untrusted code
 
-Untrusted means anything you did not author, not only fork code. Compromised internal accounts and malicious dependencies are vectors too. Mitigations per context:
-
-- **Local laptop**: an authorized age identity may decrypt every payload granted to that recipient; personal passwords and SSH/signing material remain separate
-- **Devbox / Cloud**: an age identity or rendered `.env.local` can be exfiltrated. Run untrusted code, including internal PR code you did not author, in a separate sandbox without those capabilities
+Untrusted means anything you did not author: fork code, internal PR code, and
+dependencies. Code that runs beside a rendered `.env.local` or a machine's
+decryption identity can read and exfiltrate them; `secrets-clean` before
+worktree removal does not undo that. Run untrusted code in a separate sandbox
+without the decryption identity or rendered secrets.

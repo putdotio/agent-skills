@@ -2,7 +2,7 @@
 
 Engineering doctrine for put.io SDKs across TypeScript, Swift, and Kotlin.
 Product direction, including why each SDK exists and the capability roadmap,
-lives in the team knowledge base.
+lives in the Frontend hub in the put.io Notion workspace (page: Products).
 
 ## Scope rules
 
