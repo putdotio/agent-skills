@@ -1,0 +1,46 @@
+{
+  "workspace": [
+    { "name": "putio-frontend", "repo": "putdotio/putio-frontend", "path": "~/projects/putdotio/putio-frontend", "owns": "frontend", "mode": "managed", "visibility": "private", "topics": ["putio", "frontend", "workspace", "documentation", "agent-skills"] },
+    { "name": "putio-agent-skills", "repo": "putdotio/agent-skills", "path": "~/projects/putdotio/putio-agent-skills", "owns": "frontend", "mode": "managed", "visibility": "public", "topics": ["putio", "frontend", "agent-skills", "coding-agents", "developer-tools"] }
+  ],
+  "support": [
+    { "name": "putio-support", "repo": "putdotio/support", "path": "~/projects/putdotio/putio-support", "owns": "frontend", "mode": "managed", "visibility": "private", "topics": ["putio", "frontend", "support", "intake", "triage"] }
+  ],
+  "design": [
+    { "name": "putio-design", "repo": "putdotio/putio-design", "path": "~/projects/putdotio/putio-design", "owns": "frontend", "mode": "managed", "visibility": "public", "topics": ["putio", "frontend", "design-system", "design-tokens", "product-design", "prototypes"] },
+    { "name": "putio-i18n", "repo": "putdotio/putio-i18n", "path": "~/projects/putdotio/putio-i18n", "owns": "frontend", "mode": "managed", "visibility": "private", "topics": ["putio", "frontend", "i18n", "localization", "translations"] }
+  ],
+  "apps": [
+    { "name": "putio-backend", "repo": "putdotio/putio", "path": "~/projects/putdotio/putio-backend", "owns": "backend", "mode": "managed", "visibility": "private" },
+    { "name": "putio-web", "repo": "putdotio/putio-web", "path": "~/projects/putdotio/putio-web", "owns": "frontend", "mode": "managed", "visibility": "private", "topics": ["putio", "frontend", "web", "react", "typescript", "sst"] },
+    { "name": "putio-ios", "repo": "putdotio/putio-ios", "path": "~/projects/putdotio/putio-ios", "owns": "frontend", "mode": "managed", "visibility": "public", "topics": ["putio", "frontend", "open-source", "ios", "swift", "mobile", "tvos", "apple"] },
+    { "name": "putio-android", "repo": "putdotio/putio-android", "path": "~/projects/putdotio/putio-android", "owns": "frontend", "mode": "managed", "visibility": "public", "topics": ["putio", "frontend", "open-source", "android", "kotlin", "mobile", "android-tv"] },
+    { "name": "putio-cli", "repo": "putdotio/putio-cli", "path": "~/projects/putdotio/putio-cli", "owns": "frontend", "mode": "managed", "visibility": "public", "topics": ["putio", "frontend", "open-source", "cli", "typescript", "putio-api", "developer-tools"] },
+    { "name": "putio-roku", "repo": "putdotio/putio-roku", "path": "~/projects/putdotio/putio-roku", "owns": "frontend", "mode": "managed", "visibility": "public", "topics": ["putio", "frontend", "open-source", "roku", "brightscript", "tv", "streaming"] }
+  ],
+  "extensions": [
+    { "name": "putio-webextension", "repo": "putdotio/putio-webextension", "path": "~/projects/putdotio/putio-webextension", "owns": "frontend", "mode": "managed", "visibility": "public", "topics": ["putio", "frontend", "open-source", "browser-extension", "chrome-extension", "firefox-extension", "javascript"] },
+    { "name": "putio-kodi", "repo": "putdotio/putio-kodi", "path": "~/projects/putdotio/putio-kodi", "owns": "backend", "mode": "managed", "visibility": "public" },
+    { "name": "putio-plex", "repo": "putdotio/putio-plex", "path": "~/projects/putdotio/putio-plex", "owns": "backend", "mode": "managed", "visibility": "public" },
+    { "name": "putio-raycast", "repo": "putdotio/putio-raycast", "path": "~/projects/putdotio/putio-raycast", "owns": "frontend", "mode": "managed", "visibility": "public", "topics": ["putio", "frontend", "open-source", "raycast-extension", "typescript", "macos", "productivity"] },
+    { "name": "putio-mcp-server", "repo": "putdotio/putio-mcp-server", "path": "~/projects/putdotio/putio-mcp-server", "owns": "backend", "mode": "managed", "visibility": "public" }
+  ],
+  "sdks": [
+    { "name": "putio-sdk-typescript", "repo": "putdotio/putio-sdk-typescript", "path": "~/projects/putdotio/putio-sdk-typescript", "owns": "frontend", "mode": "managed", "visibility": "public", "topics": ["putio", "frontend", "open-source", "sdk", "typescript", "api-client", "putio-api"] },
+    { "name": "putio-sdk-kotlin", "repo": "putdotio/putio-sdk-kotlin", "path": "~/projects/putdotio/putio-sdk-kotlin", "owns": "frontend", "mode": "managed", "visibility": "public", "topics": ["putio", "frontend", "open-source", "sdk", "kotlin", "api-client", "android"] },
+    { "name": "putio-pas-js", "repo": "putdotio/pas-js", "path": "~/projects/putdotio/putio-pas-js", "owns": "frontend", "mode": "managed", "visibility": "public", "topics": ["putio", "frontend", "open-source", "analytics", "typescript", "browser", "javascript"] },
+    { "name": "putio-sdk-swift", "repo": "putdotio/putio-sdk-swift", "path": "~/projects/putdotio/putio-sdk-swift", "owns": "frontend", "mode": "managed", "visibility": "public", "topics": ["putio", "frontend", "open-source", "sdk", "swift", "api-client", "ios"] },
+    { "name": "putio-go", "repo": "putdotio/go-putio", "path": "~/projects/putdotio/putio-go", "owns": "backend", "mode": "managed", "visibility": "public" },
+    { "name": "putio-sockjs", "repo": "putdotio/putio-sockjs", "path": "~/projects/putdotio/putio-sockjs", "owns": "frontend", "mode": "managed", "visibility": "public", "topics": ["putio", "frontend", "open-source", "sockjs", "realtime", "websocket", "typescript"] }
+  ],
+  "infra": [
+    { "name": "putio-frontend-vault", "repo": "putdotio/putio-frontend-vault", "path": "~/projects/putdotio/putio-frontend-vault", "owns": "frontend", "mode": "managed", "visibility": "private", "topics": ["putio", "frontend", "sops", "age-encryption", "secrets-management"] },
+    { "name": "putio-code-signing-apple", "repo": "putdotio/putio-code-signing-apple", "path": "~/projects/putdotio/putio-code-signing-apple", "owns": "frontend", "mode": "managed", "visibility": "private", "topics": ["putio", "frontend", "apple", "code-signing", "fastlane-match", "certificates"] },
+    { "name": "putio-static", "repo": "putdotio/putio-static", "path": "~/projects/putdotio/putio-static", "owns": "frontend", "mode": "managed", "visibility": "private", "topics": ["putio", "frontend", "static-assets", "sst", "aws", "s3", "cloudfront"] }
+  ],
+  "tools": [
+    { "name": "vref", "repo": "putdotio/vref", "path": "~/projects/putdotio/vref", "owns": "frontend", "mode": "managed", "visibility": "public", "topics": ["putio", "frontend", "open-source", "cli", "visual-reference", "screenshots", "typescript", "developer-tools"] },
+    { "name": "taizn", "repo": "putdotio/taizn", "path": "~/projects/putdotio/taizn", "owns": "frontend", "mode": "managed", "visibility": "public", "topics": ["putio", "frontend", "open-source", "cli", "harness", "samsung", "samsung-tv", "tizen", "tizen-tv", "tv", "widget", "typescript"] },
+    { "name": "rokit", "repo": "putdotio/rokit", "path": "~/projects/putdotio/rokit", "owns": "frontend", "mode": "managed", "visibility": "public", "topics": ["putio", "frontend", "open-source", "cli", "harness", "roku", "tv", "brightscript", "typescript", "developer-tools"] }
+  ]
+}
