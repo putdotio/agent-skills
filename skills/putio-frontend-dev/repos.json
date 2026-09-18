@@ -1,6 +1,5 @@
 {
   "workspace": [
-    { "name": "putio-frontend", "repo": "putdotio/putio-frontend", "path": "~/projects/putdotio/putio-frontend", "owns": "frontend", "mode": "managed", "visibility": "private", "topics": ["putio", "frontend", "workspace", "documentation", "agent-skills"] },
     { "name": "putio-agent-skills", "repo": "putdotio/agent-skills", "path": "~/projects/putdotio/putio-agent-skills", "owns": "frontend", "mode": "managed", "visibility": "public", "topics": ["putio", "frontend", "agent-skills", "coding-agents", "developer-tools"] }
   ],
   "support": [
