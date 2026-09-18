@@ -3,7 +3,7 @@
 A frontend harness may use the globally installed `putio` binary as an adapter
 for account-backed setup, observations, and reversible test state. Use the
 stable lookup published by the
-[putio CLI runtime contract](https://github.com/putdotio/putio-cli/blob/main/skills/putio-cli/SKILL.md#library-contract),
+[putio CLI discovery reference](https://github.com/putdotio/putio-cli/blob/main/skills/putio-cli/references/discovery.md),
 then keep command selection capability-based.
 
 ## Discover

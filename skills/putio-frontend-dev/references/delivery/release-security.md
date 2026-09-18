@@ -2,6 +2,8 @@
 
 Use this when touching GitHub Actions workflows that publish packages, upload app builds, sign artifacts, deploy apps, promote beta builds, backfill releases, or build standalone binaries.
 
+put.io-specific settings live in the Frontend hub in the put.io Notion workspace (page: Release security).
+
 ## Trusted refs
 
 - Secret-bearing jobs check out fixed trusted refs: beta from `main`, release from a published `v*` tag, or an explicitly validated protected ref
@@ -22,7 +24,6 @@ Use this when touching GitHub Actions workflows that publish packages, upload ap
 - Workflows that create GitHub Releases, upload release assets, or move `v*` tags use a `putio-releaser` installation token
 - Keep the release path pinned, least-privilege, ref-validated, and provenance-checked before publishing or promoting
 - Do not add CODEOWNERS as a blanket default for small frontend repos. Use owner-gated workflow or release-file review only when maintainers explicitly want that extra process.
-- put.io-specific settings live in the Frontend hub in the put.io Notion workspace (page: Release security).
 
 ## Inputs
 
@@ -52,7 +53,6 @@ Use this when touching GitHub Actions workflows that publish packages, upload ap
 - Bind GitHub OIDC deploy roles to the repo and protected Environment that owns the deploy, and keep AWS account IDs, Route 53 zone IDs, certificate ARNs, and role ARNs in repo variables
 - For first SST deploys, start with enough AWS access for SST bootstrap plus the app's components, then trim after a successful deploy with CloudTrail or IAM Access Analyzer evidence
 - Record the steady-state policy in the repo's release or infra docs, including the component-specific actions observed during deploy
-- put.io-specific settings live in the Frontend hub in the put.io Notion workspace (page: Release security).
 
 ## Caches and generated trees
 
@@ -92,8 +92,6 @@ Before a severity, remediation, or status claim, verify live provider settings, 
 - branch, tag, Environment, credential, and release state
 - Actions cache contents and cache write/read boundaries
 - Actions permission policy and job-level `permissions`
-
-put.io-specific settings live in the Frontend hub in the put.io Notion workspace (page: Release security).
 
 ## Docs to update
 
