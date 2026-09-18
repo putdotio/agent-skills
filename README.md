@@ -23,10 +23,10 @@ Browse the catalog:
 pnpm dlx skills add putdotio/agent-skills --list
 ```
 
-Install one skill globally for Codex and Claude Code:
+Install one skill globally:
 
 ```bash
-pnpm dlx skills add putdotio/agent-skills -g -y -a codex -a claude-code -s putio-frontend-dev
+pnpm dlx skills add putdotio/agent-skills -g -s putio-frontend-dev
 ```
 
 Replace `putio-frontend-dev` with another catalog name. Omit `-g` for a
