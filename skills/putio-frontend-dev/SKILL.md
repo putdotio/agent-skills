@@ -32,8 +32,10 @@ own guidance and code precedent.
   [delivery model](./references/delivery/model.md)
 - TypeScript package and app setup:
   [TypeScript defaults](./references/engineering/typescript.md)
+- Machine tools, peer clones, agent worktrees, readiness check:
+  [environment setup](./references/environment-setup.md)
 - Local development secrets and CI credential boundaries:
-  [environment setup](./references/delivery/secrets.md)
+  [secrets](./references/delivery/secrets.md)
 - Secret-bearing release, signing, publishing, and deployment:
   [release security](./references/delivery/release-security.md)
 - Browser, native, TV, emulator, simulator, and device proof:
@@ -56,7 +58,8 @@ the target repository.
   documentation boundary, `topics` the GitHub topic set (optional), `mode`
   whether the team's workspace tooling manages the checkout.
 - Peers sit under one folder, default `~/projects/putdotio/`. Missing path:
-  `gh repo clone <repo> <path>`.
+  `gh repo clone <repo> <path>`, or the clone loop in
+  [environment setup](./references/environment-setup.md).
 - Check `visibility` before quoting anything across repos; private content
   stays out of public ones.
 - For tasks that span all frontend repos: iterate the entries with
