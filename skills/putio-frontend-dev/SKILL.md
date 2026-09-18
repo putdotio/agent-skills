@@ -47,6 +47,15 @@ Markdown links navigate this skill bundle. Other paths shown in the references,
 such as `.github/pull_request_template.md`, name files to create or inspect in
 the target repository.
 
+## Knowledge base
+
+- Lives in the put.io Notion workspace, Frontend hub; read it through the
+  Notion MCP.
+- Holds Products, Specs, Design, Engineering (Delivery model, Release
+  security, Secrets management, Third-party services inventory),
+  Architecture decisions, and Guides.
+- Read it before product, spec, release, or secrets decisions.
+
 ## Shared defaults
 
 - Parse external input at the boundary and derive types from the validated

@@ -46,7 +46,9 @@ Development secrets must not keep a broad password-manager fallback. Keep
 personal credentials, signing material, recovery identities, and CI/CD source
 copies outside the development payload. If decryption fails, report the
 required input or missing access instead of adding a fallback or opening an
-interactive login flow. Never commit a private age identity.
+interactive login flow. Each person and unattended host uses its own age
+identity so one can be revoked alone; share only public recipients. Never
+commit a private age identity.
 
 ### Tracked `.env.example`
 
@@ -174,7 +176,7 @@ live and how a job receives them.
 
 ### Where secrets live
 
-- Workflow runtime values live as GitHub Environment secrets, npm/GitHub trusted-publishing configuration, or OIDC-backed provider configuration. put.io-specific settings live in the team knowledge base.
+- Workflow runtime values live as GitHub Environment secrets, npm/GitHub trusted-publishing configuration, or OIDC-backed provider configuration. put.io-specific settings live in the Frontend hub in the put.io Notion workspace (page: Secrets management).
 - CI must not call `op`, `1Password/load-secrets-action`, or use `OP_SERVICE_ACCOUNT_TOKEN` to fetch secrets at runtime
 - Top-level `permissions: {}` (deny by default); each job opts into the minimum it needs and reads Environment secrets directly or assumes provider roles through OIDC
 - Every workflow mapping a sensitive secret uses a deployment Environment: continuous release environments scope secrets without approval gates; production deploy, signing, promotion, or store-submission environments add reviewers only when a human gate is intended
