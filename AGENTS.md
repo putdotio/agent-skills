@@ -14,7 +14,7 @@ Contributor guidance for this public put.io skill catalog.
 - Keep public skills free of private repository content, credentials, account
   details, support cases, and machine-local paths. The frontend repository
   registry may carry repository names, remotes, canonical paths, owners,
-  visibility, and topics.
+  visibility, topics, and mode.
 - Keep current commands and volatile implementation details with the repository
   that owns them. Link public upstream sources when a stable pointer is useful.
 - Keep `agents/openai.yaml` picker metadata aligned with `SKILL.md`.

@@ -53,10 +53,10 @@ the target repository.
   have `owns: frontend`.
 - Fields: `name` is the local folder, `repo` the GitHub remote, `path` the
   canonical checkout, `owns` the responsible team, `visibility` the
-  documentation boundary, `topics` the GitHub topic set, `mode` whether the
-  team's workspace tooling manages the checkout.
+  documentation boundary, `topics` the GitHub topic set (optional), `mode`
+  whether the team's workspace tooling manages the checkout.
 - Peers sit under one folder, default `~/projects/putdotio/`. Missing path:
-  `gh repo clone putdotio/<repo> <path>`.
+  `gh repo clone <repo> <path>`.
 - Check `visibility` before quoting anything across repos; private content
   stays out of public ones.
 - For tasks that span all frontend repos: iterate the registry, enter each
@@ -135,4 +135,4 @@ the target repository.
   supplies put.io frontend domain guidance to whichever workflow does that work.
 - Keep machine-specific facts, credentials, account details, and private
   support context out of this public skill; the repository registry carries
-  names, remotes, canonical paths, owners, and visibility only.
+  names, remotes, canonical paths, owners, visibility, topics, and mode only.
