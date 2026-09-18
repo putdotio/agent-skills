@@ -47,6 +47,21 @@ Markdown links navigate this skill bundle. Other paths shown in the references,
 such as `.github/pull_request_template.md`, name files to create or inspect in
 the target repository.
 
+## Repositories
+
+- [repos.json](./repos.json) lists put.io repositories; frontend-owned entries
+  have `owns: frontend`.
+- Fields: `name` is the local folder, `repo` the GitHub remote, `path` the
+  canonical checkout, `owns` the responsible team, `visibility` the
+  documentation boundary, `topics` the GitHub topic set, `mode` whether the
+  team's workspace tooling manages the checkout.
+- Peers sit under one folder, default `~/projects/putdotio/`. Missing path:
+  `gh repo clone putdotio/<repo> <path>`.
+- Check `visibility` before quoting anything across repos; private content
+  stays out of public ones.
+- For tasks that span all frontend repos: iterate the registry, enter each
+  root, read its `AGENTS.md`, run its own verify.
+
 ## Knowledge base
 
 - Lives in the put.io Notion workspace, Frontend hub; read it through the
@@ -118,5 +133,6 @@ the target repository.
 - Repository policy, generic GitHub Actions hardening, build-tool migrations,
   bootability repair, and independent code review are outside this skill; it
   supplies put.io frontend domain guidance to whichever workflow does that work.
-- Keep private workspace inventory, machine-specific facts, credentials, and
-  private support context out of this public skill.
+- Keep machine-specific facts, credentials, account details, and private
+  support context out of this public skill; the repository registry carries
+  names, remotes, canonical paths, owners, and visibility only.
