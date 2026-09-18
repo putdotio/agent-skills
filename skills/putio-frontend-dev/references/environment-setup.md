@@ -1,13 +1,14 @@
 # Environment setup
 
 One machine layout for put.io frontend work on macOS or Linux. Runtimes come
-from [mise](https://mise.jdx.dev); each repository pins its own Node, pnpm,
-and platform toolchains in its mise config, so nothing here installs them.
+from [mise](https://mise.jdx.dev), installed and activated in the shell first;
+each repository pins its own Node, pnpm, and platform toolchains in its mise
+config, so nothing here installs them.
 
 ## Tools
 
 ```bash
-mise use -g gh jq age sops actionlint 'ubi:putdotio/putio-cli[exe=putio]'
+mise use -g gh jq age sops actionlint github:putdotio/putio-cli
 ```
 
 - `gh`: signed in with the put.io GitHub account; PR media uploads use the
@@ -25,8 +26,8 @@ Clone every registered repository into its canonical path:
 
 ```bash
 jq -r '.[][] | "\(.repo) \(.path)"' ~/.agents/skills/putio-frontend-dev/repos.json \
-  | while read -r repo path; do
-      target="${path/#\~/$HOME}"
+  | while read -r repo checkout; do
+      target="${checkout/#\~/$HOME}"
       [ -d "$target/.git" ] || gh repo clone "$repo" "$target"
     done
 ```
@@ -47,7 +48,7 @@ mise doctor
 for tool in gh jq age sops actionlint putio; do command -v "$tool" >/dev/null || echo "missing: $tool"; done
 gh auth status
 jq -r '.[][] | .path' ~/.agents/skills/putio-frontend-dev/repos.json \
-  | while read -r path; do [ -d "${path/#\~/$HOME}/.git" ] || echo "missing checkout: $path"; done
+  | while read -r checkout; do [ -d "${checkout/#\~/$HOME}/.git" ] || echo "missing checkout: $checkout"; done
 ```
 
 Silence after `gh auth status` means the machine is ready. Secrets are
