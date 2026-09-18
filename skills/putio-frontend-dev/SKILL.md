@@ -59,8 +59,8 @@ the target repository.
   `gh repo clone <repo> <path>`.
 - Check `visibility` before quoting anything across repos; private content
   stays out of public ones.
-- For tasks that span all frontend repos: iterate the registry, enter each
-  root, read its `AGENTS.md`, run its own verify.
+- For tasks that span all frontend repos: iterate the entries with
+  `owns: frontend`, enter each root, read its `AGENTS.md`, run its own verify.
 
 ## Knowledge base
 
