@@ -49,6 +49,13 @@ template gaps: missing .github/pull_request_template.md
 - Secret-bearing release, deploy, signing, publish, beta, backfill, and binary-build jobs follow [release security](./release-security.md).
 - Release jobs that create follow-up commits, release tags, GitHub Releases, or release assets use a `putio-releaser` installation token. Set commit author and committer metadata to the app bot identity. `GITHUB_TOKEN` and a spoofed human or team mailbox do not qualify.
 - Release automation fetches full git history when versioning depends on commits or tags.
+- Verification checkouts keep the default depth. Full history belongs to release jobs and history scans only; a verify job that needs the merge base for affected-package detection fetches a blobless tree and deepens to the base instead.
+- Change detection on pull requests reads the pull-request API and needs no checkout.
+- A check that works for under about half a minute does not get its own job, runner start, and install. Batch short checks into one job on the same runner and trust level; keep separate jobs for different runners, trust boundaries, or multi-minute work.
+- Record install and setup duration in the step summary. Keep a dependency cache only when restore measurably beats a cold install; a filtered install of the affected packages often wins.
+- Non-gating work such as coverage upload, cache markers, and summaries runs after the required check, never inside it.
+- Shard tests only after measuring per-shard setup; doubling shards doubles setup, so shards pay off only when setup is a small fraction of test time.
+- macOS and other platform-bound jobs run only for their platform's code paths, gated by path filters or restricted to pull requests plus manual dispatch; a native repo that must run macOS on every pull request limits the pull-request pass to the primary platform and runs the full platform matrix on `main`.
 - For Swift, Kotlin, and other ecosystems, keep this model and choose the smallest repo-native toolchain that CI can call unchanged.
 
 Semantic-release example:
