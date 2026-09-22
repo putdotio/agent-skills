@@ -52,18 +52,22 @@ the target repository.
 ## Repositories
 
 - [repos.json](./repos.json) lists put.io repositories; frontend-owned entries
-  have `owns: frontend`.
+  list `frontend` in `owns`.
 - Fields: `name` is the local folder, `repo` the GitHub remote, `path` the
-  canonical checkout, `owns` the responsible team, `visibility` the
+  canonical checkout, `owns` the responsible teams, `visibility` the
   documentation boundary, `topics` the GitHub topic set (optional), `mode`
   whether the team's workspace tooling manages the checkout.
+- An entry with several teams in `owns` is shared. In `putdotio/.github`,
+  frontend work stays in the `frontend-*` workflows and the `frontend/`
+  folder; in `putdotio/agent-skills`, in the `putio-*` skills.
 - Peers sit under one folder, default `~/projects/putdotio/`. Missing path:
   `gh repo clone <repo> <path>`, or the clone loop in
   [environment setup](./references/environment-setup.md).
 - Check `visibility` before quoting anything across repos; private content
   stays out of public ones.
-- For tasks that span all frontend repos: iterate the entries with
-  `owns: frontend`, enter each root, read its `AGENTS.md`, run its own verify.
+- For tasks that span all frontend repos: iterate the entries whose `owns`
+  includes `frontend`, enter each root, read its `AGENTS.md`, run its own
+  verify.
 
 ## Knowledge base
 
