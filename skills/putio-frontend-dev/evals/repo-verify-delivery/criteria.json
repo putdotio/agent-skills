@@ -23,6 +23,11 @@
       "max_score": 2
     },
     {
+      "name": "adopts_shared_workflows",
+      "description": "Points npm release and repository scanning at the shared frontend workflows in putdotio/.github instead of hand-writing semantic-release or scanner jobs.",
+      "max_score": 2
+    },
+    {
       "name": "names_smoke_or_gap",
       "description": "Requires an artifact/app/proof smoke check after delivery changes, or explicitly records the missing smoke check as a repo gap.",
       "max_score": 1

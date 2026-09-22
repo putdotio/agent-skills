@@ -43,6 +43,7 @@ template gaps: missing .github/pull_request_template.md
 - Orchestration stays in GitHub Actions unless an established repo standard says otherwise.
 - Repos hosted on GitHub include collaboration templates when they improve review or triage, especially `.github/pull_request_template.md` and `.github/ISSUE_TEMPLATE/*`
 - Package release jobs are safe to no-op when there are no releasable commits.
+- npm release and repository scanning call the shared frontend workflows in [putdotio/.github](https://github.com/putdotio/.github/blob/main/frontend/README.md), pinned to a tagged commit; that README owns the calling contract.
 - Delivery jobs use only the permissions and secrets they need.
 - App repos expose one repo-local deploy command per delivery target, such as `deploy-preview`, `deploy-beta`, or `deploy-production`, so workflow YAML stays thin. Do not overload one generic `deploy`.
 - Beta and preview builds ship continuously. Add stricter promotion gates only where the product or platform requires them.
