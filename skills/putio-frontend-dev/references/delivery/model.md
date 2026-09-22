@@ -49,6 +49,13 @@ template gaps: missing .github/pull_request_template.md
 - Secret-bearing release, deploy, signing, publish, beta, backfill, and binary-build jobs follow [release security](./release-security.md).
 - Release jobs that create follow-up commits, release tags, GitHub Releases, or release assets use a `putio-releaser` installation token. Set commit author and committer metadata to the app bot identity. `GITHUB_TOKEN` and a spoofed human or team mailbox do not qualify.
 - Release automation fetches full git history when versioning depends on commits or tags.
+- Verification checkouts keep the default depth. Full history belongs to release jobs and history scans only; a verify job that needs the merge base for affected-package detection fetches a blobless tree and deepens to the base instead.
+- Change detection on pull requests reads the pull request API with `pull-requests: read` and needs no checkout.
+- A job whose work is shorter than the measured runner start, checkout, and install on its runner shape is a candidate to merge into a sibling job on the same runner and trust level, with the tasks run concurrently. Measure that overhead per runner shape; GitHub does not publish it. Concurrent tasks share one runner's cores and memory, so compare the batched job with the parallel jobs before keeping it, and say whether latency or runner minutes is the target. Keep separate jobs for different runners, trust boundaries, or multi-minute work.
+- Measure caches before keeping them. Record hit or miss, restore, install, and save seconds in the step summary; a dependency cache stays only when its expected cost from those numbers beats always installing cold. Try the package-manager store cache first, and in a monorepo measure a filtered install of the affected packages against restoring everything.
+- Non-gating work such as coverage upload, cache markers, and summaries runs after the required check, never inside it.
+- Shard tests only after measuring per-shard setup; doubling shards doubles setup, so shards pay off only when setup is a small fraction of test time.
+- macOS and other platform-bound jobs run only for their platform's code paths, gated by a job-level condition or restricted to pull requests plus manual dispatch. Gate at job level behind an always-running `verify` aggregator, not with workflow-level `paths` filters, which leave a required check pending. A native repo that needs macOS on every pull request runs the primary platform there and the full platform matrix on `main`.
 - For Swift, Kotlin, and other ecosystems, keep this model and choose the smallest repo-native toolchain that CI can call unchanged.
 
 Semantic-release example:
