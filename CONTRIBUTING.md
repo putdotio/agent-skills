@@ -2,8 +2,9 @@
 
 ## Setup
 
+Install [pnpm](https://pnpm.io/installation), then:
+
 ```bash
-corepack enable pnpm
 pnpm install --frozen-lockfile
 ```
 
