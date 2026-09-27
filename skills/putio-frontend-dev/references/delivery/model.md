@@ -54,7 +54,7 @@ template gaps: missing .github/pull_request_template.md
 
 ## Collaboration templates
 
-Keep review and triage prompts in the repo.
+GitHub-hosted repos include `.github/pull_request_template.md` and `.github/ISSUE_TEMPLATE/*` when they improve review or triage.
 
 - Pull request templates ask for the most useful evidence for the kind of change:
   - screenshots or screen recordings for UI, layout, onboarding, animation, or copy changes, with the upload route named: `gh pr create --attach ./file.png` or `gh pr comment <n> --attach ./file.mp4` (gh 2.99+); a template that omits the route gets media committed to the branch
