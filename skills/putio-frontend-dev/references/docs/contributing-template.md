@@ -5,11 +5,9 @@ Adapt the commands, toolchain, and development notes to the repo. Keep the file 
 ````md
 # Contributing
 
-Thanks for contributing to this project.
-
 ## Setup
 
-Install the required toolchain and then install dependencies:
+Install the required toolchain, then install dependencies:
 
 ```bash
 <install-command>
@@ -17,15 +15,13 @@ Install the required toolchain and then install dependencies:
 
 ## Run locally
 
-Start the project in local development mode:
-
 ```bash
 <dev-command>
 ```
 
 ## Validation
 
-Run the full project checks before opening or updating a pull request:
+Run the project checks before opening or updating a pull request:
 
 ```bash
 <check-command>

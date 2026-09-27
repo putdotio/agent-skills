@@ -25,6 +25,7 @@ lives in the Frontend hub in the put.io Notion workspace (page: Products).
 - TypeScript should feel like modern Effect-first TypeScript
 - Swift should feel like modern Apple-platform Swift, not a port of JavaScript ideas
 - Kotlin should feel like coroutine-first Kotlin, not a transliteration of Swift or TypeScript
+- Per-language rules live in [language notes](./language-notes.md)
 
 ### Parse at the boundary
 
@@ -57,10 +58,6 @@ lives in the Frontend hub in the put.io Notion workspace (page: Products).
 - Treat mock-heavy self-verification as a starting point; add the real contract checks the change needs
 - If a repo cannot prove its real behavior safely, document that as a gap
 
-## Language doctrine
-
-Per-language rules live in [language notes](./language-notes.md).
-
 ## Scope policy
 
 Scope parity is not the goal for every SDK. Quality parity is. Expand Swift or
@@ -76,18 +73,10 @@ Before adding a namespace to Swift or Kotlin, check:
 
 ## Verification policy
 
-Healthy put.io SDK repos should provide:
-
-- one canonical deterministic verify path
-- one documented live-test path for real API verification
-
-The current workspace direction is:
-
-- TypeScript: repo-native verify and live-test flows such as `vp run verify` and `vp run test:live`
-- Swift: `make verify` plus a safe live-test entrypoint
-- Kotlin: `./gradlew verify` plus `./gradlew liveTest`
-
-If a repo only has one layer today, document the gap and prefer adding the missing layer over widening claims about verification quality.
+Healthy put.io SDK repos provide one canonical deterministic verify path and
+one documented live-test path for real API verification. The repo owns the
+command names. If a repo only has one layer today, document the gap and prefer
+adding the missing layer over widening claims about verification quality.
 
 Coverage is a guardrail, not the product. Still, SDK repos should carry a meaningful minimum line-coverage floor so public contracts cannot quietly rot.
 

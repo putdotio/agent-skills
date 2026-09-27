@@ -17,7 +17,7 @@ mise use -g gh jq age sops actionlint github:putdotio/putio-cli
   [secrets](./delivery/secrets.md)
 - `actionlint`: workflow checks in the verify gates
 - `putio`: the put.io CLI used by test harnesses, see
-  [CLI harness contract](../test-harness/cli.md)
+  [CLI harness contract](./test-harness/cli.md)
 - Apple targets need Xcode on macOS; Android targets need Android Studio
 
 ## Repositories

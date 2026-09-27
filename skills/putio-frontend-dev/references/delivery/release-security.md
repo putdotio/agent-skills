@@ -9,7 +9,6 @@ put.io-specific settings live in the Frontend hub in the put.io Notion workspace
 - Secret-bearing jobs check out fixed trusted refs: beta from `main`, release from a published `v*` tag, or an explicitly validated protected ref
 - Treat the workflow run ref and the checkout ref as separate trust boundaries. A GitHub Environment branch or tag policy constrains the run ref; it does not prove that `inputs.ref` is safe to check out later
 - Do not use `pull_request_target` for workflows that check out, install, build, test, package, publish, sign, deploy, or otherwise execute project code. Keep fork and outsider code on `pull_request` with read-only credentials and no release secrets
-- `workflow_dispatch` inputs are validated and bounded in a secretless step before they influence jobs that load secrets, sign artifacts, publish packages, or upload release assets
 - For manual backfills, validate the tag/ref in a separate secretless job, make build jobs depend on it, and use a sanitized output in `actions/checkout` `with.ref`
 
 ## Repo settings model
@@ -17,31 +16,29 @@ put.io-specific settings live in the Frontend hub in the put.io Notion workspace
 - Public frontend-owned repos default to: `main` push allowlist, resolved pull-request conversations, protected `v*` tags, approval-free continuous release Environments, and `putio-releaser` for automated GitHub writes
 - Private repos without paid GitHub protection document the limitation and compensate with Environment gates, fixed checkout refs, action pinning, validated manual inputs, and least-privilege credentials
 - Reviewer-gated Environments are separate production deploy, signing, promotion, or store-submission gates when a repo explicitly needs them
-- Package/library/CLI/skill release jobs use the approval-free `release` Environment as a secret boundary with `deployment: false`; app deploy, beta, signing, promotion, and store-submission jobs keep deployment records when they represent real deployments
+- Package/library/CLI/skill release jobs use the approval-free `release` Environment as a secret boundary with `deployment: false`; app deploy, beta, signing, promotion, and store-submission jobs keep deployment records when they represent real deployments, as does any Environment with custom deployment protection rules
 - Release workflows store `PUTIO_RELEASE_BOT_CLIENT_ID` as a protected Environment variable and `PUTIO_RELEASE_BOT_PRIVATE_KEY` as a protected Environment secret
-- Push-back jobs mint a `putio-releaser` installation token and set matching `GIT_AUTHOR_*` / `GIT_COMMITTER_*`. Commit metadata is not authorization: `GITHUB_TOKEN` writes as `github-actions[bot]`
+- Jobs that push commits, create GitHub Releases, upload release assets, or move `v*` tags mint a `putio-releaser` installation token and set matching `GIT_AUTHOR_*` / `GIT_COMMITTER_*`. Commit metadata is not authorization: `GITHUB_TOKEN` writes as `github-actions[bot]`, and a spoofed human or team mailbox does not qualify
 - If a third-party publish action creates commits internally, verify it accepts release-bot identity inputs or honors `GIT_AUTHOR_*` / `GIT_COMMITTER_*`
-- Workflows that create GitHub Releases, upload release assets, or move `v*` tags use a `putio-releaser` installation token
-- Keep the release path pinned, least-privilege, ref-validated, and provenance-checked before publishing or promoting
 - Do not add CODEOWNERS as a blanket default for small frontend repos. Use owner-gated workflow or release-file review only when maintainers explicitly want that extra process.
 
 ## Inputs
 
-- Pass `workflow_dispatch` inputs through `env`, validate format and length, then use shell variables such as `$TAG_NAME` or `$env:TAG_NAME`. For later action inputs, emit sanitized step outputs rather than reusing raw `${{ inputs.* }}`
+- Validate and bound `workflow_dispatch` inputs in a secretless step before they influence jobs that load secrets, sign, publish, or upload release assets
+- Pass them through `env`, validate format and length, then use shell variables such as `$TAG_NAME` or `$env:TAG_NAME`. For later action inputs, emit sanitized step outputs rather than reusing raw `${{ inputs.* }}`
 - Keep multiline untrusted input out of `$GITHUB_ENV`; sanitize it first or use heredoc-safe patterns that cannot be broken by attacker-controlled delimiters
 - Move non-secret metadata prep before any secret-loading step where possible
 
 ## Actions and toolchains
 
-- Use GitHub-hosted runners everywhere: `ubuntu-24.04-arm` for routine Linux CI and release jobs, `ubuntu-24.04` for jobs that produce or depend on x86_64 artifacts, `windows-2025` for Windows, and `macos-latest` for macOS. Do not introduce self-hosted or third-party runners without an explicit decision
+- Public repos use GitHub-hosted runners: `ubuntu-24.04-arm` for routine Linux CI and release jobs, `ubuntu-24.04` for jobs that produce or depend on x86_64 artifacts, `windows-2025` for Windows, and `macos-latest` for macOS. Private repos may use Blacksmith labels, declared in `.github/actionlint.yaml` and accepted by the shared scan workflow's `runner` input. Do not introduce other self-hosted or third-party runners without an explicit decision
 - Pin an OS image when it is part of the tested toolchain contract, and document that reason next to the workflow or in the repo release docs
-- Keep npm Trusted Publishing jobs on GitHub-hosted `ubuntu-latest` because npm rejects self-hosted runners. Do not replace OIDC with a long-lived `NPM_TOKEN` without an explicit secret-boundary decision
+- npm Trusted Publishing rejects self-hosted runners, so npm publish jobs stay on a GitHub-hosted runner. Prefer it over `NPM_TOKEN`: configure the package on npm with the GitHub owner/repo, workflow filename, and optional Environment; grant the release job `id-token: write`; and rely on npm's automatic provenance for public packages from public repos. Keep `package.json` repository metadata aligned with that GitHub repo. Do not replace OIDC with a long-lived `NPM_TOKEN` without an explicit secret-boundary decision
 - Pin release, publish, upload, signing, and deploy actions to full commit SHAs with a trailing comment for the human version tag
 - Configure Dependabot for the `github-actions` ecosystem when workflows pin actions by SHA. Dependabot updates SHA-pinned actions when the same line includes the version tag comment, so prefer exact comments such as `# v1.10.0` over broad moving-major comments such as `# v1`
 - Before committing a pinned action ref, verify that the SHA still exists upstream and resolves to the advertised tag. Stale or garbage-collected SHAs can make Dependabot update jobs fail even when the workflow still looks pinned
-- In secret-bearing release, publish, signing, and deploy paths, preserve the repo's normal toolchain contract when it can be pinned, but disable dependency caches by default. For repos that use Vite+ (`vp`), use a full-SHA-pinned `voidzero-dev/setup-vp` with `cache: false` or no cache input, then `vp install` / `vp run ...`. For pnpm repos that do not use Vite+, use full-SHA-pinned `actions/setup-node` for the Node version, full-SHA-pinned `pnpm/action-setup@v6` without package-manager cache, then `pnpm install --frozen-lockfile`
+- In secret-bearing jobs, preserve the repo's pinned toolchain but skip dependency caches. For Vite+ (`vp`) repos, use a full-SHA-pinned `voidzero-dev/setup-vp` with `cache: false`, then `vp install` / `vp run ...`. For pnpm repos without Vite+, use full-SHA-pinned `actions/setup-node` and `pnpm/action-setup@v6` without package-manager cache, then `pnpm install --frozen-lockfile`
 - For semantic-release action workflows, keep CI/CD-only release plugins in `extra_plugins` rather than repo `devDependencies`, and pin every plugin entry to an exact version
-- For npm publishing from GitHub-hosted Actions, prefer npm Trusted Publishing over `NPM_TOKEN`: configure the package on npm with the GitHub owner/repo, workflow filename, and optional Environment; grant the release job `id-token: write`; remove the long-lived token; and rely on npm's automatic provenance for public packages from public repos. Keep `package.json` repository metadata aligned with that GitHub repo.
 - Keep checkout credentials unpersisted through install, build, and pack steps when possible. If semantic-release must push a version bump, introduce the release-bot or GitHub App write credential only at the release boundary, after dependency lifecycle scripts have finished.
 - Verify downloaded runtime or toolchain archives before extraction or embedding. Pair functional smoke tests with provenance checks
 - For Node SEA or binary builds, download the official checksum file, match the exact platform archive name, hash the archive, and fail before extraction on mismatch
@@ -56,16 +53,14 @@ put.io-specific settings live in the Frontend hub in the put.io Notion workspace
 
 ## Caches and generated trees
 
-- Verify jobs may use dependency caches, but secret-bearing release, publish, signing, and deploy jobs do fresh dependency installs by default. Do not share package-manager caches between `pull_request` and privileged `push: main`, `workflow_dispatch`, or tag-driven jobs; include `${{ github.event_name }}` in cache keys so PR jobs cannot poison caches consumed by secret-bearing jobs
-- Regenerate or verify generated dependency trees inside signed or release jobs. Examples include full CocoaPods `Pods` trees and other generated vendor directories
-- Cache download artifacts where possible, then regenerate and verify generated trees before signing or publishing
-- If a generated-tree or tool cache is unavoidable in a privileged job, namespace it by workflow, event, trust level, platform, and lockfile. Privileged jobs consume only caches written by the same trusted event class, and they still regenerate or verify generated trees before signing, publishing, or promotion
+- Verify jobs may use dependency caches; secret-bearing release, publish, signing, and deploy jobs install fresh. Do not share package-manager caches between `pull_request` and privileged `push: main`, `workflow_dispatch`, or tag-driven jobs; include `${{ github.event_name }}` in cache keys so PR jobs cannot poison caches consumed by secret-bearing jobs
+- Regenerate or verify generated dependency trees, such as full CocoaPods `Pods` trees, inside signed or release jobs. Cache download artifacts where possible, then regenerate and verify before signing or publishing
+- If a generated-tree or tool cache is unavoidable in a privileged job, namespace it by workflow, event, trust level, platform, and lockfile. Privileged jobs consume only caches written by the same trusted event class
 - `bootstrap-ci.sh`-style shortcuts that skip regeneration only from lockfile equality are acceptable for local speed, but risky when a generated tree came from a shared CI cache
 
 ## Release and deploy handoffs
 
-- Treat GitHub Actions artifacts as temporary CI scratch storage, not a release or deployment registry. Quota and retention limits can block deploys after build, test, or release already succeeded.
-- Use Actions artifacts only for same-run handoff when quota, retention, and provenance are acceptable and no better immutable payload store exists.
+- Treat GitHub Actions artifacts as temporary CI scratch storage, not a release or deployment registry. Quota and retention limits can block deploys after build, test, or release already succeeded. Use them only for same-run handoff when no better immutable payload store exists.
 - For simple static surfaces where build, e2e, and deploy can safely share one trusted environment-scoped job, deploy the tested output from the runner filesystem and keep post-deploy smoke in a separate read-only job.
 - For versioned releases, deploy from the durable published boundary: GitHub Release asset, package registry version, container image digest, app-store/TestFlight build, or provider-native package. Verify the downloaded or promoted payload before loading deploy credentials where practical.
 
@@ -79,9 +74,8 @@ Worked example: [TanStack npm supply-chain compromise postmortem](https://tansta
 
 ## Provenance
 
-- Release workflows should build and upload the release artifact from the release tag
-- Promote an existing beta, TestFlight, App Store Connect, npm, or GitHub artifact into release only when provenance is recorded and verified
-- Required promotion provenance: commit SHA, tag, build number or package version, artifact digest, workflow run id, and the originating artifact identity
+- Build and upload the release artifact from the release tag
+- Promote an existing beta, TestFlight, App Store Connect, npm, or GitHub artifact into release only when provenance is recorded and verified: commit SHA, tag, build number or package version, artifact digest, workflow run id, and the originating artifact identity
 - Do not publish a release artifact and then re-upload the same payload as an Actions artifact solely for deploy. Deploy should consume the release asset, registry package, image digest, or provider-native package directly.
 - When reviewing findings, separate stale evidence from current truth. If a direct cache or checkout path was removed, keep only the surviving path that still reaches signing, publishing, or promotion
 
@@ -95,4 +89,4 @@ Before a severity, remediation, or status claim, verify live provider settings, 
 
 ## Docs to update
 
-When release, cache, provenance, or signing behavior changes, update repo-local docs in the same change. Put release and publishing behavior in `docs/DISTRIBUTION.md`; keep `CONTRIBUTING.md` focused on contributor setup and validation, and let `README.md` / `AGENTS.md` link to the distribution doc when useful.
+Update the repo's `docs/DISTRIBUTION.md` in the same change when release, cache, provenance, or signing behavior changes; [collaboration templates](./model.md#collaboration-templates) lists what it holds.
