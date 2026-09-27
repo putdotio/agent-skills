@@ -2,10 +2,11 @@
 
 Starting points only. Verify current platform tooling in the target repo before implementing.
 
-Good proof on every platform: the surface installs or boots on the selected
-target, launches foregrounded, reaches the expected route or screen through a
-deeplink, launch argument, or entrypoint, and saves a screenshot plus a log,
-trace, or state excerpt with the summary. Extra platform proof is noted below.
+Good proof usually shows the surface installed or booted on the selected
+target and launched foregrounded, with a screenshot plus a log, trace, or state
+excerpt saved with the summary. App-level harnesses also assert the expected
+route or screen after a deeplink, launch argument, or entrypoint. Platform
+alternatives and extra checks are noted below.
 
 ## Web and browser extensions
 
@@ -56,7 +57,10 @@ Common harness concerns:
 - install and launch commands that fail with terse vendor output
 - logs through `sdb`
 - screenshots when the device/toolchain supports them
-- proof includes the package artifact and startup logs through `sdb`
+- a packaging and install wrapper proves the package artifact, install on the
+  selected device, foreground launch, and startup logs through `sdb`; a
+  screenshot or runtime signal confirms visibility when the device supports it,
+  and app navigation stays in the app harness
 
 ## Roku
 
