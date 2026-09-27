@@ -1,4 +1,4 @@
-# Env setup
+# Secrets
 
 Use this reference when a put.io frontend-owned repo has local/dev secrets,
 live-test env files, SOPS ciphertext inputs, or secret-bearing build, signing,
@@ -22,10 +22,6 @@ test -f .env.example && cat .env.example
 Repos with no SOPS input, CI secret boundary, or `.env.example` contract need
 none of the below. Leave them alone.
 
-If `.env.example` already exists with bare-key placeholders for non-secret or
-device-local values, preserve those entries. Do not replace safe placeholders
-with secret-manager references.
-
 ## Standard shape
 
 A local-dev secret consumer carries four artifacts:
@@ -38,9 +34,7 @@ A local-dev secret consumer carries four artifacts:
 The maintainer supplies ciphertext outside the public repository. The wrapper
 decrypts only that file, validates the exact consumer contract, and writes the
 ignored output atomically. Frameworks may auto-read `.env.local`; shell flows
-must load it explicitly. To avoid a materialized plaintext output, use
-`sops exec-env --same-process <ciphertext> '<command>'` or a repo-owned process
-wrapper that validates before launch.
+must load it explicitly.
 
 Development secrets must not keep a broad password-manager fallback. Keep
 personal credentials, signing material, recovery identities, and CI/CD source
@@ -59,15 +53,16 @@ PUTIO_TEST_FIXTURE_ID=
 ```
 
 Keep `.env.example` as the public variable-name contract with safe placeholders.
-Do not put `op://` references or real secret-manager object names in public
-templates unless the repo explicitly owns that exposure.
+Preserve existing bare-key placeholders for non-secret or device-local values;
+do not replace them with secret-manager references. Do not put `op://`
+references or real secret-manager object names in public templates unless the
+repo explicitly owns that exposure.
 
 ### `secrets-setup` / `secrets-clean` targets
 
-The target delegates to a repo-owned wrapper. Do not embed private repository
-paths, recipients, recovery locations, or provider coordinates in a public
-command. After setup, normal repo commands read `.env.local` and do not decrypt
-again. `secrets-clean` removes the materialized file before worktree removal.
+The target delegates to a repo-owned wrapper. After setup, normal repo commands
+read `.env.local` and do not decrypt again. `secrets-clean` removes the
+materialized file before worktree removal.
 
 Name by runner: hyphen for Make, just, and shell; colon for npm-style scripts.
 
@@ -86,14 +81,6 @@ secrets-clean:
   "secrets:setup": "bash ./scripts/secrets-setup.sh",
   "secrets:clean": "rm -f .env.local .env.local.* .env.local.swp"
 } }
-```
-
-```just
-# justfile
-secrets-setup:
-    ./scripts/secrets-setup.sh
-secrets-clean:
-    rm -f .env.local .env.local.* .env.local.swp
 ```
 
 In a monorepo with per-app/package inputs, declare the target on each package so
@@ -119,13 +106,15 @@ The `!.env.example` exception is required: without it, the blanket `.env.*` rule
 
 ## Targets that need secrets
 
-Default verify (`build`, `test`, `lint`, `typecheck`) runs without secrets.
+Default verify (`build`, `test`, `lint`, `typecheck`) runs without secrets. If
+any depend on secrets, move the secret-dependent flow to a separate target
+(`live-test`, `deploy`, `release`) that documents its requirement.
 Secret-bearing targets consume an already materialized file and fail with a
 direct instruction to run `secrets-setup` when it is absent. Do not make normal
 repository commands decrypt credentials implicitly.
 
-For no-disk-persist flows, use a repo-owned process wrapper that validates the
-payload before launch:
+For no-disk-persist flows, use `sops exec-env --same-process <ciphertext> '<command>'`
+or a repo-owned process wrapper that validates the payload before launch:
 
 ```bash
 PUTIO_WEB_SOPS_FILE=/path/to/web.sops.env \
@@ -156,10 +145,9 @@ test ! -f .env.local && echo cleanup ok
 
 ## Public repo notes
 
-- Build, test, lint, typecheck must pass without `.env.local`. If any depend on secrets, move the secret-dependent flow to a separate target (`live-test`, `deploy`, `release`) that documents its requirement
 - `secrets-setup` is a committer-only target in public repos; routine contributors ignore it
 - Document only the generic SOPS input, repo-local command, ignored output, and cleanup command
-- Keep vault names, payload paths, recipients, recovery locations, and account identifiers out of public docs
+- Keep vault names, payload paths, recipients, recovery locations, and account identifiers out of public docs and commands
 
 ## CI/CD
 
@@ -215,8 +203,8 @@ jobs:
 Keep `PUTIO_RELEASE_BOT_PRIVATE_KEY` out of broad repo-owned commands such as
 install, build, test, and deploy preparation. Pass it only to the token-minting
 action, then pass the resulting short-lived token to the narrow final write step.
-
-Use `deployment: false` for package/library/CLI/skill release jobs whose Environment exists only to scope secrets. Keep deployment records for app deploys, signing, promotion, store submission, and any Environment with custom deployment protection rules.
+When to keep `deployment: false` is in
+[release security](./release-security.md#repo-settings-model).
 
 ## Harness ergonomics
 

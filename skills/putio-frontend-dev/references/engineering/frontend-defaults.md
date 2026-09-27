@@ -38,8 +38,7 @@ External input becomes a typed value at the boundary, or it does not enter the p
 - A "validated" value still typed as `unknown`, `any`, or `Record<string, unknown>` is not parsed. Keep going until the value is fully typed.
 - Parse failures are typed errors, not thrown strings. Keep success and HTTP
   failure decoding separate while returning the repository's shared error type.
-- Apply the same rule to environment variables, files, storage, and route
-  inputs. Keep their business rules in the boundary schema.
+- Keep business rules for those inputs in the boundary schema.
 - Once parsed, the typed value flows inward unchanged. Inner code does not re-validate, re-coerce, or guard with `if (!data) return null`. Those guards are signals that the boundary leaked.
 
 ## Make impossible states impossible
@@ -259,7 +258,6 @@ Rules:
 - Use `useQuery` for server reads.
 - Query keys are arrays, namespaced per feature, with the input as a structured payload, not a stringified blob: `["transfers", filter]`, not `` `transfers-${JSON.stringify(filter)}` ``. Cache invalidation works on prefix.
 - Mutations invalidate the cache, not local state: `onSuccess: invalidateQueries({ queryKey: ["transfers"] })`. Optimistic flows use `onMutate` to set and return a snapshot, `onError` to roll it back.
-- Writes: `useMutation` when there is a cache to invalidate; `useActionEffect` for one-off RPCs with no cached read. See *Forms* below.
 - Polling lives next to the query key, not the component: `refetchInterval: 5_000` on the query, not `setInterval` in a `useEffect`
 
 ## Forms
@@ -305,7 +303,7 @@ const [error, action, pending] = useActionEffect(RuntimeClient, (formData: FormD
 
 Read keys explicitly via `formData.get(name)` (or `formData.getAll(name)` for multi-value fields like checkbox groups). This preserves repeated names and keeps attacker-controlled keys out of the schema decoder.
 
-A TanStack Query mutation that invalidates the relevant query keys does not need to update local state: the next read picks up the change. Skip optimistic updates unless perceived latency warrants them.
+Skip optimistic updates unless perceived latency warrants them.
 
 Where a repo uses TanStack Form instead:
 
@@ -329,8 +327,7 @@ Components in put.io React apps do not import or call `useEffect` directly.
 
 - Components are deep modules: small surface (props), meaningful interior. A wrapper that forwards every prop unchanged adds nothing.
 - Keep state local until a second consumer needs it.
-- Subscriptions, storage, and telemetry live in adapters and reviewed hooks, not in page components. See *React effects* above.
-- Keep server-state in server-state tools and UI-state in UI-state tools. See *Server State* above.
+- Subscriptions, storage, and telemetry live in adapters and reviewed hooks, not in page components.
 - Pure render trees: a component that takes typed props and returns JSX with no side effects is the easiest to test, animate, and refactor.
 - Prefer small composable primitives in the UI layer over monolithic screen templates.
 
@@ -356,6 +353,5 @@ Pick the repo's existing stack. If the repo is silent, default to Tailwind v4 fo
 
 ## Verification before "done"
 
-- Type-check, lint, and unit tests passing is necessary, not sufficient, for UI work.
-- Exercise the feature in a browser or device. Click the golden path. Try one edge case. Watch the network tab and console.
+- Passing type-check, lint, and unit tests is necessary, not sufficient, for UI work. Exercise the feature in a browser or device: the golden path, one edge case, and the network tab and console.
 - If the UI cannot be exercised (no dev server, no preview), say so in the PR and list type checks as partial evidence.

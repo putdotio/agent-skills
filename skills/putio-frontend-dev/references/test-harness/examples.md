@@ -31,8 +31,8 @@ Good boundaries:
 Pattern signals:
 
 - `pnpm roku` scripts wrap common live-device workflows
-- TypeScript scripts drive live Roku checks
-- Roku ECP handles launch, deeplinks, keypresses, and screenshots
+- TypeScript scripts drive live Roku checks through `@putdotio/rokit`, which
+  wraps Roku ECP for launch, deeplinks, keypresses, and screenshots
 - SceneGraph/runtime queries support assertions when available
 - screenshots, logs, review HTML, and compact summaries make behavior reviewable
 - live checks cover auth state, deeplink navigation, playback, focus, media-key behavior, and visual artifacts

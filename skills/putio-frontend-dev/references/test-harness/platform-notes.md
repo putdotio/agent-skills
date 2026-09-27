@@ -2,6 +2,11 @@
 
 Starting points only. Verify current platform tooling in the target repo before implementing.
 
+Good proof on every platform: the surface installs or boots on the selected
+target, launches foregrounded, reaches the expected route or screen through a
+deeplink, launch argument, or entrypoint, and saves a screenshot plus a log,
+trace, or state excerpt with the summary. Extra platform proof is noted below.
+
 ## Web and browser extensions
 
 Likely tools:
@@ -19,13 +24,6 @@ Common harness concerns:
 - extension permissions, service worker lifecycle, and content-script injection state
 - reliable screenshots and traces for visual or startup failures
 
-Good proof:
-
-- surface boots through a single command
-- smoke check proves the app or extension is alive
-- route or extension entrypoint opens the expected product flow
-- screenshot, trace, console log, or runtime state dump is saved with the summary
-
 ## iOS / Android native
 
 Likely tools:
@@ -39,16 +37,8 @@ Common harness concerns:
 - simulator or emulator boot readiness
 - install, launch, deeplink, intent, and launch-argument support
 - app reinstall wiping local session state
-- auth/session seeding through approved development hooks
+- auth/session seeding through approved development hooks, checked before the product flow starts
 - logs, screenshots, and accessibility state that explain failures
-
-Good proof:
-
-- app installs or launches on the selected target
-- auth/session readiness is checked before the product flow starts
-- deeplink or launch argument opens the expected route
-- UI/accessibility state supports assertions
-- screenshot and log excerpt are saved with the summary
 
 ## Tizen
 
@@ -66,14 +56,7 @@ Common harness concerns:
 - install and launch commands that fail with terse vendor output
 - logs through `sdb`
 - screenshots when the device/toolchain supports them
-
-Good proof:
-
-- package artifact exists
-- install command succeeds on the selected device
-- app launches foregrounded
-- logs show startup or an expected marker
-- screenshot or runtime signal confirms the app is visible
+- proof includes the package artifact and startup logs through `sdb`
 
 ## Roku
 
@@ -91,14 +74,7 @@ Common harness concerns:
 - keypress timing
 - focus and playback state
 - screenshots and review HTML for visual proof
-
-Good proof:
-
-- app launches through ECP
-- route or screen assertion passes
-- keypress sequence reaches expected focus
-- playback responds to media keys
-- screenshot and logs are attached to the run summary
+- proof includes a keypress sequence reaching the expected focus and playback responding to media keys
 
 ## Android TV
 
@@ -119,14 +95,6 @@ Common harness concerns:
 - logcat noise filtering
 - screenshot and screenrecord artifacts
 
-Good proof:
-
-- package installs on a selected target
-- activity launches foregrounded
-- deeplink opens the expected route
-- UI dump or accessibility state supports assertions
-- screenshot/logcat excerpt is saved with the summary
-
 ## Apple TV / tvOS
 
 Likely tools:
@@ -144,14 +112,6 @@ Common harness concerns:
 - remote/button events through XCTest or simulator tooling
 - screenshots and logs
 - video/playback assertions that may need app test hooks
-
-Good proof:
-
-- build target succeeds for simulator or hardware
-- app installs and launches
-- focused route or screen assertion passes
-- screenshot is saved
-- logs or XCTest output explain failures
 
 Keep signing identities, provisioning profiles, device identifiers, and account facts outside git.
 
