@@ -77,6 +77,10 @@ the target repository.
   security, Secrets management, Third-party services inventory),
   Architecture decisions, and Guides.
 - Read it before product, spec, release, or secrets decisions.
+- Edit only Frontend pages. Leave other teams' pages, including ops guides in
+  shared databases, untouched unless the task asks for them.
+- Keep put.io knowledge in the put.io workspace; never copy it into another
+  Notion workspace, or another workspace's knowledge into it.
 
 ## Shared defaults
 
