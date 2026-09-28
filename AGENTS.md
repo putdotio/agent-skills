@@ -23,6 +23,4 @@ Contributor guidance for this public put.io skill catalog.
   criteria changed.
 - Run `pnpm run verify` before handoff. CI runs the same keyless workflow and
   skill lint gate.
-- Verify every finding. Fix valid findings, reply with the proving commit or
-  evidence, and resolve their threads before merging.
 - Use repo-relative links in checked-in Markdown.
