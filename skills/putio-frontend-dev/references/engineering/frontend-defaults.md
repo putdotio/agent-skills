@@ -156,10 +156,6 @@ Long-running operations emit `{ current, total, label }` progress events. Keep m
   errors.
 - Let SDK errors propagate unchanged through browser adapters; app-local wrapper
   classes discard operation context. Localize at the route or feature boundary.
-- Server functions are a serialization boundary: map SDK errors to a typed
-  result (`{ status: "error", reason }`) before returning instead of throwing
-  an `Error` instance across it. Document security-preserving mappings, such as
-  enumeration-safe password reset, at the mapper.
 - Never render `error.message` to users; API text is not localized copy.
 - UI surfaces errors through localizers, not raw error switches in components.
   A localizer matches a status, API error type, or predicate and returns
@@ -197,18 +193,9 @@ export const localizeRenameFileError = (error: unknown) =>
   ]);
 ```
 
-Avoid:
-
-```tsx
-try {
-  await renameFile(input);
-} catch (error) {
-  Toast.Show(String(error));
-  Sentry.captureException(error);
-}
-```
-
-That leaks raw error text, duplicates telemetry policy in a leaf, and gives the user no recovery path.
+Avoid `catch (error) { Toast.Show(String(error)); Sentry.captureException(error); }`
+in leaves: it leaks raw error text, duplicates telemetry policy, and gives the
+user no recovery path.
 
 ## Effect runtime wiring (TypeScript)
 
@@ -282,46 +269,22 @@ export const useActionEffect = <Payload, A, E, R>(
   );
 ```
 
-Usage: schema decode happens inside the Effect, parse errors stay typed alongside business errors, and there is no separate validate-then-submit step:
+Decode the form inside the Effect with `Schema.decodeUnknown`, so parse errors
+stay typed alongside business errors and there is no separate validate-then-submit
+step. Bind `action` to `<form action>` and disable the fieldset while `pending`.
+Read keys explicitly via `formData.get(name)` (or `formData.getAll(name)` for
+multi-value fields like checkbox groups); this preserves repeated names and keeps
+attacker-controlled keys out of the schema decoder.
 
-```tsx
-const [error, action, pending] = useActionEffect(RuntimeClient, (formData: FormData) =>
-  Effect.gen(function* () {
-    const sdk = yield* PutioSdk;
-    const input = yield* Schema.decodeUnknown(RenameFileInput)({
-      fileId: formData.get("fileId"),
-      name: formData.get("name"),
-    });
-    yield* sdk.files.rename(input);
-  }),
-);
-
-<form action={action}>
-  <fieldset disabled={pending}>...</fieldset>
-</form>;
-```
-
-Read keys explicitly via `formData.get(name)` (or `formData.getAll(name)` for multi-value fields like checkbox groups). This preserves repeated names and keeps attacker-controlled keys out of the schema decoder.
-
-Skip optimistic updates unless perceived latency warrants them.
-
-Where a repo uses TanStack Form instead:
-
-- A Standard Schema (Valibot in put.io web) at the form boundary owns the value type; derive it with the schema's output inference rather than a hand-written type.
-- Register the schema only as `validators.onSubmit` with `canSubmitWhenInvalid: true`. Blur and change validators need a reviewed interaction reason.
-- Bind inputs through `form.Field`; `onChange` updates values, `onBlur` records touched state, neither validates.
-- Surface issues through the field component's invalid state (`data-invalid` on the field, `aria-invalid` on the control) and turn native constraint validation off so schema issues are the ones rendered.
-- Submit typed values to a route-owned mutation or server function. Password strings flow exactly as typed; trim only identifiers and emails.
+Skip optimistic updates unless perceived latency warrants them. Repos on
+TanStack Form keep their form rules in the owning app's `AGENTS.md`.
 
 ## React effects
 
-Components in put.io React apps do not import or call `useEffect` directly.
-
-- Derive render output from props, form state, query state, and route state during render. `const state = mutation.isPending ? "loading" : mutation.error ? "error" : "default"`, not an effect that copies it into `useState`.
-- Put user-action side effects in event handlers, form submits, mutations, or route callbacks. Routes own navigation after a mutation; screens do not redirect.
-- Read external systems (storage, media queries, network status) through `useSyncExternalStore` or a plain read function called during render.
-- Attach to systems React does not own (window listeners, media engines, timers, focus engines) through one reviewed, named wrapper hook the repo exposes, with cleanup in the returned function. Nothing else in product code touches `useEffect`.
-- Copying props or query state into local state creates stale mirrors; fetching in effects belongs in TanStack Query.
+Components in put.io React apps do not call `useEffect` directly. Derive render
+output during render, put user-action side effects in handlers, submits, and
+mutations, read external systems through `useSyncExternalStore`, and attach to
+systems React does not own through one reviewed wrapper hook with cleanup.
 
 ## Component and state placement
 
@@ -343,15 +306,7 @@ Pick the repo's existing stack. If the repo is silent, default to Tailwind v4 fo
 
 ## Testing shape
 
-- Write tests at the level the bug would surface: a parse bug needs a parse test, a state-machine bug needs a machine test, a render bug needs a render test, an interaction bug needs an interaction test.
-- Prefer real implementations over mocks at the contract boundary. Mock the
-  network when needed, but parse responses through the production path.
+- TypeScript repos use `vite-plus/test` (Vitest). E2E uses Playwright.
+- Mock the network when needed, but parse responses through the production path.
 - Gate shared-account live tests behind repository-owned secret hydration and
   sequential execution. Keep them non-destructive.
-- TypeScript repos use `vite-plus/test` (Vitest). E2E uses Playwright.
-- Assert on behavior with controlled clocks and public effects instead of logger output, real timers, or implementation internals.
-
-## Verification before "done"
-
-- Passing type-check, lint, and unit tests is necessary, not sufficient, for UI work. Exercise the feature in a browser or device: the golden path, one edge case, and the network tab and console.
-- If the UI cannot be exercised (no dev server, no preview), say so in the PR and list type checks as partial evidence.
