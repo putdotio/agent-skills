@@ -24,14 +24,14 @@ The rest of this file covers the workflow mechanics agents write.
 
 - Package, library, CLI, and skill release jobs use the `release` Environment with `deployment: false`. App deploy, beta, signing, promotion, and store-submission jobs keep deployment records, as does any Environment with custom deployment protection rules
 - Store `PUTIO_RELEASE_BOT_CLIENT_ID` as a protected Environment variable and `PUTIO_RELEASE_BOT_PRIVATE_KEY` as a protected Environment secret
-- Jobs that push commits, create GitHub Releases, upload release assets, or move `v*` tags mint a `putio-releaser` installation token and set matching `GIT_AUTHOR_*` / `GIT_COMMITTER_*`. Commit metadata is not authorization: `GITHUB_TOKEN` writes as `github-actions[bot]`, and a spoofed human or team mailbox does not qualify
+- Jobs that push commits, create or push tags, create GitHub Releases, upload release assets, or move `v*` tags mint a `putio-releaser` installation token and set matching `GIT_AUTHOR_*` / `GIT_COMMITTER_*`. Commit metadata is not authorization: `GITHUB_TOKEN` writes as `github-actions[bot]`, and a spoofed human or team mailbox does not qualify
 - If a third-party publish action creates commits internally, verify it accepts release-bot identity inputs or honors `GIT_AUTHOR_*` / `GIT_COMMITTER_*`
 
 ## Actions and toolchains
 
-- Runner labels: `ubuntu-24.04-arm` for routine Linux CI, `ubuntu-24.04` for jobs that produce or depend on x86_64 artifacts, `windows-2025`, and `macos-latest`. Private repos declare Blacksmith labels in `.github/actionlint.yaml`
+- Take runner labels from the repo's existing workflows and the Release security page; do not invent labels. Routine Linux CI runs on Arm; jobs that produce or depend on x86_64 artifacts run on x86_64
 - Pin an OS image when it is part of the tested toolchain contract, and document that reason next to the workflow or in the repo release docs
-- npm publish jobs use the shared `frontend-release-npm` workflow in [putdotio/.github](https://github.com/putdotio/.github), which owns the runner default. Configure the package on npm with the GitHub owner/repo, workflow filename, and optional Environment; grant the release job `id-token: write`; keep `package.json` repository metadata aligned with that repo. Do not replace OIDC with a long-lived `NPM_TOKEN` without an explicit secret-boundary decision
+- npm publish jobs use the shared `frontend-release-npm` workflow in [putdotio/.github](https://github.com/putdotio/.github), which owns the runner default. Configure the package on npm with the GitHub owner/repo, workflow filename, and optional Environment; grant the release job `id-token: write`; keep `package.json` repository metadata aligned with that repo. Do not replace OIDC with a long-lived `NPM_TOKEN` without an explicit secret-boundary decision. When migrating a package to OIDC, remove the legacy `NPM_TOKEN` secret and its workflow mapping in the same change
 - Pin release, publish, upload, signing, and deploy actions to full commit SHAs with an exact version comment such as `# v1.10.0`, not `# v1`, so Dependabot's `github-actions` updates can move them. Before committing a pin, verify the SHA still exists upstream and resolves to the advertised tag
 - In secret-bearing jobs, preserve the repo's pinned toolchain but skip dependency caches. For Vite+ (`vp`) repos, use a full-SHA-pinned `voidzero-dev/setup-vp` with `cache: false`, then `vp install` / `vp run ...`. For pnpm repos without Vite+, use full-SHA-pinned `actions/setup-node` and `pnpm/action-setup@v6` without package-manager cache, then `pnpm install --frozen-lockfile`
 - For semantic-release action workflows, keep CI/CD-only release plugins in `extra_plugins` rather than repo `devDependencies`, and pin every plugin entry to an exact version
@@ -44,7 +44,7 @@ The rest of this file covers the workflow mechanics agents write.
 
 - Verify jobs may use dependency caches; secret-bearing release, publish, signing, and deploy jobs install fresh. Include `${{ github.event_name }}` in cache keys so `pull_request` jobs cannot poison caches that privileged `push: main`, `workflow_dispatch`, or tag-driven jobs consume
 - Regenerate or verify generated dependency trees, such as full CocoaPods `Pods` trees, inside signed or release jobs. Cache download artifacts where possible, then regenerate and verify before signing or publishing
-- If a generated-tree or tool cache is unavoidable in a privileged job, namespace it by workflow, event, trust level, platform, and lockfile. Privileged jobs consume only caches written by the same trusted event class
+- If a generated-tree or tool cache is unavoidable in a privileged job, namespace it by workflow, event, trust level, platform, and lockfile. Privileged jobs consume only caches written by the same trusted event class, and still verify the restored tree against the lockfile before signing or publishing
 - `bootstrap-ci.sh`-style shortcuts that skip regeneration only from lockfile equality are acceptable for local speed, but risky when a generated tree came from a shared CI cache
 
 ## Handoffs and provenance

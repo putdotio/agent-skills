@@ -1,9 +1,9 @@
 # Environment setup
 
 One machine layout for put.io frontend work on macOS or Linux. Runtimes come
-from [mise](https://mise.jdx.dev), installed and activated in the shell first;
-each repository pins its own Node, pnpm, and platform toolchains in its mise
-config, so nothing here installs them.
+from [mise](https://mise.jdx.dev), installed and activated in the shell first.
+Repositories that need Node, pnpm, or platform toolchains pin them in their own
+mise config or version files, so nothing here installs them.
 
 ## Tools
 
@@ -22,34 +22,37 @@ mise use -g gh jq age sops actionlint github:putdotio/putio-cli
 
 ## Repositories
 
-Clone every registered repository into its canonical path:
+Point `registry` at this skill's installed `repos.json`, then clone every
+registered repository into its canonical path:
 
 ```bash
-jq -r '.[][] | "\(.repo) \(.path)"' ~/.agents/skills/putio-frontend-dev/repos.json \
+registry=<skill-dir>/repos.json
+jq -r '.[][] | "\(.repo) \(.path)"' "$registry" \
   | while read -r repo checkout; do
       target="${checkout/#\~/$HOME}"
       [ -d "$target/.git" ] || gh repo clone "$repo" "$target"
     done
 ```
 
-The path is the skill's global install location; adjust it for a project-local
-install. Private entries clone only for members of the GitHub organization.
+Private entries clone only for members of the GitHub organization.
 
-## Agent worktrees
+## Clones and worktrees
 
-Coding agents create worktrees under `~/.claude/worktrees` or
-`~/.codex/worktrees`. Each carries the repository's mise config; run
-`mise trust` inside a new worktree before its commands work.
+Agent worktrees live in the coding harness's own worktree folder, outside the
+canonical checkouts. Run `mise trust` inside every new clone or worktree that
+carries a mise config before running its commands.
 
 ## Check
 
 ```bash
+registry=<skill-dir>/repos.json
 mise doctor
 for tool in gh jq age sops actionlint putio; do command -v "$tool" >/dev/null || echo "missing: $tool"; done
 gh auth status
-jq -r '.[][] | .path' ~/.agents/skills/putio-frontend-dev/repos.json \
+jq -r '.[][] | .path' "$registry" \
   | while read -r checkout; do [ -d "${checkout/#\~/$HOME}/.git" ] || echo "missing checkout: $checkout"; done
 ```
 
-Silence after `gh auth status` means the machine is ready. Secrets are
-verified separately in the vault repository.
+The machine is ready when the check prints no `missing` lines and
+`gh auth status` shows the put.io account logged in. Secrets are verified
+separately in the vault repository.

@@ -43,7 +43,7 @@ Keep only the checks contributors are expected to run.
 - Add or update tests when behavior changes.
 - Keep this section high-level and aligned with `.github/pull_request_template.md` when the repo has one; the template holds the full review checklist.
 - Include the most helpful review evidence for the kind of change you made.
-  - screenshots or screen recordings for UI, layout, animation, onboarding, or copy changes, uploaded with `gh pr create --attach ./file.png` or `gh pr comment <n> --attach ./file.mp4`, never committed
+  - screenshots or screen recordings for UI, layout, animation, onboarding, or copy changes, uploaded with `gh pr create --attach ./file.png` or `gh pr comment <n> --attach ./file.mp4` (gh 2.99+), never committed
   - sanity checks for risky or user-visible flows
   - before and after benchmark numbers for performance-sensitive changes
   - rollout, risk, or follow-up notes when touching auth, persistence, release flow, or external integrations
