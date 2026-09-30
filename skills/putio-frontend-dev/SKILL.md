@@ -19,7 +19,7 @@ own guidance and code precedent.
 
 ## Reference map
 
-- Feature code, parsing, state, errors, components, and testing:
+- Feature code, parsing, state, errors, forms, styling, and testing:
   [frontend defaults](./references/engineering/frontend-defaults.md)
 - README, CONTRIBUTING, SECURITY, and agent-facing docs:
   [top-level docs](./references/docs/style.md)
@@ -112,6 +112,10 @@ the target repository.
   boundaries matter.
 - Exercise user-visible behavior in the real browser, app, simulator, emulator,
   or device surface when one exists.
+- Before calling UI work done, exercise first load, loading, error, and empty
+  states, small screens, and interaction state such as selection, focus,
+  hydration, and races. Inspect the result yourself instead of asking the user
+  what looks wrong.
 - Reuse passing proof while its source, inputs, and environment remain valid; a
   new turn or handoff alone does not require another run. Name unavailable
   proof and its exact blocker. Command discovery does not authorize live
