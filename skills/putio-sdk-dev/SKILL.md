@@ -31,12 +31,7 @@ Widen SDK surfaces only when real app use and verified backend behavior justify 
 
 Read only what you need:
 
-- every filesystem `AGENTS.md` that applies from the target repo root to the
-  files being changed, including untracked files, followed by the tracked
-  auxiliary guidance inventory from `git ls-files '*AGENTS.md' '*SKILL.md'`
-- the frontmatter and instructions from task-matching project-local `SKILL.md`
-  files under `.agents/skills/`, `.claude/skills/`, or `skills/`; ignore
-  dependency and vendored trees
+- nested guidance from `git ls-files '*AGENTS.md' '*SKILL.md'`
 - the canonical verify and live-test commands from `README.md`, `AGENTS.md`, or `docs/*`
 - [SDK vision](./references/sdk-vision.md) for scope rules, shared engineering principles, and the verification policy; product direction lives in the Frontend hub in the put.io Notion workspace (page: Products)
 - [patterns](./references/patterns.md) for typed boundaries, error mapping, pagination, and live-test layering
@@ -55,13 +50,10 @@ command, and its delivery or supply-chain policy override this shared skill.
 4. Add or update deterministic coverage for request shaping, parsing, errors, and public client contracts.
 5. Add or refresh safe live verification when production behavior matters and the surface is reversible.
 6. Keep multiple public clients aligned when the repo exposes more than one interface style.
-7. Select the owner's documented checks for the affected contracts and their
+7. Run the owner's documented checks for the affected contracts and their
    dependents, including installed-package and downstream-consumer proof when
    relevant. Run the full canonical gate when mandated, shared inputs changed,
-   or focused coverage is uncertain. Fix failures and refresh affected proof;
-   reuse passing results while their source, inputs and environment remain
-   valid. Record unavailable proof and its exact blocker without claiming it
-   passed or inferring authorization from command discovery.
+   or focused coverage is uncertain.
 8. Update package-facing docs and release notes when the public surface changes.
 
 ## Endpoint changes
@@ -109,23 +101,6 @@ An SDK repo should expose both:
 
 If one of those layers is missing, treat it as a repo gap to document or fix rather than silently accepting a weaker verification story.
 
-Discover the owned commands before running them:
-
-```bash
-rg --hidden -n "verify|check|test|example" . \
-  --glob 'README.md' \
-  --glob 'AGENTS.md' \
-  --glob 'docs/**' \
-  --glob '.github/**' \
-  --glob 'package.json' \
-  --glob 'Makefile' \
-  --glob 'pyproject.toml' \
-  --glob 'Cargo.toml' \
-  --glob 'build.gradle*' \
-  --glob 'settings.gradle*' \
-  --glob 'Package.swift' || true
-```
-
 For runtime verification, prefer the repo's documented live-test entrypoints and follow the shared-account safety rules in that repo's testing docs.
 
 ## Boundaries
@@ -133,7 +108,7 @@ For runtime verification, prefer the repo's documented live-test entrypoints and
 - Verify backend contracts with current docs, source, fixtures, or live probes rather than old SDKs alone.
 - Claim full verification only when the unit, fixture, and live layers that matter for the change were exercised.
 - Keep live coverage against shared accounts non-destructive.
-- Finish in-scope edits, verification, and fixes without pausing for approval; ask before publishing, release writes, coverage-threshold changes, and live writes that are not reversible.
+- Ask before publishing, release writes, coverage-threshold changes, and live writes that are not reversible.
 - Preserve naming, parity, and type-safety unless a documented reason justifies a change.
 - Keep repo-specific implementation guidance in that repo's `AGENTS.md` or
   `docs/*`

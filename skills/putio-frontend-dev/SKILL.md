@@ -10,17 +10,12 @@ own guidance and code precedent.
 
 ## Start
 
-1. Read every filesystem `AGENTS.md` that applies from the target repo root to
-   the files being changed, including untracked files. Then inventory tracked
-   auxiliary guidance with `git ls-files '*AGENTS.md' '*SKILL.md'`.
-2. Discover tracked project-local `SKILL.md` files under `.agents/skills/`,
-   `.claude/skills/`, or `skills/`. Read the frontmatter and apply only the
-   task-matching skills; ignore dependency and vendored trees.
-3. Read the `README.md` sections and docs that cover the area being changed.
-   Target-repo guidance and skills override this shared skill.
-4. Identify the repo kind, stack, verify entrypoint, delivery target, and
+1. Inventory nested guidance with `git ls-files '*AGENTS.md' '*SKILL.md'` and
+   read the `README.md` and docs for the area being changed. Target-repo
+   guidance, project-local skills, and code precedent override this skill.
+2. Identify the repo kind, stack, verify entrypoint, delivery target, and
    runtime proof surface.
-5. Select only the references required for the task.
+3. Select only the references required for the task.
 
 ## Reference map
 
@@ -71,16 +66,17 @@ the target repository.
 
 ## Knowledge base
 
-- Lives in the put.io Notion workspace, Frontend hub; read it through the
-  Notion MCP.
-- Holds Products, Specs, Design, Engineering (Delivery model, Release
-  security, Secrets management, Third-party services inventory),
-  Architecture decisions, and Guides.
+- Lives in the put.io Notion workspace,
+  [Frontend hub](https://app.notion.com/p/dd26f70efbfb4eb0ba4dce43e3e12d01);
+  read it through the Notion MCP.
+- Holds Products, Specs, Design, Services, Delivery
+  ([Delivery model](https://app.notion.com/p/3ded546ba2f58103ae8ce55b0f7a7f9d),
+  [Release security](https://app.notion.com/p/3ded546ba2f581a39ec9e28f38e6d3fc),
+  [Secrets management](https://app.notion.com/p/3ded546ba2f581e19b74c6d119adb228)),
+  Decisions, Analytics, and Guides.
 - Read it before product, spec, release, or secrets decisions.
 - Edit only Frontend pages. Leave other teams' pages, including ops guides in
   shared databases, untouched unless the task asks for them.
-- Keep put.io knowledge in the put.io workspace; never copy it into another
-  Notion workspace, or another workspace's knowledge into it.
 
 ## Shared defaults
 
@@ -97,41 +93,32 @@ the target repository.
   harness, and other clients must delegate account authorization to the website
   through OAuth or device-link flows and handle only the resulting codes or
   tokens.
-- Let repo-local guidance and established code override shared defaults.
-- Keep verification logic in repo-owned commands that CI calls. Preserve an
-  established task graph; use one `verify` entrypoint when creating a new lane.
+- Keep build, verify, deploy, and smoke logic in repo-owned commands that CI
+  calls, with thin workflow YAML. Preserve an established task graph; use one
+  `verify` entrypoint when creating a new lane.
 - Deliver from trusted `main` or validated release refs only after verification.
-- Finish in-scope edits, checks, and fixes without pausing for approval; ask
-  before anything destructive, paid, public, or outside the task, such as
-  deploys, publishes, secret or provider changes, external writes, and
-  force-pushes.
+- Ask before deploys, publishes, secret or provider changes, external writes,
+  and force-pushes.
+- Record non-obvious code conventions in the nearest `AGENTS.md`; keep user,
+  contributor, distribution, and security documentation in their canonical
+  homes.
+
+## Proof
+
+- Select the owner's documented checks for the affected behavior and its
+  dependents. Run the full canonical gate when owner policy requires it,
+  shared inputs changed, or focused coverage is uncertain. Keep separate
+  installed-package, downstream-consumer, browser, and device proof where those
+  boundaries matter.
 - Exercise user-visible behavior in the real browser, app, simulator, emulator,
   or device surface when one exists.
+- Reuse passing proof while its source, inputs, and environment remain valid; a
+  new turn or handoff alone does not require another run. Name unavailable
+  proof and its exact blocker. Command discovery does not authorize live
+  actions.
 - Before a proof command launches a runtime, install cleanup and record whether
   it started that exact target. On every exit, stop only targets it started and
   confirm their absence; preserve pre-existing targets.
-
-## Workflow
-
-1. Inspect the current implementation, docs, scripts, workflows, and proof
-   surface before proposing a shape.
-2. Apply the smallest relevant shared defaults and preserve working repo
-   conventions unless evidence shows they are wrong.
-3. Record non-obvious code conventions in the nearest `AGENTS.md`; keep user,
-   contributor, distribution, and security documentation in their canonical
-   homes.
-4. Keep workflow orchestration thin and put repeatable build, verify, deploy,
-   and smoke logic behind repo-owned commands.
-5. Select the owner's documented checks for the affected behavior and its
-   dependents. Run the full canonical gate when owner policy requires it,
-   shared inputs changed, or focused coverage is uncertain. Preserve separate
-   installed-package, downstream-consumer, browser, and device proof where
-   those boundaries matter. Command discovery does not authorize live actions.
-   Fix failures and refresh affected proof. Reuse passing proof while its
-   source, inputs, and environment remain valid; a new turn or handoff alone
-   does not require another run. Name unavailable proof and its exact blocker.
-6. Report changed behavior, verification, proof artifacts, risks, and remaining
-   gaps.
 
 ## Boundaries
 
