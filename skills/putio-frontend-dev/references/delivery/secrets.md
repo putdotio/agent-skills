@@ -204,7 +204,7 @@ Keep `PUTIO_RELEASE_BOT_PRIVATE_KEY` out of broad repo-owned commands such as
 install, build, test, and deploy preparation. Pass it only to the token-minting
 action, then pass the resulting short-lived token to the narrow final write step.
 When to keep `deployment: false` is in
-[release security](./release-security.md#repo-settings-model).
+[release security](./release-security.md#release-identity).
 
 ## Harness ergonomics
 

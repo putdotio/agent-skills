@@ -1,27 +1,16 @@
 # Repo delivery model
 
-Default frontend repo shape at put.io: package repos publish continuously, app repos deploy continuously.
+The org model lives in the put.io Notion workspace:
+[Delivery model](https://app.notion.com/p/3ded546ba2f58103ae8ce55b0f7a7f9d)
+under Frontend / Delivery owns targets per repo kind, the default shape, delivery
+guardrails, release identities, and trusted refs. Each repo's distribution doc
+owns its own targets, triggers, and gates. This file covers the repo mechanics
+agents write.
 
 Preserve an established multi-app task graph and its owner-defined verification
-lanes. The single-entrypoint shape below is a starting point for new setups,
-not a reason to replace scoped checks or fold separate package/device proof
-into every default run. Retain full gates where the owner requires them.
-
-## Core model
-
-- `VERIFY` runs on pull requests and `main` pushes; delivery runs on `main` only, after `VERIFY` passes.
-- GitHub Actions owns orchestration; the repo owns build, test, and publish-ready or deploy-ready commands.
-- Every merge to `main` is assumed publishable or deployable.
-- Delivery targets: a package registry for packages; preview or production hosting for web apps; TestFlight, beta tracks, or store delivery for native apps; staging or production environments for internal tools.
-
-## Default shape
-
-1. One repo-local verify command or script.
-2. One `verify` CI job that runs it.
-3. One delivery job gated on `verify`.
-4. Conventional commits or another deterministic release or deploy signal.
-5. No manual version bump or deploy checklist flow in normal delivery.
-6. No repo-local release-only tooling by default; prefer workflow-level execution.
+lanes. The single-entrypoint shape is a starting point for new setups, not a
+reason to replace scoped checks or fold separate package or device proof into
+every default run.
 
 Inspection summary example:
 
@@ -36,13 +25,8 @@ template gaps: missing .github/pull_request_template.md
 ## Checklist
 
 - `VERIFY` covers lint, typecheck, build, tests, and any package-specific guardrails.
-- Package release jobs are safe to no-op when there are no releasable commits.
 - npm release and repository scanning call the shared frontend workflows in [putdotio/.github](https://github.com/putdotio/.github), pinned to a tagged commit; that README owns the calling contract.
-- Delivery jobs use only the permissions and secrets they need.
-- App repos expose one repo-local deploy command per delivery target, such as `deploy-preview`, `deploy-beta`, or `deploy-production`, so workflow YAML stays thin. Do not overload one generic `deploy`.
-- Beta and preview builds ship continuously. Add stricter promotion gates only where the product or platform requires them.
 - Secret-bearing release, deploy, signing, publish, beta, backfill, and binary-build jobs follow [release security](./release-security.md), including the `putio-releaser` identity for release writes.
-- Release automation fetches full git history when versioning depends on commits or tags.
 - Verification checkouts keep the default depth. Full history belongs to release jobs and history scans only; a verify job that needs the merge base for affected-package detection fetches a blobless tree and deepens to the base instead.
 - Change detection on pull requests reads the pull request API with `pull-requests: read` and needs no checkout.
 - A job whose work is shorter than the measured runner start, checkout, and install on its runner shape is a candidate to merge into a sibling job on the same runner and trust level, with the tasks run concurrently. Measure that overhead per runner shape; GitHub does not publish it. Concurrent tasks share one runner's cores and memory, so compare the batched job with the parallel jobs before keeping it, and say whether latency or runner minutes is the target. Keep separate jobs for different runners, trust boundaries, or multi-minute work.
