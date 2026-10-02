@@ -7,7 +7,7 @@ Use this when shaping top-level docs for a put.io frontend repo. Copy the struct
 - `README.md` is user-facing: what the project is, how to install it, how to use it.
 - `CONTRIBUTING.md` is developer-facing: environment setup, local run, checks.
 - `LICENSE` states the license; reference it from `README.md`.
-- `SECURITY.md` explains private-first vulnerability disclosure and points reporters to `devs@put.io`.
+- Security reporting follows the [org-wide security policy](https://github.com/putdotio/.github/blob/main/SECURITY.md). Add a repo `SECURITY.md` only when its policy genuinely differs.
 
 ## README.md
 
@@ -19,14 +19,15 @@ Use this order unless the repo gives a strong reason not to:
 4. Optional examples, variants, or integration notes
 5. Docs
 6. Contributing
-7. License
+7. Security
+8. License
 
 - Answer on the first screen: what is this project, how do I install it, and how do I use it.
 - For package repos, show install commands and one short usage example.
 - For app repos, show the user-facing way to access or use the app; contributor setup belongs in `CONTRIBUTING.md`.
 - Use human-facing labels, not raw filenames or paths: `Contributing`, `Distribution`, `Architecture`, or `Agent guide` over `CONTRIBUTING.md` or `docs/DISTRIBUTION.md`.
 - Add short `Contributing` and `License` sections that point to `CONTRIBUTING.md` and `LICENSE`.
-- Link to `SECURITY.md` when it helps navigation without cluttering the main user flow.
+- Add a short `Security` section that links the [org-wide security policy](https://github.com/putdotio/.github/blob/main/SECURITY.md), or the repo `SECURITY.md` when one exists.
 
 ## Hero and badges
 
@@ -64,7 +65,3 @@ Use this order unless the repo gives a strong reason not to:
 - Keep commands copy-pastable and verified against the repo.
 - Document repo-specific development constraints only when they help contributors.
 - If the repo uses `.github/pull_request_template.md` or `.github/ISSUE_TEMPLATE/*`, treat them as part of the contributor doc surface and keep the high-level expectations aligned.
-
-## SECURITY.md
-
-Keep it short and private-first: tell reporters not to file public issues for vulnerabilities, and use `devs@put.io` as the contact.

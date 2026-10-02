@@ -21,7 +21,7 @@ own guidance and code precedent.
 
 - Feature code, parsing, state, errors, forms, styling, and testing:
   [frontend defaults](./references/engineering/frontend-defaults.md)
-- README, CONTRIBUTING, SECURITY, and agent-facing docs:
+- README, CONTRIBUTING, security reporting, and agent-facing docs:
   [top-level docs](./references/docs/style.md)
 - CI, verify, publishing, deployment, and release shape for packages and apps:
   [delivery model](./references/delivery/model.md)

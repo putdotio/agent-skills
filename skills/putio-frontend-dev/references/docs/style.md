@@ -1,7 +1,7 @@
 # Top-level docs
 
 Use this reference when `putio-frontend-dev` work touches README, CONTRIBUTING,
-SECURITY, agent guidance, or other top-level repo docs.
+security reporting, agent guidance, or other top-level repo docs.
 
 ## Scope
 
@@ -13,8 +13,8 @@ SECURITY, agent guidance, or other top-level repo docs.
 
 1. Inspect the repository before drafting: project type, user install and usage flow, contributor setup flow, GitHub collaboration templates already in use, and the best existing docs to link.
 2. Read the [README guideline](./readme-guideline.md) before picking a final shape. It owns the file split, section order, hero and badge rules, link labels, and the security contact.
-3. Start from the [contributing template](./contributing-template.md) when creating or reshaping `CONTRIBUTING.md` and the [security template](./security-template.md) for `SECURITY.md`.
-4. Ensure the repo has `CONTRIBUTING.md`, `LICENSE`, and `SECURITY.md`.
+3. Start from the [contributing template](./contributing-template.md) when creating or reshaping `CONTRIBUTING.md`.
+4. Ensure the repo has `CONTRIBUTING.md` and `LICENSE`. The [org-wide security policy](https://github.com/putdotio/.github/blob/main/SECURITY.md) covers security reporting for every put.io repository without its own `SECURITY.md`. Add a repo `SECURITY.md` only when its policy genuinely differs; put repo-specific facts such as supported versions or credential handling in the README or docs.
 5. When a repo uses `AGENTS.md`, keep `CLAUDE.md` beside it as a symlink to `AGENTS.md` instead of a second authored guidance file.
 6. In checked-in docs, use repo-relative Markdown links for local files. Reserve absolute filesystem paths such as `/Users/...`, `file://...`, or `vscode://...` for chat/UI file references.
 7. Verify every claimed command, path, email address, doc link, badge target, and GitHub template path. Fix broken ones and re-verify before stopping.
@@ -30,7 +30,7 @@ rg --hidden -n "README|CONTRIBUTING|SECURITY|AGENTS|CLAUDE|docs/|pull_request_te
   --glob 'CLAUDE.md' \
   --glob 'docs/**' \
   --glob '.github/**' || true
-test -e README.md && test -e CONTRIBUTING.md
+test -e README.md && test -e CONTRIBUTING.md && test -e LICENSE
 test ! -e AGENTS.md || { test -L CLAUDE.md && test "$(readlink CLAUDE.md)" = "AGENTS.md"; }
 ```
 
