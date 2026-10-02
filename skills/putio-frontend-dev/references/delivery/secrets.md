@@ -14,7 +14,7 @@ rather than shared secret references. Those follow their repo-local setup.
 
 ```bash
 rg -n 'sops|SOPS|op (run|inject|read|item|whoami|signin)|OP_SERVICE_ACCOUNT_TOKEN|op://|load-secrets-action' \
-  AGENTS.md README.md CONTRIBUTING.md SECURITY.md docs .github Makefile package.json build.gradle.kts Package.swift .env.example scripts tooling apps Tests src 2>/dev/null
+  AGENTS.md README.md CONTRIBUTING.md docs .github Makefile package.json build.gradle.kts Package.swift .env.example scripts tooling apps Tests src 2>/dev/null
 
 test -f .env.example && cat .env.example
 ```

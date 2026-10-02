@@ -40,7 +40,7 @@ repository-local installation.
 
 ## Security
 
-Report security or privacy issues through [Security](SECURITY.md).
+Report security or privacy issues through the [put.io security policy](https://github.com/putdotio/.github/blob/main/SECURITY.md).
 
 ## License
 
