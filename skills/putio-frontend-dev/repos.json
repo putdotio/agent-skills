@@ -13,6 +13,8 @@
   "apps": [
     { "name": "putio-backend", "repo": "putdotio/putio", "path": "~/projects/putdotio/putio-backend", "owns": ["backend"], "mode": "managed", "visibility": "private" },
     { "name": "putio-web", "repo": "putdotio/putio-web", "path": "~/projects/putdotio/putio-web", "owns": ["frontend"], "mode": "managed", "visibility": "private", "topics": ["putio", "frontend", "web", "react", "typescript", "sst"] },
+    { "name": "putio-tv-legacy", "repo": "putdotio/putio-tv-legacy", "path": "~/projects/putdotio/putio-tv-legacy", "owns": ["frontend"], "mode": "managed", "visibility": "private" },
+    { "name": "putio-tv-native-legacy", "repo": "putdotio/putio-tv-native-legacy", "path": "~/projects/putdotio/putio-tv-native-legacy", "owns": ["frontend"], "mode": "managed", "visibility": "private" },
     { "name": "putio-ios", "repo": "putdotio/putio-ios", "path": "~/projects/putdotio/putio-ios", "owns": ["frontend"], "mode": "managed", "visibility": "public", "topics": ["putio", "frontend", "open-source", "ios", "swift", "mobile", "tvos", "apple"] },
     { "name": "putio-android", "repo": "putdotio/putio-android", "path": "~/projects/putdotio/putio-android", "owns": ["frontend"], "mode": "managed", "visibility": "public", "topics": ["putio", "frontend", "open-source", "android", "kotlin", "mobile", "android-tv"] },
     { "name": "putio-cli", "repo": "putdotio/putio-cli", "path": "~/projects/putdotio/putio-cli", "owns": ["frontend"], "mode": "managed", "visibility": "public", "topics": ["putio", "frontend", "open-source", "cli", "typescript", "putio-api", "developer-tools"] },
