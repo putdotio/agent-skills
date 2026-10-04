@@ -97,8 +97,9 @@ the target repository.
   calls, with thin workflow YAML. Preserve an established task graph; use one
   `verify` entrypoint when creating a new lane.
 - Deliver from trusted `main` or validated release refs only after verification.
-- Ask before deploys, publishes, secret or provider changes, external writes,
-  and force-pushes.
+- Merging or pushing to `main` is delivery, including the deploys and
+  publishes CI starts from it. Ask before a deploy or publish run by hand,
+  secret or provider changes, external writes, and force-pushes.
 - Record non-obvious code conventions in the nearest `AGENTS.md`; keep user,
   contributor, distribution, and security documentation in their canonical
   homes.
