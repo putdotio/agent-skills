@@ -23,8 +23,8 @@ The rest of this file covers the workflow mechanics agents write.
 ## Release identity
 
 - Package, library, CLI, and skill release jobs use the `release` Environment with `deployment: false`. App deploy, beta, signing, promotion, and store-submission jobs keep deployment records, as does any Environment with custom deployment protection rules
-- Store `PUTIO_RELEASE_BOT_CLIENT_ID` as a protected Environment variable and `PUTIO_RELEASE_BOT_PRIVATE_KEY` as a protected Environment secret
-- Jobs that push commits, create or push tags, create GitHub Releases, upload release assets, or move `v*` tags mint a `putio-releaser` installation token and set matching `GIT_AUTHOR_*` / `GIT_COMMITTER_*`. Commit metadata is not authorization: `GITHUB_TOKEN` writes as `github-actions[bot]`, and a spoofed human or team mailbox does not qualify
+- Store `PUTIO_CI_APP_CLIENT_ID` as a protected Environment variable and `PUTIO_CI_APP_PRIVATE_KEY` as a protected Environment secret
+- Jobs that push commits, create or push tags, create GitHub Releases, upload release assets, or move `v*` tags mint a `putio-ci` installation token and set matching `GIT_AUTHOR_*` / `GIT_COMMITTER_*`. Commit metadata is not authorization: `GITHUB_TOKEN` writes as `github-actions[bot]`, and a spoofed human or team mailbox does not qualify
 - If a third-party publish action creates commits internally, verify it accepts release-bot identity inputs or honors `GIT_AUTHOR_*` / `GIT_COMMITTER_*`
 
 ## Actions and toolchains
