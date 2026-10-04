@@ -26,7 +26,7 @@ template gaps: missing .github/pull_request_template.md
 
 - `VERIFY` covers lint, typecheck, build, tests, and any package-specific guardrails.
 - npm release and repository scanning call the shared frontend workflows in [putdotio/.github](https://github.com/putdotio/.github), pinned to a tagged commit; that README owns the calling contract.
-- Secret-bearing release, deploy, signing, publish, beta, backfill, and binary-build jobs follow [release security](./release-security.md), including the `putio-releaser` identity for release writes.
+- Secret-bearing release, deploy, signing, publish, beta, backfill, and binary-build jobs follow [release security](./release-security.md), including the `putio-ci` identity for release writes.
 - Verification checkouts keep the default depth. Full history belongs to release jobs and history scans only; a verify job that needs the merge base for affected-package detection fetches a blobless tree and deepens to the base instead.
 - Change detection on pull requests reads the pull request API with `pull-requests: read` and needs no checkout.
 - A job whose work is shorter than the measured runner start, checkout, and install on its runner shape is a candidate to merge into a sibling job on the same runner and trust level, with the tasks run concurrently. Measure that overhead per runner shape; GitHub does not publish it. Concurrent tasks share one runner's cores and memory, so compare the batched job with the parallel jobs before keeping it, and say whether latency or runner minutes is the target. Keep separate jobs for different runners, trust boundaries, or multi-minute work.

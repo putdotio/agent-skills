@@ -192,15 +192,15 @@ jobs:
       - id: release-bot
         uses: actions/create-github-app-token@<sha>
         with:
-          client-id: ${{ vars.PUTIO_RELEASE_BOT_CLIENT_ID }}
-          private-key: ${{ secrets.PUTIO_RELEASE_BOT_PRIVATE_KEY }}
+          client-id: ${{ vars.PUTIO_CI_APP_CLIENT_ID }}
+          private-key: ${{ secrets.PUTIO_CI_APP_PRIVATE_KEY }}
           permission-contents: write
       - run: pnpm release:write
         env:
           GH_TOKEN: ${{ steps.release-bot.outputs.token }}
 ```
 
-Keep `PUTIO_RELEASE_BOT_PRIVATE_KEY` out of broad repo-owned commands such as
+Keep `PUTIO_CI_APP_PRIVATE_KEY` out of broad repo-owned commands such as
 install, build, test, and deploy preparation. Pass it only to the token-minting
 action, then pass the resulting short-lived token to the narrow final write step.
 When to keep `deployment: false` is in
