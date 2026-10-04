@@ -13,3 +13,6 @@ the [skill fleet inventory](skill-fleet.md#inventory).
 Every pull request and push to `main` runs `pnpm run verify`
 ([workflow](../.github/workflows/verify.yml)) and an offline check of relative
 Markdown links and anchors ([workflow](../.github/workflows/links.yml)).
+A [scan](../.github/workflows/scan.yml) runs Gitleaks and TruffleHog on every
+pull request, Actionlint and Zizmor on pull requests that change `.github/`,
+and all four weekly.
