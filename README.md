@@ -10,10 +10,10 @@
 
 ## Catalog
 
-| Skill | Use it for |
-| --- | --- |
+| Skill                                                      | Use it for                                                                      |
+| ---------------------------------------------------------- | ------------------------------------------------------------------------------- |
 | [`putio-frontend-dev`](skills/putio-frontend-dev/SKILL.md) | End-user apps, shared frontend packages, test harnesses, and frontend delivery. |
-| [`putio-sdk-dev`](skills/putio-sdk-dev/SKILL.md) | Typed API clients and SDK packages. |
+| [`putio-sdk-dev`](skills/putio-sdk-dev/SKILL.md)           | Typed API clients and SDK packages.                                             |
 
 ## Install
 

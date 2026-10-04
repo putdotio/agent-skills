@@ -16,11 +16,13 @@ const FileSchema = Schema.Struct({
 export type PutioFile = Schema.Schema.Type<typeof FileSchema>;
 
 export const listFiles = (client: PutioSdkClient, input: ListFilesInput) =>
-  client.get("/files/list", { query: input }).pipe(
-    selectJsonField("files"),
-    Effect.flatMap(Schema.decodeUnknown(Schema.Array(FileSchema))),
-    withOperationErrors(ListFilesErrorSpec),
-  );
+  client
+    .get("/files/list", { query: input })
+    .pipe(
+      selectJsonField("files"),
+      Effect.flatMap(Schema.decodeUnknown(Schema.Array(FileSchema))),
+      withOperationErrors(ListFilesErrorSpec),
+    );
 ```
 
 Prefer discriminated unions and parameter-aware types over loose bags:
