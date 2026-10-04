@@ -11,4 +11,5 @@ the [skill fleet inventory](skill-fleet.md#inventory).
 ## Quality gate
 
 Every pull request and push to `main` runs `pnpm run verify`
-([workflow](../.github/workflows/verify.yml)).
+([workflow](../.github/workflows/verify.yml)) and an offline check of relative
+Markdown links and anchors ([workflow](../.github/workflows/links.yml)).
