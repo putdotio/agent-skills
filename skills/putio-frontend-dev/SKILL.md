@@ -99,7 +99,8 @@ the target repository.
 - Deliver from trusted `main` or validated release refs only after verification.
 - Merging or pushing to `main` is delivery, including the deploys and
   publishes CI starts from it. Ask before a deploy or publish run by hand,
-  secret or provider changes, external writes, and force-pushes.
+  secret or provider changes, writes outside the repository's forge (stores,
+  provider consoles, shared accounts), and force-pushes.
 - Record non-obvious code conventions in the nearest `AGENTS.md`; keep user,
   contributor, distribution, and security documentation in their canonical
   homes.
