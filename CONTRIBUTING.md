@@ -20,6 +20,8 @@ activation or boundary change.
 pnpm run verify
 ```
 
-The gate lints the workflow files and runs
+The gate lints the workflow files, checks Markdown formatting with
+[oxfmt](https://oxc.rs/docs/guide/usage/formatter), and runs
 [`@uinaf/skillcheck`](https://github.com/uinaf/skillcheck) structural lint on
-every skill package. CI runs the same keyless gate.
+every skill package. CI runs the same keyless gate. `pnpm exec oxfmt "**/*.md"`
+fixes formatting.

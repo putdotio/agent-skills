@@ -57,6 +57,7 @@ as explicit machines when a forgotten state is a real failure mode.
   ```
 
   A repo that picks another machine library records it in its `AGENTS.md`.
+
 - Effect code models loops with `Effect.gen`, explicit state, deadlines,
   bounded sleeps, and terminal conditions. Swift and Kotlin drive enum states
   through the repository's existing event or delegate boundary.

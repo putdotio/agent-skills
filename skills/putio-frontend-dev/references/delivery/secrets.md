@@ -6,7 +6,7 @@ release, or deploy workflows. It defines the public repo-side mechanics; private
 operator docs are not required.
 
 **Out of scope**: repos with native non-task-runner build systems (e.g. Xcode +
-Fastlane), repos that *hold* signing material consumed by tools like `match`,
+Fastlane), repos that _hold_ signing material consumed by tools like `match`,
 and repos whose `.env`/`.env.example` carry plain device or runtime credentials
 rather than shared secret references. Those follow their repo-local setup.
 
@@ -77,10 +77,12 @@ secrets-clean:
 
 ```json
 // package.json
-{ "scripts": {
-  "secrets:setup": "bash ./scripts/secrets-setup.sh",
-  "secrets:clean": "rm -f .env.local .env.local.* .env.local.swp"
-} }
+{
+  "scripts": {
+    "secrets:setup": "bash ./scripts/secrets-setup.sh",
+    "secrets:clean": "rm -f .env.local .env.local.* .env.local.swp"
+  }
+}
 ```
 
 In a monorepo with per-app/package inputs, declare the target on each package so
