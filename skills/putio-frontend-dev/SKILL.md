@@ -102,9 +102,10 @@ the target repository.
   secret or provider changes, writes outside the repository's forge (stores,
   provider consoles, shared accounts), and force-pushes.
 - Keep pull request bodies as short as the change allows: the outcome, real
-  risks, and what stayed unverified. Show UI changes with reviewed screenshots
-  or a short recording and flows with a Mermaid diagram instead of describing
-  them; test counts, command logs, and review history stay out.
+  risks, and what stayed unverified. Every body carries a visual aid instead
+  of prose: reviewed screenshots or a short recording for UI, a Mermaid
+  diagram for a flow, a table for numbers, or a short code sample for an API.
+  Test counts, command logs, and review history stay out.
 - Record non-obvious code conventions in the nearest `AGENTS.md`; keep user,
   contributor, distribution, and security documentation in their canonical
   homes.
