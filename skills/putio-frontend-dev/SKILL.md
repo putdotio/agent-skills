@@ -101,6 +101,10 @@ the target repository.
   publishes CI starts from it. Ask before a deploy or publish run by hand,
   secret or provider changes, writes outside the repository's forge (stores,
   provider consoles, shared accounts), and force-pushes.
+- Keep pull request bodies as short as the change allows: the outcome, real
+  risks, and what stayed unverified. Show UI changes with reviewed screenshots
+  or a short recording and flows with a Mermaid diagram instead of describing
+  them; test counts, command logs, and review history stay out.
 - Record non-obvious code conventions in the nearest `AGENTS.md`; keep user,
   contributor, distribution, and security documentation in their canonical
   homes.
