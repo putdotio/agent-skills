@@ -13,8 +13,8 @@
     "verify": "pnpm run lint:actions && pnpm run markdown:check && pnpm run skills:lint"
   },
   "devDependencies": {
-    "@uinaf/skillcheck": "1.5.0",
+    "@uinaf/skillcheck": "1.7.3",
     "github-actionlint": "1.7.12",
-    "oxfmt": "0.70.0"
+    "oxfmt": "0.71.0"
   }
 }
