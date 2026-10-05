@@ -10,9 +10,10 @@ the [skill fleet inventory](skill-fleet.md#inventory).
 
 ## Quality gate
 
-Every pull request and push to `main` runs `pnpm run verify`
-([workflow](../.github/workflows/verify.yml)) and an offline check of relative
-Markdown links and anchors ([workflow](../.github/workflows/links.yml)).
-A [scan](../.github/workflows/scan.yml) runs Gitleaks and TruffleHog on every
-pull request, Actionlint and Zizmor on pull requests that change `.github/`,
-and all four weekly.
+Every pull request, push to `main`, and manual dispatch runs `pnpm run verify`
+and an offline check of relative Markdown links and anchors
+([workflow](../.github/workflows/verify.yml)). The same job then runs the
+shared [scan](https://github.com/putdotio/.github#actionsscan): on a push it
+runs Actionlint and Zizmor when the pushed range changes `.github/`, and a
+manual dispatch lints every workflow. GitHub secret scanning and push
+protection cover secrets in this public repository.
