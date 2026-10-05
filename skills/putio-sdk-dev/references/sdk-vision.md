@@ -78,6 +78,11 @@ one documented live-test path for real API verification. The repo owns the
 command names. If a repo only has one layer today, document the gap and prefer
 adding the missing layer over widening claims about verification quality.
 
+New SDK repos end their CI `verify` job with the shared
+[links](https://github.com/putdotio/.github#actionslinks) and
+[scan](https://github.com/putdotio/.github#actionsscan) steps; that README owns
+the snippet.
+
 Coverage is a guardrail, not the product. Still, SDK repos should carry a meaningful minimum line-coverage floor so public contracts cannot quietly rot.
 
 ## Non-goals

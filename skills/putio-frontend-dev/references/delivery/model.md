@@ -25,7 +25,7 @@ template gaps: missing .github/pull_request_template.md
 ## Checklist
 
 - `VERIFY` covers lint, typecheck, build, tests, and any package-specific guardrails.
-- npm release and repository scanning call the shared frontend workflows in [putdotio/.github](https://github.com/putdotio/.github), pinned to a tagged commit; that README owns the calling contract.
+- npm release calls the shared `frontend-release-npm` workflow, and `verify` ends with the shared [links](https://github.com/putdotio/.github#actionslinks) and [scan](https://github.com/putdotio/.github#actionsscan) steps, all from [putdotio/.github](https://github.com/putdotio/.github) and pinned to a tagged commit; that README owns the calling contract and snippets.
 - Secret-bearing release, deploy, signing, publish, beta, backfill, and binary-build jobs follow [release security](./release-security.md), including the `putio-ci` identity for release writes.
 - Verification checkouts keep the default depth. Full history belongs to release jobs and history scans only; a verify job that needs the merge base for affected-package detection fetches a blobless tree and deepens to the base instead.
 - Change detection on pull requests reads the pull request API with `pull-requests: read` and needs no checkout.
