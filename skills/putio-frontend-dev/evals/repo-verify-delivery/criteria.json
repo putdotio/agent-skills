@@ -23,8 +23,8 @@
       "max_score": 2
     },
     {
-      "name": "adopts_shared_workflows",
-      "description": "Points npm release and repository scanning at the shared frontend workflows in putdotio/.github instead of hand-writing semantic-release or scanner jobs.",
+      "name": "adopts_shared_release_and_scan",
+      "description": "Points npm release at the shared `frontend-release-npm` workflow and ends `verify` with the shared `actions/links` and `actions/scan` steps from putdotio/.github, instead of hand-writing semantic-release, link-check, or scanner jobs.",
       "max_score": 2
     },
     {
