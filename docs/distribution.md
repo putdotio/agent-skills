@@ -1,8 +1,9 @@
 # Distribution
 
 This repository is the source of truth for its two skills. Consumers install
-them directly from the `skills/` tree with the `skills` CLI. There is no
-publish pipeline.
+them directly from the `skills/` tree with the `skills` CLI, or add the
+repository as a plugin through the root `plugin.json` (Agent Plugins) or
+`.claude-plugin/plugin.json` (Claude Code). There is no publish pipeline.
 
 Harness-local and repository-local copies are not sources of truth; re-sync
 them instead of editing them. The full owner map, including `putio-cli`, is

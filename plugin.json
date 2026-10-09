@@ -1,0 +1,13 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "putio-agent-skills",
+  "description": "put.io skills for developing and reviewing put.io frontend apps and SDKs.",
+  "author": {
+    "name": "put.io",
+    "url": "https://github.com/putdotio"
+  },
+  "homepage": "https://github.com/putdotio/agent-skills",
+  "repository": "https://github.com/putdotio/agent-skills",
+  "license": "MIT",
+  "keywords": ["skills", "putio"]
+}
