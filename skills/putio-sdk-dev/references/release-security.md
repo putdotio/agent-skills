@@ -23,7 +23,7 @@ for CI credentials. Verify live provider settings before a posture claim.
 - Prefer registry trusted publishing over long-lived tokens. For npm, use npm
   Trusted Publishing with `id-token: write` and provenance when supported.
 - Pin release, publish, upload, and signing actions to full commit SHAs with an
-  exact version comment so Dependabot can update them.
+  exact version comment so Renovate can update them.
 - Install fresh with the pinned toolchain and frozen dependency contract in
   jobs that receive publish or signing credentials; do not share dependency or
   generated-tree caches between pull requests and privileged release jobs.

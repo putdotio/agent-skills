@@ -153,7 +153,7 @@ test ! -f .env.local && echo cleanup ok
 
 ## CI/CD
 
-Workflow trust boundaries, ref validation, action pinning, Dependabot,
+Workflow trust boundaries, ref validation, action pinning, Renovate,
 Environment posture, cache scoping, and branch/tag push mechanics are owned by
 [release security](./release-security.md). This section covers where secrets
 live and how a job receives them.
