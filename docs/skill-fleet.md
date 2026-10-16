@@ -2,11 +2,11 @@
 
 ## Inventory
 
-| Owner repository        | Skill                |
-| ----------------------- | -------------------- |
+| Owner repository                  | Skill                |
+| --------------------------------- | -------------------- |
 | `putdotio/putio-dev-agent-plugin` | `putio-frontend-dev` |
 | `putdotio/putio-dev-agent-plugin` | `putio-sdk-dev`      |
-| `putdotio/putio-cli`    | `putio-cli`          |
+| `putdotio/putio-cli`              | `putio-cli`          |
 
 The owner repository is the only edit target. Consumers re-sync instead of
 editing installed copies.
