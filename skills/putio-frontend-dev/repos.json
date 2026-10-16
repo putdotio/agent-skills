@@ -1,7 +1,7 @@
 {
   "workspace": [
     { "name": "putio-github", "repo": "putdotio/.github", "path": "~/projects/putdotio/putio-github", "owns": ["frontend", "backend"], "mode": "managed", "visibility": "public", "topics": ["putio", "frontend", "github-actions", "reusable-workflows", "ci"] },
-    { "name": "putio-agent-skills", "repo": "putdotio/agent-skills", "path": "~/projects/putdotio/putio-agent-skills", "owns": ["frontend", "backend"], "mode": "managed", "visibility": "public", "topics": ["putio", "frontend", "agent-skills", "coding-agents", "developer-tools"] }
+    { "name": "putio-agent-skills", "repo": "putdotio/putio-dev-agent-plugin", "path": "~/projects/putdotio/putio-agent-skills", "owns": ["frontend", "backend"], "mode": "managed", "visibility": "public", "topics": ["putio", "frontend", "agent-skills", "coding-agents", "developer-tools"] }
   ],
   "support": [
     { "name": "putio-support", "repo": "putdotio/support", "path": "~/projects/putdotio/putio-support", "owns": ["frontend"], "mode": "managed", "visibility": "private", "topics": ["putio", "frontend", "support", "intake", "triage"] }

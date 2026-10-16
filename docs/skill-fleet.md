@@ -4,8 +4,8 @@
 
 | Owner repository        | Skill                |
 | ----------------------- | -------------------- |
-| `putdotio/agent-skills` | `putio-frontend-dev` |
-| `putdotio/agent-skills` | `putio-sdk-dev`      |
+| `putdotio/putio-dev-agent-plugin` | `putio-frontend-dev` |
+| `putdotio/putio-dev-agent-plugin` | `putio-sdk-dev`      |
 | `putdotio/putio-cli`    | `putio-cli`          |
 
 The owner repository is the only edit target. Consumers re-sync instead of

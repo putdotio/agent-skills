@@ -54,7 +54,7 @@ the target repository.
   whether the team's workspace tooling manages the checkout.
 - An entry with several teams in `owns` is shared. In `putdotio/.github`,
   frontend work stays in the `frontend-*` workflows; in
-  `putdotio/agent-skills`, in the `putio-*` skills.
+  `putdotio/putio-dev-agent-plugin`, in the `putio-*` skills.
 - Peers sit under one folder, default `~/projects/putdotio/`. Missing path:
   `gh repo clone <repo> <path>`, or the clone loop in
   [environment setup](./references/environment-setup.md).
