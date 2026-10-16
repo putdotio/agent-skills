@@ -1,0 +1,16 @@
+{
+  "name": "putio",
+  "description": "put.io skills for developing and reviewing put.io frontend apps and SDKs.",
+  "owner": {
+    "name": "put.io",
+    "url": "https://github.com/putdotio"
+  },
+  "plugins": [
+    {
+      "name": "putio-dev",
+      "source": ".",
+      "description": "put.io frontend and SDK development skills.",
+      "category": "development"
+    }
+  ]
+}

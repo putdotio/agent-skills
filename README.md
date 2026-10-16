@@ -32,10 +32,18 @@ pnpm dlx skills add putdotio/agent-skills -g -s putio-frontend-dev
 Replace `putio-frontend-dev` with another catalog name. Omit `-g` for a
 repository-local installation.
 
-The repository is also a plugin that bundles both skills: `plugin.json` at the
-root follows [Agent Plugins](https://agent-plugins.org), and
-`.claude-plugin/plugin.json` covers Claude Code. Add it from
-`github.com/putdotio/agent-skills` in any client that installs plugins from Git.
+The repository is also the `putio` marketplace with one plugin, `putio-dev`,
+that bundles both skills:
+
+```bash
+claude plugin marketplace add putdotio/agent-skills
+claude plugin install putio-dev@putio
+```
+
+Codex takes the same marketplace with `codex plugin marketplace add` and
+`codex plugin add`. The root `plugin.json` follows
+[Agent Plugins](https://agent-plugins.org) for other clients that install
+plugins from Git.
 
 ## Docs
 
