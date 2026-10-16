@@ -8,7 +8,7 @@
   "plugins": [
     {
       "name": "putio-dev",
-      "source": ".",
+      "source": "./",
       "description": "put.io frontend and SDK development skills.",
       "category": "development"
     }
