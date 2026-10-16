@@ -1,6 +1,6 @@
 {
-  "name": "putio-agent-skills",
-  "displayName": "put.io agent skills",
+  "name": "putio-dev",
+  "displayName": "put.io dev",
   "description": "put.io skills for developing and reviewing put.io frontend apps and SDKs.",
   "author": {
     "name": "put.io",
